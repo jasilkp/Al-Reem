@@ -126,8 +126,8 @@
   
   /* Make home page logo bigger - increased for better visibility */
   #home-logo {
-    width: 200px !important;
-    height: 200px !important;
+    width: 220px !important;
+    height: 220px !important;
   }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
@@ -135,8 +135,8 @@
 	#logo-intro-img.intro-logo,
 	object.intro-logo,
 	.intro-logo {
-		width: clamp(360px, 52vw, 520px) !important;
-		height: clamp(360px, 52vw, 520px) !important;
+		width: clamp(380px, 56vw, 560px) !important;
+		height: clamp(380px, 56vw, 560px) !important;
 		max-width: 92vw !important;
 		max-height: 92vh !important;
 	}
@@ -284,8 +284,8 @@
 	/* Increase the hero/home logo size (override Tailwind utility sizes on small screens) */
 	#home-logo {
 		/* Bump up the hero logo size for phones */
-		width: clamp(160px, 36vw, 320px) !important;
-		height: clamp(160px, 36vw, 320px) !important;
+		width: clamp(180px, 40vw, 360px) !important;
+		height: clamp(180px, 40vw, 360px) !important;
 		display: inline-block;
 		object-fit: contain;
 	}
