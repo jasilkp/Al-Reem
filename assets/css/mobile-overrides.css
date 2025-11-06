@@ -1,3 +1,9 @@
+/* ========================================================================
+   CRITICAL FIX FOR LARGE PHONES (Redmi Note 9 Pro, iPhone Pro Max, etc.)
+   Extended mobile breakpoints from 640px to 768px/820px to ensure proper
+   mobile layouts on modern large-screen smartphones (414px+)
+   ======================================================================== */
+
 /* Hide vertical text AND icons on home page for screens below 998px width (keep rail containers) */
 @media (max-width: 998px) {
 	.home-contact-rail .rail-text,
@@ -74,16 +80,17 @@
 	}
 }
 
-/* Below 808px width: hide desktop nav links, show top-right menu button;
+/* EXTENDED MOBILE BREAKPOINT: Changed from 808px to 820px to cover larger phones like Redmi Note 9 Pro
+   Below 820px width: hide desktop nav links, show top-right menu button;
    keep rails and the red underline element intact; remove nav appear timing. */
-@media (max-width: 808px) {
+@media (max-width: 820px) {
   /* Ensure header context for absolute positioning */
   #header { position: relative !important; min-height: 56px; }
 
-  /* Hide the desktop links container (Tailwind md:flex) even between 769-808px */
+  /* Hide the desktop links container (Tailwind md:flex) even between 769-820px */
   .home-anim-nav-inner .md\:flex { display: none !important; visibility: hidden !important; opacity: 0 !important; }
 
-  /* Force-show the mobile button container (Tailwind md:hidden) under 808px */
+  /* Force-show the mobile button container (Tailwind md:hidden) under 820px */
   .home-anim-nav-inner .md\:hidden { display: block !important; visibility: visible !important; opacity: 1 !important; }
 
   /* Place the menu button at the top-right */
@@ -646,13 +653,15 @@ p, .text-gray-300, .text-gray-200 {
 }
 
 /* Hide the compact 4-item mobile topper nav on small screens while keeping
-   the red decorative line, rails and the main nav/hamburger present. */
-@media (max-width: 640px) {
+   the red decorative line, rails and the main nav/hamburger present. 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	nav.mobile-topper-nav, .mobile-topper-nav { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
 }
 
-/* Small accessibility improvement: prefer center alignment for stacked content on very small widths */
-@media (max-width: 640px) {
+/* Small accessibility improvement: prefer center alignment for stacked content on very small widths 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	.dish-info, .home-anim, .home-anim-cta-wrap { text-align: center !important; align-items: center !important; justify-content: center !important; }
 }
 
@@ -920,8 +929,9 @@ p, .text-gray-300, .text-gray-200 {
 	footer .footer-social-icon, footer a { min-height: 34px !important; min-width: 34px !important; }
 }
 
-/* Mobile: zoom the Testimonials background and tighten the section height for phones */
-@media (max-width: 640px) {
+/* Mobile: zoom the Testimonials background and tighten the section height for phones 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	/* Target both the ID and helper/bg class to be robust */
 	#testimonials, .testimonials-section-bg {
 		background-size: 150% !important; /* zoom in */
@@ -1222,37 +1232,36 @@ p, .text-gray-300, .text-gray-200 {
 					}
 			}
 
-			/* Hide vertical rail text (contact / quote rails) on small screens while keeping icons tappable */
-			@media (max-width: 640px) {
-				/* Target the text nodes or wrappers that use vertical writing-mode */
-				.home-contact-rail .rail-text,
-				.menu-contact-rail .rail-text,
-				.home-quote-rail .quote-inner,
-				.home-quote-rail .quote-inner * {
-					display: none !important;
-					visibility: hidden !important;
-					opacity: 0 !important;
-					pointer-events: none !important;
-					height: 0 !important;
-					width: 0 !important;
-					margin: 0 !important;
-					padding: 0 !important;
-				}
+/* Hide vertical rail text (contact / quote rails) on small screens while keeping icons tappable 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
+	/* Target the text nodes or wrappers that use vertical writing-mode */
+	.home-contact-rail .rail-text,
+	.menu-contact-rail .rail-text,
+	.home-quote-rail .quote-inner,
+	.home-quote-rail .quote-inner * {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		pointer-events: none !important;
+		height: 0 !important;
+		width: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
 
-				/* Ensure the rail icon containers remain visible and tappable */
-				.home-contact-rail .rail-inner,
-				.menu-contact-rail .rail-inner {
-					display: flex !important;
-					pointer-events: auto !important;
-					opacity: 1 !important;
-					visibility: visible !important;
-				}
+	/* Ensure the rail icon containers remain visible and tappable */
+	.home-contact-rail .rail-inner,
+	.menu-contact-rail .rail-inner {
+		display: flex !important;
+		pointer-events: auto !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
 
-				/* If any vertical text uses writing-mode, force it hidden too */
-				[style*="writing-mode"], [class*="rail-text"] { display: none !important; }
-			}
-
-				/* Hide Get-in-touch icon rails entirely on small screens if user prefers them gone */
+	/* If any vertical text uses writing-mode, force it hidden too */
+	[style*="writing-mode"], [class*="rail-text"] { display: none !important; }
+}				/* Hide Get-in-touch icon rails entirely on small screens if user prefers them gone */
 				@media (max-width: 640px) {
 					.home-contact-rail,
 					.menu-contact-rail,
@@ -1277,42 +1286,41 @@ p, .text-gray-300, .text-gray-200 {
 					}
 				}
 
-					/* Final tweak: slightly decrease the overall hero height on small devices so the section
-						 isn't quite fullscreen. This overrides earlier fullscreen rules and keeps the video
-						 prominent but reduces vertical occupancy. */
-					@media (max-width: 640px) {
-						.hero-section {
-							/* slightly reduce vertical occupancy so content below is more reachable
-							   — lower than previous 80svh for a tighter mobile layout */
-							height: auto !important;
-							min-height: 72svh !important;
-							max-height: 73svh !important;
-							padding-top: 0 !important;
-							padding-bottom: 0 !important;
-							overflow: hidden !important;
-						}
+	/* Final tweak: slightly decrease the overall hero height on small devices so the section
+		 isn't quite fullscreen. This overrides earlier fullscreen rules and keeps the video
+		 prominent but reduces vertical occupancy. EXTENDED to 768px to cover larger phones */
+	@media (max-width: 768px) {
+		.hero-section {
+			/* slightly reduce vertical occupancy so content below is more reachable
+			   — lower than previous 80svh for a tighter mobile layout */
+			height: auto !important;
+			min-height: 72svh !important;
+			max-height: 73svh !important;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+			overflow: hidden !important;
+		}
 
-						.with-container-frame > .home-video-wrap {
-							/* reduce the framed video height slightly to match the shorter hero */
-							top: 0 !important;
-							bottom: 0 !important;
-							height: 70svh !important;
-							min-height: 70svh !important;
-							max-height: 70svh !important;
-							inset: 0 !important;
-							border-radius: 0 !important;
-							overflow: hidden !important;
-						}
-					}
-
-					@media (max-width: 420px) {
+		.with-container-frame > .home-video-wrap {
+			/* reduce the framed video height slightly to match the shorter hero */
+			top: 0 !important;
+			bottom: 0 !important;
+			height: 70svh !important;
+			min-height: 70svh !important;
+			max-height: 70svh !important;
+			inset: 0 !important;
+			border-radius: 0 !important;
+			overflow: hidden !important;
+		}
+	}					@media (max-width: 420px) {
 						/* For the smallest phones, reduce further so content below becomes reachable sooner */
 						.hero-section { min-height: 76svh !important; max-height: 77svh !important; }
 						.with-container-frame > .home-video-wrap { height: 74svh !important; min-height: 74svh !important; max-height: 74svh !important; }
 					}
 
-/* Mobile: make the Why Choose Us icons circular and centered for small screens */
-@media (max-width: 640px) {
+/* Mobile: make the Why Choose Us icons circular and centered for small screens 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	/* Parent wrapper becomes a circular tile */
 	#why-choose .why-choose-3d-btn {
 		width: 88px !important; /* increased further per request */
@@ -1368,8 +1376,9 @@ p, .text-gray-300, .text-gray-200 {
 }
 
 /* Mobile-only: zoom the 'Why Choose Us' background and reduce section height/padding
-	 so small screens show a tighter, zoomed visual without extra vertical space. */
-@media (max-width: 640px) {
+	 so small screens show a tighter, zoomed visual without extra vertical space. 
+	 EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	/* Target both the ID and the new-bg helper class to be robust */
 	#why-choose, .why-choose-new-bg {
 		/* Zoom the background image a bit for a stronger visual impact on phones */
@@ -1961,8 +1970,9 @@ p, .text-gray-300, .text-gray-200 {
 	.outlet-card h3 { font-size: 1rem !important; }
 }
 
-/* Mobile: increase the visible height of the framed home video so it reads larger on phones */
-@media (max-width: 640px) {
+/* Mobile: increase the visible height of the framed home video so it reads larger on phones 
+   EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	/* Make the video wrap much taller on phones (about 85% of the viewport). */
 	.with-container-frame > .home-video-wrap {
 		height: 85vh !important;
@@ -1988,8 +1998,9 @@ p, .text-gray-300, .text-gray-200 {
 }
 
 /* Mobile: visually lengthen the contact image without increasing the section height
-	 We keep the wrapper's computed height the same but scale the image vertically and clip overflow. */
-@media (max-width: 640px) {
+	 We keep the wrapper's computed height the same but scale the image vertically and clip overflow. 
+	 EXTENDED to 768px to cover larger phones */
+@media (max-width: 768px) {
 	.contact-img-wrapper {
 		overflow: hidden !important; /* clip the scaled image so section height doesn't grow */
 		position: relative !important;
