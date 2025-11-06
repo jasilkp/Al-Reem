@@ -742,10 +742,10 @@ function initOutlets() {
             'photo_2025-10-10_22-51-05.jpg',
             'photo_2025-10-10_22-51-10.jpg'
         ], contact: '+94114754500', location: 'Colombo, Sri Lanka', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Sri%20lanka%20(Colombo)' },
-        { name: 'Sri lanka (Negombo)', folder: 'Sri lanka (Negombo)', images: [
+        { name: 'Sri Lanka (Negombo)', folder: 'Sri Lanka (Negombo)', images: [
             'photo_2025-10-10_22-52-04.jpg',
             'photo_2025-10-10_22-52-10.jpg'
-        ], contact: '+94312263555', location: 'Negombo, Sri Lanka', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Sri%20lanka%20(Negombo)' },
+        ], contact: '+94312263555', location: 'Negombo, Sri Lanka', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Sri%20Lanka%20(Negombo)' },
         { name: 'Saudi Arabia (Jizan)', folder: 'Saudi Arabia (Jizan)', images: [
             'photo_2025-10-10_22-51-57.jpg'
         ], contact: 'Nil', location: 'Jizan, Saudi Arabia', maps: null },
@@ -921,7 +921,7 @@ function initOutlets() {
             'Coimbatore',
             'Palakkad',
             'Sri lanka (Colombo)',
-            'Sri lanka (Negombo)',
+            'Sri Lanka (Negombo)',
             'Saudi Arabia (Jizan)'
         ];
 
