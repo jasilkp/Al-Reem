@@ -2660,7 +2660,8 @@ p, .text-gray-300, .text-gray-200 {
 }
 
 
-/* Global: Fix case-sensitive path for Why Choose Us background on Cloudflare/UNIX hosts */
-.parallax-bg { background-image: url('../images/Why Choose Us -min.jpg') !important; }
+/* Removed global .parallax-bg override - background defined in style.css works correctly */
+
+
 
 
