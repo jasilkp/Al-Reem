@@ -240,9 +240,9 @@
   box-shadow: 0 0 8px rgba(199, 0, 0, 0.6) !important;
 }
 
-/* Scope: All rules in this file now apply ONLY on screens up to 720px wide AND 720px tall.
+/* Scope: All rules in this file now apply on screens up to 720px wide (height unrestricted for tall phones).
 	Above that size, desktop/default styles remain untouched and only automatic media-switching occurs. */
-@media (max-width: 720px) and (max-height: 720px) {
+@media (max-width: 720px) {
 	/* Reduce the hero section height slightly so the page feels tighter */
 	.hero-section {
 		height: auto !important;
@@ -2252,11 +2252,11 @@ p, .text-gray-300, .text-gray-200 {
 }
 
 /* ---------------------------------------------------------------------------
-	 Global Mobile Scope refinement (<=720×720): make home video taller WITHOUT
+	 Global Mobile Scope refinement (<=720px width): make home video taller WITHOUT
 	 increasing section height. We maximize the video wrap height by tightening
 	 the inner frame and letting the wrap fill the section, then covering it.
 --------------------------------------------------------------------------- */
-@media (max-width: 720px) and (max-height: 720px) {
+@media (max-width: 720px) {
 	/* Slim inner frame so the video can occupy more vertical space inside hero */
 	.with-container-frame {
 		--frame-top: 0px !important;
