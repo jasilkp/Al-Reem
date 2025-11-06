@@ -2398,10 +2398,19 @@ p, .text-gray-300, .text-gray-200 {
 	--------------------------------------------------------------------------- */
 	@media (max-width: 640px) and (min-height: 780px) {
 		.hero-section {
+			/* Fallback for browsers without svh */
+			min-height: 86vh !important;
+			max-height: 90vh !important;
+			/* Preferred on modern mobile browsers */
 			min-height: 86svh !important;
 			max-height: 90svh !important;
 		}
 		.with-container-frame > .home-video-wrap {
+			/* Fallback for browsers without svh */
+			height: 84vh !important;
+			min-height: 84vh !important;
+			max-height: 84vh !important;
+			/* Preferred on modern mobile browsers */
 			height: 84svh !important;
 			min-height: 84svh !important;
 			max-height: 84svh !important;
@@ -2415,10 +2424,19 @@ p, .text-gray-300, .text-gray-200 {
 
 	@media (max-width: 640px) and (min-height: 900px) {
 		.hero-section {
+			/* Fallback for browsers without svh */
+			min-height: 90vh !important;
+			max-height: 94vh !important;
+			/* Preferred on modern mobile browsers */
 			min-height: 90svh !important;
 			max-height: 94svh !important;
 		}
 		.with-container-frame > .home-video-wrap {
+			/* Fallback for browsers without svh */
+			height: 88vh !important;
+			min-height: 88vh !important;
+			max-height: 88vh !important;
+			/* Preferred on modern mobile browsers */
 			height: 88svh !important;
 			min-height: 88svh !important;
 			max-height: 88svh !important;
@@ -2436,6 +2454,10 @@ p, .text-gray-300, .text-gray-200 {
 	/* Limit hero height so content below is reachable; avoid fullscreen on phones */
 	.hero-section {
 		height: auto !important;
+		/* Fallback for browsers without svh */
+		min-height: 74vh !important;
+		max-height: 78vh !important;
+		/* Preferred on modern mobile browsers */
 		min-height: 74svh !important;
 		max-height: 78svh !important;
 		padding-top: clamp(6px, 1.4vw, 10px) !important;
@@ -2447,6 +2469,11 @@ p, .text-gray-300, .text-gray-200 {
 	.with-container-frame > .home-video-wrap {
 		top: 0 !important;
 		bottom: 0 !important;
+		/* Fallback for browsers without svh */
+		height: 72vh !important;
+		min-height: 72vh !important;
+		max-height: 72vh !important;
+		/* Preferred on modern mobile browsers */
 		height: 72svh !important;
 		min-height: 72svh !important;
 		max-height: 72svh !important;
@@ -2480,6 +2507,47 @@ p, .text-gray-300, .text-gray-200 {
 	}
 }
 
+/* Production hard-stop normalization for phones up to 808px: ensure final sizes also win over any <=808px earlier blocks */
+@media (max-width: 808px) {
+	.hero-section {
+		height: auto !important;
+		/* Fallback for browsers without svh */
+		min-height: 74vh !important;
+		max-height: 78vh !important;
+		/* Preferred on modern mobile browsers */
+		min-height: 74svh !important;
+		max-height: 78svh !important;
+		padding-top: clamp(6px, 1.4vw, 10px) !important;
+		padding-bottom: clamp(6px, 1.4vw, 10px) !important;
+		overflow: hidden !important;
+	}
+	.with-container-frame > .home-video-wrap {
+		top: 0 !important;
+		bottom: 0 !important;
+		/* Fallback for browsers without svh */
+		height: 72vh !important;
+		min-height: 72vh !important;
+		max-height: 72vh !important;
+		/* Preferred on modern mobile browsers */
+		height: 72svh !important;
+		min-height: 72svh !important;
+		max-height: 72svh !important;
+		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
+	}
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt {
+		width: 100% !important;
+		height: 100% !important;
+		max-width: 100% !important;
+		max-height: 100% !important;
+		object-fit: contain !important;
+		object-position: center center !important;
+		transform: none !important;
+	}
+}
+
 @media (max-width: 420px) {
 	.hero-section {
 		min-height: 76svh !important;
@@ -2491,5 +2559,9 @@ p, .text-gray-300, .text-gray-200 {
 		max-height: 74svh !important;
 	}
 }
+
+
+/* Global: Fix case-sensitive path for Why Choose Us background on Cloudflare/UNIX hosts */
+.parallax-bg { background-image: url('../images/Why Choose Us -min.jpg') !important; }
 
 
