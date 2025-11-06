@@ -2661,4 +2661,9 @@ p, .text-gray-300, .text-gray-200 {
 	}
 }
 
+/* Global override: Ensure correct case-sensitive path for Why Choose Us background on all screens
+   (Linux/Cloudflare servers are case-sensitive, file is .jpg lowercase) */
+.parallax-bg {
+	background-image: url('../images/Why Choose Us -min.jpg') !important;
+}
 
