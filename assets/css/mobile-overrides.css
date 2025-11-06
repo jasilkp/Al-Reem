@@ -502,8 +502,6 @@
 	}
 	/* Disable parallax backgrounds on small screens: make them static and centered */
 	.parallax-bg {
-		/* Ensure correct case-sensitive path for Linux/Cloudflare servers */
-		background-image: url('../images/Why Choose Us -min.jpg') !important;
 		/* force non-parallax behavior on phones */
 		background-attachment: scroll !important;
 		/* Center the focal point precisely and keep a tasteful zoom */
