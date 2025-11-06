@@ -2460,6 +2460,9 @@ p, .text-gray-300, .text-gray-200 {
 		/* Preferred on modern mobile browsers */
 		min-height: 74svh !important;
 		max-height: 78svh !important;
+		/* Prefer dynamic viewport on Android */
+		min-height: 74dvh !important;
+		max-height: 78dvh !important;
 		padding-top: clamp(6px, 1.4vw, 10px) !important;
 		padding-bottom: clamp(6px, 1.4vw, 10px) !important;
 		overflow: hidden !important;
@@ -2477,6 +2480,10 @@ p, .text-gray-300, .text-gray-200 {
 		height: 72svh !important;
 		min-height: 72svh !important;
 		max-height: 72svh !important;
+		/* Prefer dynamic viewport on Android */
+		height: 72dvh !important;
+		min-height: 72dvh !important;
+		max-height: 72dvh !important;
 		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
 		border-radius: 8px !important;
 		overflow: hidden !important;
@@ -2517,6 +2524,9 @@ p, .text-gray-300, .text-gray-200 {
 		/* Preferred on modern mobile browsers */
 		min-height: 74svh !important;
 		max-height: 78svh !important;
+		/* Prefer dynamic viewport on Android */
+		min-height: 74dvh !important;
+		max-height: 78dvh !important;
 		padding-top: clamp(6px, 1.4vw, 10px) !important;
 		padding-bottom: clamp(6px, 1.4vw, 10px) !important;
 		overflow: hidden !important;
@@ -2532,6 +2542,10 @@ p, .text-gray-300, .text-gray-200 {
 		height: 72svh !important;
 		min-height: 72svh !important;
 		max-height: 72svh !important;
+		/* Prefer dynamic viewport on Android */
+		height: 72dvh !important;
+		min-height: 72dvh !important;
+		max-height: 72dvh !important;
 		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
 		border-radius: 8px !important;
 		overflow: hidden !important;
@@ -2546,6 +2560,82 @@ p, .text-gray-300, .text-gray-200 {
 		object-position: center center !important;
 		transform: none !important;
 	}
+}
+
+/* Tall Android phones (portrait): give a bit more height while keeping contain-fit */
+@media (max-width: 640px) and (min-height: 780px) and (orientation: portrait) {
+	.hero-section {
+		/* fallback */
+		min-height: 80vh !important;
+		max-height: 86vh !important;
+		/* svh */
+		min-height: 82svh !important;
+		max-height: 86svh !important;
+		/* dvh preferred */
+		min-height: 82dvh !important;
+		max-height: 86dvh !important;
+	}
+	.with-container-frame > .home-video-wrap {
+		/* fallback */
+		height: 78vh !important;
+		min-height: 78vh !important;
+		max-height: 84vh !important;
+		/* svh */
+		height: 80svh !important;
+		min-height: 80svh !important;
+		max-height: 84svh !important;
+		/* dvh preferred */
+		height: 80dvh !important;
+		min-height: 80dvh !important;
+		max-height: 84dvh !important;
+	}
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt { object-fit: contain !important; }
+}
+
+@media (max-width: 640px) and (min-height: 900px) and (orientation: portrait) {
+	.hero-section {
+		/* fallback */
+		min-height: 84vh !important;
+		max-height: 92vh !important;
+		/* svh */
+		min-height: 86svh !important;
+		max-height: 92svh !important;
+		/* dvh preferred */
+		min-height: 86dvh !important;
+		max-height: 92dvh !important;
+	}
+	.with-container-frame > .home-video-wrap {
+		/* fallback */
+		height: 82vh !important;
+		min-height: 82vh !important;
+		max-height: 90vh !important;
+		/* svh */
+		height: 84svh !important;
+		min-height: 84svh !important;
+		max-height: 90svh !important;
+		/* dvh preferred */
+		height: 84dvh !important;
+		min-height: 84dvh !important;
+		max-height: 90dvh !important;
+	}
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt { object-fit: contain !important; }
+}
+
+/* Duplicate tall-phone boosts for <=808px to override any earlier 808px blocks */
+@media (max-width: 808px) and (min-height: 780px) and (orientation: portrait) {
+	.hero-section { min-height: 82dvh !important; max-height: 86dvh !important; }
+	.with-container-frame > .home-video-wrap { height: 80dvh !important; min-height: 80dvh !important; max-height: 84dvh !important; }
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt { object-fit: contain !important; }
+}
+
+@media (max-width: 808px) and (min-height: 900px) and (orientation: portrait) {
+	.hero-section { min-height: 86dvh !important; max-height: 92dvh !important; }
+	.with-container-frame > .home-video-wrap { height: 84dvh !important; min-height: 84dvh !important; max-height: 90dvh !important; }
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt { object-fit: contain !important; }
 }
 
 @media (max-width: 420px) {
