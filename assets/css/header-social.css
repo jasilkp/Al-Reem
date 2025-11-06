@@ -1,0 +1,32 @@
+/* Header social icons styles - only visible on mobile screens */
+#header { position: sticky; }
+.header-social {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  gap: 10px;
+  z-index: 260; /* ensure above header/video layers */
+  pointer-events: auto;
+}
+/* Hide on desktop screens (above 720px) */
+@media (min-width: 721px) {
+  .header-social { display: none !important; }
+}
+.header-social-icon {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  align-items: center;
+  justify-content: center;
+  color: #eaeaea;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.header-social-icon:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: rgba(255,255,255,0.13);
+  color: var(--accent-red);
+}

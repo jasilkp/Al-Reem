@@ -1,0 +1,150 @@
+/* Signature Dish Slider Styles */
+.signature-slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  background: none;
+  margin-bottom: 2rem;
+}
+.signature-slider .dish-slide {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 900px;
+  min-height: 340px;
+  background: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+  transform: translateX(60px) scale(0.98);
+  z-index: 1;
+}
+.signature-slider .dish-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+  z-index: 2;
+}
+.signature-slider .dish-img-side {
+  flex: 0 0 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 340px;
+}
+.signature-slider .dish-img {
+  width: 320px;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  background: #fff;
+  border: 8px solid var(--accent-red);
+}
+.signature-slider .dish-info-side {
+  flex: 1 1 0;
+  padding-left: 2.5rem;
+  color: var(--primary-black);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.signature-slider .dish-info-side h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.signature-slider .dish-info-side p {
+  font-size: 1.15rem;
+  margin-bottom: 1.2rem;
+  color: #333;
+}
+.signature-slider .see-details-btn {
+  background: var(--accent-red);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  transition: background 0.2s;
+}
+.signature-slider .see-details-btn:hover {
+  background: #b30000;
+}
+.signature-slider .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: var(--accent-red);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.85;
+  transition: background 0.2s;
+}
+.signature-slider .carousel-arrow.prev { left: -60px; }
+.signature-slider .carousel-arrow.next { right: -60px; }
+.signature-slider .carousel-arrow:after {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-top: 3px solid #fff;
+  border-right: 3px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%) rotate(135deg);
+}
+.signature-slider .carousel-arrow.next:after { transform: translate(-50%,-50%) rotate(-45deg); }
+.signature-slider .carousel-dots {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+.signature-slider .carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--accent-red);
+  opacity: 0.7;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+}
+.signature-slider .carousel-dot.active {
+  background: var(--accent-red);
+  opacity: 1;
+}
+@media (max-width: 900px) {
+  .signature-slider .dish-img-side { flex-basis: 220px; height: 220px; }
+  .signature-slider .dish-img { width: 200px; height: 200px; }
+  .signature-slider .dish-info-side { padding-left: 1.2rem; }
+}
+@media (max-width: 600px) {
+  .signature-slider { flex-direction: column; min-height: 320px; margin-bottom: 0.75rem; margin-top: 1rem; }
+  .signature-slider .dish-slide { flex-direction: column; min-height: 320px; }
+  .signature-slider .dish-img-side { flex-basis: auto; height: 180px; }
+  .signature-slider .dish-img { width: 160px; height: 160px; }
+  .signature-slider .dish-info-side { padding-left: 0; padding-top: 1.2rem; text-align: center; }
+  .signature-slider .carousel-arrow.prev { left: 10px; }
+  .signature-slider .carousel-arrow.next { right: 10px; }
+}

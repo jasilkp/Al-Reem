@@ -1,0 +1,2495 @@
+/* Hide vertical text AND icons on home page for screens below 998px width (keep rail containers) */
+@media (max-width: 998px) {
+	.home-contact-rail .rail-text,
+	.home-contact-rail .rail-inner,
+	.home-contact-rail .rail-icons,
+	.home-contact-rail .rail-icon,
+	.home-quote-rail .quote-text,
+	.home-quote-rail .quote-inner {
+		display: none !important;
+		visibility: hidden !important;
+		opacity: 0 !important;
+		height: 0 !important;
+		width: 0 !important;
+		pointer-events: none !important;
+	}
+	/* Disable animations for hidden rail elements to save time */
+	.home-anim-side-left,
+	.home-anim-side-right,
+	.home-contact-rail,
+	.home-quote-rail {
+		animation: none !important;
+		transition: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+
+	/* Make the intro sequence logo bigger up to 998px width */
+	#logo-intro-img,
+	#logo-intro-img.intro-logo,
+	object.intro-logo,
+	.intro-logo {
+		/* Larger than previous defaults; scales with viewport but capped */
+		width: clamp(380px, 42vw, 560px) !important;
+		height: clamp(380px, 42vw, 560px) !important;
+		max-width: 90vw !important;
+		max-height: 90vh !important;
+		display: block !important;
+	}
+}
+
+/* Mobile width-only fallback: ensure Our Story clamp + button also apply on tall phones */
+@media (max-width: 720px) {
+	#about .story-text-container { position: relative !important; }
+	#about #about-text {
+		/* Smooth expand/collapse animation */
+		transition: height 280ms ease !important;
+		display: -webkit-box !important;
+		-webkit-box-orient: vertical !important;
+		-webkit-line-clamp: 4 !important;
+		line-clamp: 4 !important;
+		overflow: hidden !important;
+		max-height: 7.5em !important;
+	}
+	#about .story-text-container.expanded #about-text {
+		-webkit-line-clamp: unset !important;
+		line-clamp: unset !important;
+		display: block !important;
+		max-height: none !important;
+		overflow: visible !important;
+	}
+	.about-toggle {
+		display: inline-block !important;
+		width: auto !important;
+		margin: 0.5rem auto 0 !important; /* center horizontally */
+		padding: 0.4rem 0.9rem !important; /* smaller height */
+		font-size: 0.85rem !important; /* slightly smaller text */
+		line-height: 1.2 !important;
+		text-align: center !important;
+		border-radius: 9999px !important;
+		position: relative !important;
+		z-index: 2 !important;
+		-webkit-tap-highlight-color: transparent;
+		touch-action: manipulation;
+	}
+}
+
+/* Below 808px width: hide desktop nav links, show top-right menu button;
+   keep rails and the red underline element intact; remove nav appear timing. */
+@media (max-width: 808px) {
+  /* Ensure header context for absolute positioning */
+  #header { position: relative !important; min-height: 56px; }
+
+  /* Hide the desktop links container (Tailwind md:flex) even between 769-808px */
+  .home-anim-nav-inner .md\:flex { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+
+  /* Force-show the mobile button container (Tailwind md:hidden) under 808px */
+  .home-anim-nav-inner .md\:hidden { display: block !important; visibility: visible !important; opacity: 1 !important; }
+
+  /* Place the menu button at the top-right */
+  #mobile-menu-button {
+    position: absolute !important;
+    right: 12px !important;
+    top: 12px !important;
+    z-index: 200 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* Disable nav appear animation/timing */
+  body.home-anim-play .home-anim-nav-inner { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+
+  /* Hide the compact topper nav to avoid duplicate controls */
+  nav.mobile-topper-nav, .mobile-topper-nav { display: none !important; visibility: hidden !important; }
+
+  /* Keep the red underline visible (no override required) */
+  #main-nav-underline { display: block !important; opacity: 1 !important; }
+  
+  /* Make home video bigger */
+  .with-container-frame > .home-video-wrap {
+    height: 90vh !important;
+    min-height: 90vh !important;
+    max-height: 90vh !important;
+  }
+  
+  .hero-section {
+    min-height: 92vh !important;
+    max-height: 92vh !important;
+  }
+  
+  /* Make home page logo bigger */
+  #home-logo {
+    width: 180px !important;
+    height: 180px !important;
+  }
+  
+	/* Make intro sequence logo bigger (more than before) for <=808px */
+	#logo-intro-img,
+	#logo-intro-img.intro-logo,
+	object.intro-logo,
+	.intro-logo {
+		width: clamp(360px, 52vw, 520px) !important;
+		height: clamp(360px, 52vw, 520px) !important;
+		max-width: 92vw !important;
+		max-height: 92vh !important;
+	}
+}
+
+/* Above 1024px width: make dish description compact and horizontally aligned */
+@media (min-width: 1025px) {
+  #current-dish-desc,
+  .current-dish-desc {
+    max-width: 600px !important;
+    max-height: 3.6em !important; /* ~3 lines max */
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    line-height: 1.2em !important;
+    margin: 0.5rem auto !important;
+    text-align: center !important;
+  }
+}
+
+/* Below 1024px width: hide dish description in Our Menu section, keep only dish name */
+@media (max-width: 1024px) {
+  #current-dish-desc,
+  .current-dish-desc,
+  .dish-info p {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Also hide the top dish list (horizontal chip buttons) */
+  .dish-top-list-wrapper,
+  .dish-top-list {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Make dish name bigger and perfectly centered */
+  #current-dish-title,
+  .current-dish-title {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    margin: 0 auto 1rem auto !important;
+    color: var(--accent-red, #c70000) !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.5px !important;
+  }
+}
+
+/* Global Menu section change: hide red carousel arrows, use dots instead */
+/* Hide the red arrow navigation buttons */
+#single-arc-prev,
+#single-arc-next,
+.single-arc-nav-btn {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Style navigation dots below the dish info area */
+.dish-carousel-dots {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 32px !important;
+  padding: 16px 0 !important;
+}
+
+.dish-carousel-dots .dish-dot {
+	width: 10px !important;
+	height: 10px !important;
+  border-radius: 50% !important;
+  background: rgba(199, 0, 0, 0.3) !important;
+  border: 1px solid rgba(199, 0, 0, 0.5) !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.dish-carousel-dots .dish-dot:hover {
+  background: rgba(199, 0, 0, 0.6) !important;
+  transform: scale(1.15) !important;
+}
+
+.dish-carousel-dots .dish-dot.active {
+  background: var(--accent-red, #c70000) !important;
+  border-color: var(--accent-red, #c70000) !important;
+	transform: scale(1.15) !important;
+  box-shadow: 0 0 8px rgba(199, 0, 0, 0.6) !important;
+}
+
+/* Scope: All rules in this file now apply ONLY on screens up to 720px wide AND 720px tall.
+	Above that size, desktop/default styles remain untouched and only automatic media-switching occurs. */
+@media (max-width: 720px) and (max-height: 720px) {
+	/* Reduce the hero section height slightly so the page feels tighter */
+	.hero-section {
+		height: auto !important;
+		min-height: clamp(36svh, 42svh, 56svh) !important;
+		max-height: clamp(42svh, 50svh, 62svh) !important;
+		padding-top: clamp(4px, 1vw, 10px) !important;
+		padding-bottom: clamp(4px, 1vw, 10px) !important;
+		overflow: hidden !important;
+	}
+/* Additional Menu-section mobile tweaks: make the dish carousel sit lower and shrink title/desc/button */
+@media (max-width: 640px) {
+	/* Reduce the Menu section heading so it doesn't dominate on phones */
+/* Mobile-only overrides: increase home/intro logo sizes for small screens
+	 These rules are loaded last and only apply under max-width so desktop is untouched.
+*/
+@media (max-width: 640px) {
+	/* Make the intro overlay logo a bit larger and more prominent on phones */
+	.intro-logo {
+		/* Increased values to make the intro logo noticeably larger on small phones */
+		width: clamp(240px, 44vw, 520px);
+		height: clamp(240px, 44vw, 520px);
+		max-width: 96vw;
+		max-height: 96vw;
+	}
+
+	/* The intro logo is rendered via an <object> (replaced element). Target it directly
+		 and use !important to override inline width/height attributes so the embedded
+		 SVG scales to the desired size on phones. */
+	#logo-intro-img,
+	#logo-intro-img.intro-logo,
+	object.intro-logo {
+		width: clamp(280px, 50vw, 620px) !important;
+		height: clamp(280px, 50vw, 620px) !important;
+		max-width: 96vw !important;
+		max-height: 96vw !important;
+		display: block !important;
+	}
+
+	/* Increase the hero/home logo size (override Tailwind utility sizes on small screens) */
+	#home-logo {
+		/* Bump up the hero logo size for phones */
+		width: clamp(160px, 36vw, 320px) !important;
+		height: clamp(160px, 36vw, 320px) !important;
+		display: inline-block;
+		object-fit: contain;
+	}
+
+	/* Slightly increase the title sizing in hero for small screens while preserving layout */
+	.hero-section .main-title { font-size: clamp(1.6rem, 6.5vw, 2.25rem) !important; }
+	.hero-section .home-anim-sub { font-size: clamp(0.95rem, 3.2vw, 1.05rem) !important; }
+
+
+	/* Further enlarge the framed video area for phones: make rails very slim
+		 and increase hero height so the video becomes the dominant element. */
+	.with-container-frame {
+		--frame-vertical: 6px !important;  /* keep slim left/right rails */
+		--frame-top: 1px !important;       /* near-zero top rail */
+	 /* Slightly reduced bottom rail from earlier change so it still fits the label
+		 but doesn't take too much vertical space on small screens */
+	 --frame-bottom: 40px !important;   /* slightly smaller but readable */
+	}
+
+	/* Make the hero taller so the framed video reads as large and professional
+		 on most phones while still fitting common viewport heights. */
+	.hero-section {
+		/* Increase height more — make the hero fill the viewport on phones while
+			 keeping width unchanged. Reduce vertical padding so more of the video is visible. */
+		height: 100vh !important;
+		min-height: 94vh !important;
+		padding-top: 1rem !important;
+		padding-bottom: 1rem !important;
+	}
+
+	/* Hide the bottom label on mobile screens */
+	.frame-bottom-label {
+		display: none !important;
+	}
+
+	/* Hide the bottom rail in home section */
+	.hero-section.with-container-frame::before {
+		background:
+			/* Keep vertical rails (left & right) */
+			linear-gradient(
+				to right,
+				var(--frame-color) 0,
+				var(--frame-color) var(--frame-vertical),
+				transparent var(--frame-vertical),
+				transparent calc(100% - var(--frame-vertical)),
+				var(--frame-color) calc(100% - var(--frame-vertical)),
+				var(--frame-color) 100%
+			),
+			/* Only top rail, no bottom rail */
+			linear-gradient(
+				to bottom,
+				var(--frame-color) 0,
+				var(--frame-color) var(--frame-top),
+				transparent var(--frame-top),
+				transparent 100%
+			) !important;
+		background-repeat: no-repeat, no-repeat !important;
+		background-size: 100% 100%, 100% 100% !important;
+	}
+
+	/* Ensure the video wrap uses the updated frame variables and fully fills
+		 the available inset area on mobile devices. */
+	.with-container-frame > .home-video-wrap {
+		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+		border-radius: 8px;
+		/* Ensure the wrap fills the taller hero area while respecting the frame inset */
+		top: var(--frame-top, 1px) !important;
+		bottom: var(--frame-bottom, 4px) !important;
+	}
+
+	/* Make sure the video element uses the available space (preserve contain). */
+	.with-container-frame .home-bg-video {
+		width: 100% !important;
+		height: 100% !important;
+		max-height: 100% !important;
+		object-fit: contain !important;
+		object-position: center center !important;
+	}
+
+	/* Mobile: reduce the size of the animated poster carousel in Events section
+		 so it doesn't dominate the viewport on small screens. Desktop is untouched. */
+	.events-carousel-container {
+		/* user requested a bit more size — bump the mobile carousel up further */
+		height: 340px !important; /* increased from 300 */
+		margin-top: 1rem !important;
+		margin-bottom: 1rem !important;
+		overflow: visible !important; /* allow side slides to peek out */
+	}
+	.events-carousel-container .event-slide {
+		/* slightly larger poster size to fill the container more comfortably */
+		width: 260px !important;
+		height: 340px !important;
+	}
+	/* Side slides: slightly larger and more visible to match increased poster size */
+	.event-slide.prev { /* previous slide should peek on the left */
+		transform: translateX(-44%) scale(0.78) !important;
+		opacity: 0.18 !important;
+	}
+	.event-slide.next { /* next slide peeks on the right */
+		transform: translateX(44%) scale(0.78) !important;
+		opacity: 0.18 !important;
+	}
+
+	/* soften the faded peek appearance and keep active slide on top */
+	.event-slide { transition: transform 260ms ease, opacity 260ms ease; }
+	.event-slide.active { transform: translateX(0) scale(1) !important; opacity: 1 !important; z-index: 2 !important; }
+
+	/* Reduce the Events section padding so it sits tighter vertically on phones */
+	#events, .events-section-bg {
+		padding-top: 2.5rem !important; /* reduce top spacing */
+		padding-bottom: 2.5rem !important; /* reduce bottom spacing */
+		min-height: auto !important; /* allow section to size to content on small screens */
+	}
+	/* Tighten heading spacing inside the events section */
+	#events .text-center { margin-bottom: 1rem !important; }
+	.event-slide.active { box-shadow: 0 12px 30px rgba(0,0,0,0.5) !important; }
+
+	/* Event Details page — make posters smaller and tighter on phones */
+	/* Show the full poster (no crop) by constraining the image inside a fixed
+		 viewport and using object-fit:contain. Center the poster and reduce its
+		 maximum dimensions so it appears smaller but uncropped on phones. */
+	.event-details-page .card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+	.event-details-page .card img {
+		/* Let the image scale down while preserving aspect ratio and staying fully visible.
+			 Increase the max dimensions so posters are larger overall but still uncropped. */
+		width: auto !important;
+		height: auto !important;
+		max-width: 320px !important;  /* slightly bigger on mobile */
+		max-height: 280px !important;
+		object-fit: contain !important; /* ensure no cropping */
+		display: block !important;
+		margin: 0 0 0.75rem !important;
+		box-shadow: none !important;
+	}
+	.event-details-page .card .p-6 {
+		padding: 1rem !important; /* slightly increase padding to match larger poster */
+	}
+	.event-details-page .card h3 {
+		font-size: 1.3rem !important; /* slightly larger headline for balance */
+		margin-bottom: 0.5rem !important;
+	}
+
+	/* About section adjustments for mobile: reduce overall height and card sizes */
+	#about {
+		padding-top: 1.75rem !important;
+		padding-bottom: 1.75rem !important;
+	}
+	#about .container { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+	/* Reduce gap between the columns when stacked */
+	#about .grid { gap: 1rem !important; }
+
+	/* Shrink the image slideshow card on phones */
+	.story-slideshow {
+		height: 300px !important; /* smaller than desktop 500px */
+		border-radius: 0.5rem !important;
+		overflow: hidden !important;
+	}
+	.story-slideshow img { height: 100% !important; width: 100% !important; object-fit: cover !important; }
+
+	/* Shrink the text card: reduce padding and font sizes for better fit */
+	.story-text-container {
+		padding: 1rem !important;
+		/* restore solid card color from desktop so it doesn't blend into pure black */
+		background-color: #1a1a1a !important;
+		border-radius: 0.5rem !important;
+	}
+	.story-text-container h3 { font-size: clamp(1.25rem, 6.5vw, 1.6rem) !important; margin-bottom: 0.5rem !important; }
+	.story-text-container p {
+		font-size: 0.95rem !important;
+		line-height: 1.45 !important;
+		margin-bottom: 0 !important;
+		max-height: none !important;
+	}
+
+	/* Extra-small screens: shrink further (rules moved to dedicated 420px block at end) */
+
+
+	/* Nudge the hero text (name & moto) closer to the logo on phones:
+		 - reduce the logo's right margin
+		 - move the text slightly left and down for tighter alignment */
+	.hero-section .home-anim { align-items: center; }
+	.hero-section #home-logo {
+		margin-right: 0.6rem !important; /* closer to text (was Tailwind mr-6) */
+		vertical-align: middle;
+	}
+	.hero-section .home-anim > div {
+		/* Nudge slightly more left (small change requested) and keep the same downward offset */
+		transform: translate(-10px, 8px) !important; /* left & down nudge */
+		transition: transform 220ms ease;
+	}
+	/* Move the Book a Table CTA slightly up on small screens so it sits closer to the hero
+		 without overlapping. Use transform rather than negative margins for smoother rendering. */
+	.home-anim-cta-wrap { margin-top: 0 !important; }
+	.home-anim-cta { transform: translateY(-6px) !important; margin-top: 0 !important; }
+	/* Slightly reduce title top margin on very small screens for balance */
+
+	/* Move the left contact rail content (Get in touch + icons) slightly toward
+		 the center on phones so it reads 'forward' from the edge without changing
+		 the rail visual. Small translate keeps icons tappable. */
+	.home-contact-rail .rail-inner {
+		/* move slightly in and a little upward so the left vertical text sits higher
+			 but only a small increment per user's 'only a bit up' request */
+	 transform: translate(8px, -40px) !important; /* nudge further up on small screens */
+		transition: transform 180ms ease;
+	}
+
+	/* Nudge the right vertical quote text a bit upward on mobile so it sits
+		 higher along the right rail (moves away from the video area). */
+	.home-quote-rail .quote-inner {
+		/* move a bit more up per user's request */
+		transform: translateY(-46px);
+		transition: transform 180ms ease;
+	}
+	/* Disable parallax backgrounds on small screens: make them static and centered */
+	.parallax-bg {
+		/* force non-parallax behavior on phones */
+		background-attachment: scroll !important;
+		/* Center the focal point precisely and keep a tasteful zoom */
+		background-position: center center !important;
+		background-size: 130% auto !important; /* zoom in beyond cover */
+		will-change: auto !important;
+		transform: none !important;
+	}
+	/* keep overlay and content static and sized sensibly on phones */
+	.parallax-overlay { position: absolute; background: rgba(0,0,0,0.34) !important; }
+	/* Further reduce the visible section height and bottom space on phones
+		 while ensuring the quote is centered within the section. */
+	/* Reduce the outer section min-height so the area becomes shorter on small screens. */
+	#why-us { min-height: 58vh !important; padding-bottom: 0.5rem !important; padding-top: 0.9rem !important; }
+	.parallax-content {
+		/* Center the quote perfectly within the section */
+		min-height: 58vh !important;
+		padding-top: 0 !important;
+		padding-bottom: 0 !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
+	}
+	/* Ensure the immediate container centers the blockquote */
+	.parallax-content > .container { display: flex !important; align-items: center !important; justify-content: center !important; }
+	/* Make the quote centered and constrained for better readability on small screens */
+	.parallax-quote {
+		max-width: 640px !important;
+		width: 100% !important;
+		margin: 0 auto !important;
+		text-align: center !important;
+		font-size: clamp(1.06rem, 5.1vw, 1.3rem) !important;
+		line-height: 1.5 !important;
+		font-weight: 600 !important;
+		letter-spacing: 0.2px !important;
+		color: #fafafa !important;
+		/* Remove the box background; enhance legibility with layered shadows and subtle stroke */
+		text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 4px 22px rgba(0,0,0,0.45), 0 0 2px rgba(0,0,0,0.35) !important;
+		-webkit-text-stroke: 0.4px rgba(0,0,0,0.35);
+		text-rendering: optimizeLegibility;
+		/* no extra nudge; keep true center */
+		margin-top: 0 !important;
+	}
+	.parallax-quote .quote-mark { display: inline-block; margin: 0 6px; vertical-align: middle; font-size: 1.6rem !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   Unified fluid/responsive rules (APPENDED)
+   - Provide smooth, automatic scaling for hero height, the video wrap, headings,
+	 paragraphs, buttons and spacing so the layout adapts across a wide range of
+	 viewport sizes without per-breakpoint tinkering.
+   - Uses clamp() and viewport-aware units (vh / svh / vw) so sizes interpolate
+	 between sensible minimum and maximum values.
+   - Placed at the end so these rules win over earlier mobile tweaks; still
+	 use !important where necessary to beat other !important rules.
+--------------------------------------------------------------------------- */
+
+/* Fluid hero height and video wrap scaling for a broad range of widths */
+.hero-section {
+	/* Let the hero compress on small screens but expand on larger ones */
+	height: auto !important;
+	min-height: clamp(48svh, 60vh + 2vw, 90svh) !important;
+	max-height: clamp(56svh, 72vh + 4vw, 95svh) !important;
+	padding-top: clamp(0.4rem, 1.2vw, 1.2rem) !important;
+	padding-bottom: clamp(0.4rem, 1.2vw, 1.2rem) !important;
+	overflow: hidden !important;
+}
+
+/* Hide the Our Story toggle on desktop/big screens explicitly */
+@media (min-width: 721px) {
+	#about #about-toggle { display: none !important; }
+}
+
+.with-container-frame > .home-video-wrap {
+	/* Keep the video wrap slightly smaller than the hero so header/nav breathe */
+	height: clamp(44svh, 56vh + 2vw, 84svh) !important;
+	min-height: clamp(44svh, 56vh + 2vw, 84svh) !important;
+	max-height: clamp(50svh, 64vh + 3vw, 86svh) !important;
+	inset: 0 !important;
+	border-radius: 0 !important;
+	overflow: hidden !important;
+}
+
+/* Fluid typography: headings and body text scale smoothly with viewport */
+.main-title, h1, h2, .section-title {
+	font-size: clamp(1.1rem, 3.8vw, 3.2rem) !important;
+	line-height: 1.08 !important;
+	margin-top: 0.25rem !important;
+	margin-bottom: 0.35rem !important;
+}
+
+.hero-section .main-title {
+	font-size: clamp(1.4rem, 6.4vw, 3.6rem) !important;
+}
+
+.hero-section .home-anim-sub,
+.home-anim p,
+.current-dish-desc,
+p, .text-gray-300, .text-gray-200 {
+	font-size: clamp(0.85rem, 2.6vw, 1.15rem) !important;
+	line-height: clamp(1.25, 1.35, 1.6) !important;
+}
+
+/* Buttons and CTAs scale down on small screens for better fit */
+.btn-primary, .dish-cta-btn, #current-dish-cta {
+	font-size: clamp(0.82rem, 2.2vw, 1rem) !important;
+	padding: clamp(6px, 1.6vw, 10px) clamp(10px, 2.8vw, 14px) !important;
+}
+
+/* Logo and hero layout adjustments (fluid) */
+#home-logo {
+	width: clamp(96px, 22vw, 220px) !important;
+	height: auto !important;
+}
+.home-anim { gap: clamp(0.4rem, 2.2vw, 1.6rem) !important; }
+
+/* Navigation / topper adjustments so the topper centers and shrinks gracefully */
+.mobile-topper-nav { gap: clamp(6px, 1.8vw, 12px) !important; }
+.mobile-topper-nav a.mobile-topper-link { font-size: clamp(0.82rem, 2.4vw, 0.98rem) !important; padding: clamp(4px, 1.1vw, 8px) !important; }
+
+/* Reduce decorative element sizes so they don't crowd on smaller screens */
+.why-choose-3d-btn { width: clamp(64px, 12.5vw, 88px) !important; height: clamp(64px, 12.5vw, 88px) !important; }
+
+/* Reduce large margins/paddings for stacked content on narrow viewports */
+.container, .menu-inner-container, .story-text-container { padding-left: clamp(8px, 3vw, 24px) !important; padding-right: clamp(8px, 3vw, 24px) !important; }
+
+/* Make rails, overlays and icons scale down neatly if they remain visible */
+.rail-icon { width: clamp(20px, 5vw, 28px) !important; height: clamp(20px, 5vw, 28px) !important; }
+
+/* Tighter card/section spacing on small screens */
+@media (max-width: 640px) {
+	.hero-section { min-height: clamp(56svh, 66svh, 76svh) !important; }
+	.with-container-frame > .home-video-wrap { height: clamp(52svh, 62svh, 72svh) !important; }
+	.main-title { font-size: clamp(1.1rem, 6.4vw, 2.4rem) !important; }
+	.frame-bottom-label { font-size: clamp(10px, 2.6vw, 12px) !important; }
+}
+
+@media (max-width: 420px) {
+	/* Extra-small phones: compress further so below-the-fold content is reachable */
+	.hero-section { min-height: clamp(48svh, 58svh, 68svh) !important; }
+	.with-container-frame > .home-video-wrap { height: clamp(46svh, 56svh, 66svh) !important; }
+	.main-title { font-size: clamp(1rem, 7.6vw, 2rem) !important; }
+	.hero-section .home-anim-sub, p { font-size: clamp(0.78rem, 3.2vw, 1rem) !important; }
+	.dish-info { margin-top: clamp(120px, 14vh, 220px) !important; }
+}
+
+/* Hide the compact 4-item mobile topper nav on small screens while keeping
+   the red decorative line, rails and the main nav/hamburger present. */
+@media (max-width: 640px) {
+	nav.mobile-topper-nav, .mobile-topper-nav { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+}
+
+/* Small accessibility improvement: prefer center alignment for stacked content on very small widths */
+@media (max-width: 640px) {
+	.dish-info, .home-anim, .home-anim-cta-wrap { text-align: center !important; align-items: center !important; justify-content: center !important; }
+}
+
+/* End of unified responsive block */
+
+/* ---------------------------------------------------------------------------
+	 Global small-screen section height reductions
+	 - Apply slight, conservative compression of section paddings/margins and
+		 remove forced min-heights so sections take less vertical space on phones.
+	 - We target a set of common section selectors; rules are wrapped in max-width
+		 breakpoints so desktop remains unaffected.
+--------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+	section, .section, .site-section, .hero-section, .with-container-frame, .team-section, .menu-section, .about-section, .contact-section {
+		padding-top: clamp(8px, 2.6vw, 16px) !important;
+		padding-bottom: clamp(8px, 2.6vw, 16px) !important;
+		margin-top: clamp(6px, 2vw, 12px) !important;
+		margin-bottom: clamp(6px, 2vw, 12px) !important;
+		min-height: unset !important;
+	}
+
+	.container, .section .container {
+		padding-left: clamp(8px, 3vw, 20px) !important;
+		padding-right: clamp(8px, 3vw, 20px) !important;
+	}
+}
+
+@media (max-width: 420px) {
+	section, .section, .site-section, .hero-section, .with-container-frame {
+		padding-top: clamp(6px, 2.2vw, 12px) !important;
+		padding-bottom: clamp(6px, 2.2vw, 12px) !important;
+		margin-top: clamp(4px, 1.6vw, 10px) !important;
+		margin-bottom: clamp(4px, 1.6vw, 10px) !important;
+	}
+
+	/* Make the home video wrap more compact on extra-small phones */
+	.with-container-frame > .home-video-wrap { height: clamp(34svh, 42svh, 54svh) !important; max-height: 56svh !important; }
+	.hero-section { min-height: clamp(36svh, 44svh, 58svh) !important; max-height: 60svh !important; }
+}
+
+/* Stronger compression specifically for small phones to reduce perceived long hero */
+@media (max-width: 640px) {
+	.with-container-frame > .home-video-wrap {
+		height: clamp(36svh, 44svh, 64svh) !important;
+		max-height: 70svh !important;
+	}
+
+	.hero-section {
+		min-height: clamp(40svh, 48svh, 72svh) !important;
+		max-height: 76svh !important;
+	}
+
+	/* If other rules enforce tall min-heights, unset them here to allow compression */
+	.hero-section[style], .with-container-frame[style] { min-height: unset !important; }
+}
+
+/* A gentle fallback for very small widths (narrower than 360px) */
+@media (max-width: 360px) {
+	.with-container-frame > .home-video-wrap { height: clamp(32svh, 38svh, 48svh) !important; }
+	.hero-section { min-height: clamp(34svh, 40svh, 52svh) !important; }
+}
+
+/* ---------------------------------------------------------------------------
+	 Stronger compression: further reduce home hero height on very small screens
+	 - The user requested the home section be decreased more on mobile. These
+		 rules override earlier mobile rules and gently scale the background video
+		 so important content remains visible.
+--------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+	.with-container-frame > .home-video-wrap {
+		height: clamp(30svh, 36svh, 54svh) !important;
+		max-height: 56svh !important;
+	}
+
+	.hero-section {
+		min-height: clamp(34svh, 40svh, 60svh) !important;
+		max-height: 62svh !important;
+		padding-top: clamp(6px, 1.6vw, 10px) !important;
+		padding-bottom: clamp(6px, 1.6vw, 10px) !important;
+	}
+
+	/* Slightly scale the video to keep subject visible while reducing container height */
+	.home-bg-video {
+		transform: scale(1.12) translateY(-6%) !important;
+		object-position: center center !important;
+	}
+}
+
+@media (max-width: 420px) {
+	.with-container-frame > .home-video-wrap { height: clamp(28svh, 34svh, 48svh) !important; max-height: 50svh !important; }
+	.hero-section { min-height: clamp(30svh, 36svh, 50svh) !important; max-height: 52svh !important; }
+	.home-bg-video { transform: scale(1.08) translateY(-8%) !important; }
+}
+
+@media (max-width: 360px) {
+	.with-container-frame > .home-video-wrap { height: clamp(26svh, 32svh, 44svh) !important; max-height: 46svh !important; }
+	.hero-section { min-height: clamp(28svh, 34svh, 46svh) !important; max-height: 48svh !important; }
+	.home-bg-video { transform: scale(1.06) translateY(-10%) !important; }
+}
+
+/* Reduce bottom rail thickness and label size on small screens */
+@media (max-width: 768px) {
+	.with-container-frame { --frame-bottom: 40px !important; }
+	.frame-bottom-label {
+		font-size: clamp(9px, 2.0vw, 10px) !important;
+		letter-spacing: 1.6px !important;
+		height: var(--frame-bottom, 40px) !important;
+		line-height: 1 !important;
+	}
+}
+
+@media (max-width: 640px) {
+	.with-container-frame { --frame-bottom: 32px !important; --frame-vertical: 4px !important; }
+	.frame-bottom-label {
+		font-size: clamp(8px, 1.8vw, 9px) !important;
+		letter-spacing: 1.4px !important;
+		height: var(--frame-bottom, 32px) !important;
+	}
+}
+
+@media (max-width: 420px) {
+	.with-container-frame { --frame-bottom: 24px !important; --frame-vertical: 4px !important; }
+	.frame-bottom-label {
+		font-size: clamp(7px, 1.6vw, 8px) !important;
+		letter-spacing: 1.1px !important;
+		height: var(--frame-bottom, 24px) !important;
+	}
+}
+
+/* More aggressive shrinkage for very small phones */
+@media (max-width: 420px) {
+	/* Make the bottom rail even thinner and allow the label to wrap if needed */
+	.with-container-frame { --frame-bottom: 18px !important; --frame-vertical: 4px !important; }
+	.frame-bottom-label {
+		font-size: clamp(6px, 1.4vw, 7px) !important;
+		letter-spacing: 1px !important;
+		height: var(--frame-bottom, 18px) !important;
+		line-height: 1 !important;
+		white-space: normal !important; /* allow wrapping to keep the label legible */
+		padding: 0 6px !important;
+	}
+	.frame-bottom-label::before, .frame-bottom-label::after { display: none !important; }
+}
+
+@media (max-width: 360px) {
+	.with-container-frame { --frame-bottom: 16px !important; --frame-vertical: 3px !important; }
+	.frame-bottom-label {
+		font-size: clamp(6px, 1.2vw, 6.5px) !important;
+		height: var(--frame-bottom, 16px) !important;
+		letter-spacing: .8px !important;
+		padding: 0 4px !important;
+	}
+}
+
+/* Increase size and lift the bottom label on mobile so it's more prominent */
+@media (max-width: 640px) {
+	.frame-bottom-label {
+		font-size: clamp(10px, 2.6vw, 13px) !important;
+		line-height: 1 !important;
+		transform: translateY(-14%) !important; /* lift slightly less */
+		bottom: 1px !important;
+		white-space: nowrap !important; /* prefer single-line on slightly larger phones */
+		padding: 0 6px !important;
+	}
+}
+
+@media (max-width: 420px) {
+	.frame-bottom-label {
+		font-size: clamp(11px, 3.0vw, 14px) !important;
+		transform: translateY(-20%) !important; /* lift moderately */
+		bottom: 3px !important;
+		white-space: normal !important; /* allow wrapping if needed on narrower screens */
+		padding: 0 5px !important;
+	}
+}
+
+@media (max-width: 360px) {
+	.frame-bottom-label {
+		font-size: clamp(10px, 2.8vw, 13px) !important;
+		transform: translateY(-24%) !important;
+		bottom: 4px !important;
+		padding: 0 3px !important;
+	}
+}
+
+
+
+
+
+
+/* Mobile: ensure the centered (active) event poster displays cleanly with no active shadow
+	 while keeping subtle shadows for the peeking slides on either side. This avoids the
+	 active poster appearing 'muted' by overlapping shadows. */
+@media (max-width: 640px) {
+	.events-carousel-container .event-slide.active {
+		box-shadow: none !important; /* remove heavy shadow from the centered poster */
+		z-index: 4 !important;       /* bring it above peeking slides */
+		transform: translateX(0) scale(1) !important; /* ensure perfect centering */
+		opacity: 1 !important;
+	}
+
+	.events-carousel-container .event-slide.prev,
+	.events-carousel-container .event-slide.next {
+		box-shadow: 0 10px 22px rgba(0,0,0,0.22) !important; /* subtle peek shadow */
+		z-index: 1 !important; /* keep peeks under the active poster */
+		opacity: 0.18 !important; /* preserve faded appearance */
+	}
+
+	/* Small safety: ensure the active slide doesn't get clipped by parent stacking contexts */
+	.events-carousel-container { position: relative !important; z-index: 2 !important; }
+}
+
+/* Mobile: compact the Footer for small screens (reduce height, tighten gaps, keep touch targets usable) */
+@media (max-width: 640px) {
+	/* Reduce large vertical padding on the footer */
+	footer {
+		padding-top: 0.65rem !important; /* tighter than before */
+		padding-bottom: 0.45rem !important;
+	}
+
+	/* Make the inner container breathe less horizontally on small screens */
+	footer .container {
+		padding-left: 0.75rem !important;
+		padding-right: 0.75rem !important;
+	}
+
+	/* Tighten the grid gaps and reduce vertical spacing between blocks */
+	footer .grid { gap: 0.35rem !important; }
+
+	/* Make the footer logo larger on mobile for stronger brand presence while keeping the footer compact */
+	footer img { width: 56px !important; height: 56px !important; margin-right: 0.5rem !important; }
+	footer .main-title { font-size: 0.95rem !important; line-height: 1.05 !important; }
+	footer p, footer .text-gray-400, footer .text-gray-500 { font-size: 0.84rem !important; line-height: 1.28 !important; }
+
+	/* Quick links / contact headings smaller and tighter */
+	footer h4, footer h3 { font-size: 0.92rem !important; margin-bottom: 0.25rem !important; }
+	footer ul.space-y-2 > li { margin-bottom: 0.25rem !important; }
+
+	/* Social icons: smaller, inline, and slightly padded for tappability */
+	.footer-social-icon { width: 28px !important; height: 28px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; padding: 4px !important; border-radius: 6px !important; background: rgba(255,255,255,0.03) !important; margin-right: 6px !important; }
+	.footer-social-icon svg { width: 16px !important; height: 16px !important; }
+
+	/* Reduce the bottom copyright bar spacing and border to keep footer compact */
+	footer > .container > .mt-12.pt-8.border-t { margin-top: 0.4rem !important; padding-top: 0.35rem !important; border-top-width: 1px !important; }
+
+	/* Center the copyright text and reduce its size slightly */
+	footer .text-center.text-gray-500 p { font-size: 0.74rem !important; margin: 0 !important; }
+
+	/* Reduce excessive paragraph max-width so text wraps earlier and reduces vertical height */
+	footer .max-w-md { max-width: 100% !important; }
+	/* Clamp long About paragraph to 2 lines to reduce height */
+	footer .max-w-md { display: -webkit-box !important; -webkit-line-clamp: 2 !important; line-clamp: 2 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; }
+
+	/* Hide optional contact note paragraph */
+	footer p.text-xs.italic { display: none !important; }
+
+	/* Reduce margin above social icons row */
+	footer .flex.mt-4 { margin-top: 0.3rem !important; }
+
+	/* Keep links tappable but smaller visually */
+	footer a { font-size: 0.9rem !important; }
+
+	/* Ensure formattings don't collapse touch targets: keep min-height on small clickable blocks */
+	footer .footer-social-icon, footer a { min-height: 34px !important; min-width: 34px !important; }
+}
+
+/* Mobile: zoom the Testimonials background and tighten the section height for phones */
+@media (max-width: 640px) {
+	/* Target both the ID and helper/bg class to be robust */
+	#testimonials, .testimonials-section-bg {
+		background-size: 150% !important; /* zoom in */
+		background-position: center 42% !important; /* adjust focal point */
+		background-attachment: scroll !important; /* static on mobile */
+		padding-top: 1.75rem !important; /* more top space so heading isn't clipped */
+		padding-bottom: 0.9rem !important;
+		min-height: 28vh !important; /* reduce vertical footprint */
+		overflow: visible !important; /* allow heading/shadows to render fully */
+	}
+
+	/* Raise heading above any decorative bands and ensure it's not clipped */
+	#testimonials .text-center,
+	#testimonials .section-title { position: relative !important; z-index: 2 !important; }
+
+	/* Make testimonial cards a little tighter vertically so the zoomed bg doesn't overcrowd content */
+	#testimonials .card {
+		padding: 1rem !important;
+		margin-bottom: 0.6rem !important;
+		background: transparent !important;
+	}
+
+	/* Slightly reduce heading spacing to keep everything compact */
+	#testimonials .section-title { margin-bottom: 0.5rem !important; }
+}
+
+/* Mobile: nudge the home/logo down slightly so it sits lower in the hero on phones */
+@media (max-width: 640px) {
+	/* Ensure the hero logo and name/moto align horizontally on mobile
+		 Remove previous vertical nudges and force center alignment so the
+		 name and moto sit straight beside the logo. */
+	.hero-section .home-anim {
+		display: flex !important;
+		flex-direction: row !important;
+		align-items: center !important;
+		gap: 0.6rem !important;
+		justify-content: center !important;
+	}
+
+	.hero-section #home-logo {
+		/* allow rotation transforms for animations */
+		margin-top: 0 !important;
+		margin-right: 0.6rem !important;
+		vertical-align: middle !important;
+		display: inline-block !important;
+	}
+
+	.hero-section .home-anim > div {
+		transform: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	/* Keep headline and subheading sizing reasonable while aligned */
+	/* Force the site name to a single line on mobile; constrain its container beside the logo
+		 and fall back to ellipsis if it can't fully fit. Adjust font-size responsively. */
+	.hero-section .home-anim > div { max-width: calc(100% - 96px) !important; }
+	.hero-section .main-title {
+		font-size: clamp(1.2rem, 5.2vw, 2.0rem) !important;
+		white-space: nowrap !important;
+		overflow: hidden !important;
+		text-overflow: ellipsis !important;
+		margin: 0 !important;
+	}
+	.hero-section .home-anim-sub { margin-top: 0.18rem !important; }
+}
+
+/* Mobile: nudge any logo or decorative icon inside the Why Choose section down slightly */
+@media (max-width: 640px) {
+	/* Target likely logo/image elements and the decorative 3d button wrapper */
+	#why-choose .why-choose-3d-btn,
+	#why-choose picture,
+	#why-choose img,
+	#why-choose .why-choose-logo {
+		transform: translateY(14px) !important; /* move down on phones */
+		transition: transform 180ms ease !important;
+		display: block !important;
+	}
+
+	/* Slight extra spacing for its container to avoid overlap with headline */
+	#why-choose .text-center, #why-choose .why-choose-inner {
+		padding-top: 0.4rem !important;
+	}
+}
+
+/* Tweak: reduce overall hero height so the home section is shorter on small screens
+	 Keep the video large but make the section less tall. This block is placed at the
+	 end so it overrides earlier 85vh/100vh rules above. */
+@media (max-width: 640px) {
+	.hero-section {
+		height: auto !important;
+		/* make the hero almost full-viewport so the video dominates on phones */
+		min-height: 95vh !important;
+		max-height: 96vh !important;
+		padding-top: 0.25rem !important;
+		padding-bottom: 0.25rem !important;
+		overflow: visible !important;
+	}
+
+	/* Increase the framed video wrap substantially so the video reads very large */
+	.with-container-frame > .home-video-wrap {
+		height: 92vh !important;
+		min-height: 92vh !important;
+		max-height: 92vh !important;
+		top: 0 !important;
+		bottom: 0 !important;
+		inset: 0 var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+	}
+
+	/* Keep object-fit: cover so the video fills the larger frame (may crop edges) */
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt {
+		object-fit: cover !important;
+		object-position: center center !important;
+	}
+}
+
+	/* User-requested: maximize the home video on phones — make hero full viewport and
+		 let the video-wrap take nearly all of it while leaving a small header-safe offset.
+		 This overrides earlier mobile blocks and is appended at the end intentionally. */
+	@media (max-width: 640px) {
+		/* Use svh where available so mobile UI chrome doesn't shrink the hero unexpectedly. */
+		.hero-section {
+			height: auto !important;
+			min-height: 100svh !important; /* near-fullscreen on modern mobile browsers */
+			max-height: 100svh !important;
+			padding-top: 0 !important;
+			padding-bottom: 0 !important;
+			overflow: hidden !important;
+		}
+
+		/* Let the video wrap occupy almost the entire viewport but subtract a small header
+			 offset so the site header remains visible. Fallback to 56px if no header variable. */
+		.with-container-frame > .home-video-wrap {
+			height: calc(100svh - var(--header-height, 56px)) !important;
+			min-height: calc(100svh - var(--header-height, 56px)) !important;
+			max-height: calc(100svh - var(--header-height, 56px)) !important;
+			top: 0 !important;
+			bottom: 0 !important;
+			inset: 0 var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+			border-radius: 0 !important; /* full-bleed feel on phones */
+		}
+
+		.with-container-frame .home-bg-video,
+		.with-container-frame .home-bg-video-alt {
+			object-fit: cover !important;
+			object-position: center center !important;
+			width: 100% !important;
+			height: 100% !important;
+		}
+
+		/* Ensure header sits above video and remains tappable */
+		header { position: relative !important; z-index: 120 !important; }
+	}
+
+		/* Extra: expand the video vertically from top and bottom for an even fuller look on phones
+			 This nudges the video 24px beyond the normal top/bottom inset and enlarges the computed
+			 height accordingly. Keep it at the end so it wins over prior rules. */
+		@media (max-width: 640px) {
+			.hero-section {
+				height: 100svh !important;
+				min-height: 100svh !important;
+				max-height: 100svh !important;
+				padding: 0 !important;
+				overflow: hidden !important;
+			}
+			.with-container-frame > .home-video-wrap {
+				top: 0 !important;
+				bottom: 0 !important;
+				left: 0 !important;
+				right: 0 !important;
+				height: 100svh !important;
+				min-height: 100svh !important;
+				max-height: 100svh !important;
+				border-radius: 0 !important;
+				overflow: hidden !important;
+				inset: 0 !important;
+			}
+			.with-container-frame .home-bg-video,
+			.with-container-frame .home-bg-video-alt {
+				width: 100% !important;
+				height: 100% !important;
+				object-fit: cover !important;
+				object-position: center center !important;
+			}
+
+			/* keep the video filling the enlarged wrap */
+			.with-container-frame .home-bg-video,
+			.with-container-frame .home-bg-video-alt {
+				width: 100% !important;
+				height: 100% !important;
+				object-fit: cover !important;
+				object-position: center center !important;
+			}
+
+			/* ensure the header remains tappable above the expanded video */
+			header { z-index: 140 !important; }
+		}
+
+			/* Remove vertical rails and expand video height on small devices
+				 - Hide frame rails / pseudo elements
+				 - Remove frame insets and make video taller on <=640px, more on <=420px
+				 Placed at the end so it overrides earlier mobile rules. */
+			@media (max-width: 640px) {
+				/* collapse frame rails */
+				.with-container-frame {
+					--frame-vertical: 0 !important;
+					--frame-top: 0 !important;
+					--frame-bottom: 0 !important;
+				}
+
+				/* hide common rail markup and any pseudo elements */
+				.with-container-frame::before,
+				.with-container-frame::after,
+				.with-container-frame .frame-left,
+				.with-container-frame .frame-right {
+					display: none !important;
+					opacity: 0 !important;
+					width: 0 !important;
+					height: 0 !important;
+					pointer-events: none !important;
+				}
+
+				/* Make the hero truly full-bleed and enlarge the video wrap slightly beyond viewport
+					 so it visually reaches closer to top/bottom edges without rails. */
+				.hero-section {
+					height: 100svh !important;
+					min-height: 100svh !important;
+					max-height: 100svh !important;
+					padding: 0 !important;
+					overflow: hidden !important;
+				}
+
+				.with-container-frame > .home-video-wrap {
+					inset: 0 !important;
+					top: -12px !important;
+					bottom: -12px !important;
+					left: 0 !important;
+					right: 0 !important;
+					height: calc(100svh + 24px) !important;
+					min-height: calc(100svh + 24px) !important;
+					max-height: calc(100svh + 24px) !important;
+					border-radius: 0 !important;
+					overflow: hidden !important;
+				}
+
+				.with-container-frame .home-bg-video,
+				.with-container-frame .home-bg-video-alt {
+					width: 100% !important;
+					height: 100% !important;
+					object-fit: cover !important;
+					object-position: center center !important;
+				}
+
+				/* keep header above video */
+				header { z-index: 180 !important; position: relative !important; }
+			}
+
+			/* Extra aggressive expansion on the smallest phones */
+			@media (max-width: 420px) {
+				.with-container-frame > .home-video-wrap {
+					top: -28px !important;
+					bottom: -28px !important;
+					height: calc(100svh + 56px) !important;
+					min-height: calc(100svh + 56px) !important;
+					max-height: calc(100svh + 56px) !important;
+					inset: -28px 0 -28px 0 !important;
+				}
+			}
+
+			/* Increase the visible size of the video inside the existing hero without changing
+				 the hero's computed height: scale the video element and slightly enlarge its
+				 rendered box so it appears larger and crops more of the frame. */
+			@media (max-width: 640px) {
+				.with-container-frame .home-bg-video,
+				.with-container-frame .home-bg-video-alt {
+						/* make the video much larger visually while keeping the hero size */
+						width: 180% !important;
+						height: 180% !important;
+						max-width: none !important;
+						max-height: none !important;
+						/* shift the enlarged video so the crop stays central (stronger crop) */
+						transform: translate(-40%, -40%) scale(1) !important;
+						transform-origin: center center !important;
+						object-fit: cover !important; /* ensure fill */
+						object-position: center center !important;
+						will-change: transform, width, height !important;
+				}
+			}
+
+			@media (max-width: 420px) {
+					.with-container-frame .home-bg-video,
+					.with-container-frame .home-bg-video-alt {
+						width: 220% !important;
+						height: 220% !important;
+						transform: translate(-60%, -60%) scale(1) !important;
+						object-fit: cover !important;
+					}
+			}
+
+			/* Hide vertical rail text (contact / quote rails) on small screens while keeping icons tappable */
+			@media (max-width: 640px) {
+				/* Target the text nodes or wrappers that use vertical writing-mode */
+				.home-contact-rail .rail-text,
+				.menu-contact-rail .rail-text,
+				.home-quote-rail .quote-inner,
+				.home-quote-rail .quote-inner * {
+					display: none !important;
+					visibility: hidden !important;
+					opacity: 0 !important;
+					pointer-events: none !important;
+					height: 0 !important;
+					width: 0 !important;
+					margin: 0 !important;
+					padding: 0 !important;
+				}
+
+				/* Ensure the rail icon containers remain visible and tappable */
+				.home-contact-rail .rail-inner,
+				.menu-contact-rail .rail-inner {
+					display: flex !important;
+					pointer-events: auto !important;
+					opacity: 1 !important;
+					visibility: visible !important;
+				}
+
+				/* If any vertical text uses writing-mode, force it hidden too */
+				[style*="writing-mode"], [class*="rail-text"] { display: none !important; }
+			}
+
+				/* Hide Get-in-touch icon rails entirely on small screens if user prefers them gone */
+				@media (max-width: 640px) {
+					.home-contact-rail,
+					.menu-contact-rail,
+					.home-contact-rail .rail-inner,
+					.menu-contact-rail .rail-inner,
+					.home-contact-rail .rail-icons,
+					.menu-contact-rail .rail-icons {
+						display: none !important;
+						visibility: hidden !important;
+						pointer-events: none !important;
+						opacity: 0 !important;
+					}
+
+					/* Also hide individual icon elements if present */
+					.home-contact-rail .rail-icon,
+					.menu-contact-rail .rail-icon {
+						display: none !important;
+						width: 0 !important;
+						height: 0 !important;
+						margin: 0 !important;
+						padding: 0 !important;
+					}
+				}
+
+					/* Final tweak: slightly decrease the overall hero height on small devices so the section
+						 isn't quite fullscreen. This overrides earlier fullscreen rules and keeps the video
+						 prominent but reduces vertical occupancy. */
+					@media (max-width: 640px) {
+						.hero-section {
+							/* slightly reduce vertical occupancy so content below is more reachable
+							   — lower than previous 80svh for a tighter mobile layout */
+							height: auto !important;
+							min-height: 72svh !important;
+							max-height: 73svh !important;
+							padding-top: 0 !important;
+							padding-bottom: 0 !important;
+							overflow: hidden !important;
+						}
+
+						.with-container-frame > .home-video-wrap {
+							/* reduce the framed video height slightly to match the shorter hero */
+							top: 0 !important;
+							bottom: 0 !important;
+							height: 70svh !important;
+							min-height: 70svh !important;
+							max-height: 70svh !important;
+							inset: 0 !important;
+							border-radius: 0 !important;
+							overflow: hidden !important;
+						}
+					}
+
+					@media (max-width: 420px) {
+						/* For the smallest phones, reduce further so content below becomes reachable sooner */
+						.hero-section { min-height: 76svh !important; max-height: 77svh !important; }
+						.with-container-frame > .home-video-wrap { height: 74svh !important; min-height: 74svh !important; max-height: 74svh !important; }
+					}
+
+/* Mobile: make the Why Choose Us icons circular and centered for small screens */
+@media (max-width: 640px) {
+	/* Parent wrapper becomes a circular tile */
+	#why-choose .why-choose-3d-btn {
+		width: 88px !important; /* increased further per request */
+		height: 88px !important; /* increased further per request */
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		margin: 0 auto 0.8rem auto !important; /* center horizontally and add small gap */
+		border-radius: 50% !important;
+		background: rgba(199,0,0,0.08) !important; /* slightly stronger tint */
+		border: 1px solid rgba(199,0,0,0.14) !important;
+		box-shadow: 0 12px 30px rgba(0,0,0,0.24) !important;
+		padding: 12px !important;
+	}
+
+	/* SVG icon sizing inside the circular tile */
+	#why-choose .why-choose-3d-btn svg.why-choose-icon,
+	#why-choose .why-choose-icon {
+		width: 40px !important; /* larger icon */
+		height: 40px !important; /* larger icon */
+		display: block !important;
+		margin: 0 !important;
+		color: var(--accent-red, #c70000) !important;
+	}
+
+	/* Ensure label and icon stack nicely and center under the circle */
+	#why-choose .why-choose-3d-btn + h3,
+	#why-choose .why-choose-3d-btn + p {
+		text-align: center !important;
+	}
+}
+
+/* Global mobile: hide Why Choose Us descriptions; keep icons + titles only */
+@media (max-width: 720px) {
+	/* Hide only the immediate description paragraph under each item */
+	#why-choose .scroll-animate > p {
+		display: none !important;
+		visibility: hidden !important;
+		height: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	/* Slightly tighten spacing below titles since descriptions are removed */
+	#why-choose .scroll-animate > h3 {
+		margin-bottom: 0.15rem !important;
+	}
+
+	/* Reduce vertical gap between items for a cleaner mobile stack */
+	#why-choose .container .grid {
+		row-gap: 1.25rem !important; /* ~20px */
+	}
+}
+
+/* Mobile-only: zoom the 'Why Choose Us' background and reduce section height/padding
+	 so small screens show a tighter, zoomed visual without extra vertical space. */
+@media (max-width: 640px) {
+	/* Target both the ID and the new-bg helper class to be robust */
+	#why-choose, .why-choose-new-bg {
+		/* Zoom the background image a bit for a stronger visual impact on phones */
+		background-size: 140% !important; /* zoom in */
+		background-position: center 42% !important; /* raise/lower focal point slightly */
+		background-attachment: scroll !important; /* ensure static behavior on mobile */
+		/* Reduce vertical space so the section doesn't dominate the viewport */
+		min-height: 38vh !important; /* lower than desktop; keeps some presence */
+		padding-top: 0.8rem !important;
+		padding-bottom: 0.8rem !important;
+		overflow: hidden !important; /* prevent background bleed */
+	}
+
+	/* Further tighten the inner grid so content stacks neatly on compact phones */
+	.why-choose-inner {
+		padding-top: 0.25rem !important;
+		padding-bottom: 0.25rem !important;
+	}
+
+	/* Keep the heading size unchanged on mobile but tighten spacing below it */
+	#why-choose .section-title, .why-choose-new-bg .section-title {
+		margin-bottom: 0.5rem !important;
+	}
+}
+
+/* Mobile (≤720px): make 'Why Choose Us' heading more impactful and tidy spacing */
+@media (max-width: 720px) {
+	/* Larger, bolder section heading while preserving style */
+	#why-choose .section-title,
+	.why-choose-new-bg .section-title {
+		font-size: clamp(1.6rem, 7vw, 2.5rem) !important;
+		line-height: 1.12 !important;
+		letter-spacing: 0.2px !important;
+		margin-bottom: 0.5rem !important; /* keep tight under the title */
+	}
+
+	/* Slightly wider underline to match the stronger title */
+	#why-choose .section-underline,
+	.why-choose-new-bg .section-underline {
+		width: clamp(120px, 38vw, 190px) !important;
+		height: 2px !important;
+		opacity: 0.95 !important;
+	}
+
+	/* Tidy heading block spacing so the grid sits closer under the title */
+	#why-choose .text-center,
+	.why-choose-new-bg .text-center {
+		margin-bottom: 0.9rem !important;
+	}
+
+	/* Ensure item titles remain readable without descriptions */
+	#why-choose h3 {
+		font-size: clamp(1.05rem, 4.2vw, 1.3rem) !important;
+		line-height: 1.25 !important;
+		margin-top: 0.2rem !important;
+		margin-bottom: 0.2rem !important;
+	}
+}
+
+/* Hide the unused bottom area of the Menu section on mobile — removes empty placeholder
+	 so small-screen users don't see a large blank area. Keeps desktop unchanged. */
+@media (max-width: 640px) {
+	/* The placeholder container is empty on mobile; hide it and collapse spacing */
+	.menu-content-area {
+		display: none !important;
+		height: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		visibility: hidden !important;
+	}
+
+	/* Reduce the bottom padding of the entire Menu section so it doesn't leave excess space */
+	#menu {
+		padding-bottom: 0 !important;
+		padding-top: 0.6rem !important; /* tighten top slightly on phones */
+		margin-bottom: 0 !important;
+	}
+
+	/* Tighten the inner container so the section closes up neatly on phones */
+	.menu-inner-container {
+		padding-bottom: 0 !important;
+		margin-bottom: 0 !important;
+	}
+}
+
+/* Further tighten spacing between Menu and Outlets on small screens so there's no large gap */
+@media (max-width: 640px) {
+	/* Pull the next visible section (Outlets) up closer to the Menu */
+	#outlets {
+		padding-top: 0.75rem !important;
+		margin-top: 0 !important;
+	}
+
+	/* Reduce any large bottom gap produced by the dish-info vertical spacing by clamping it a bit */
+	.dish-info {
+		margin-top: clamp(160px, 18vh, 260px) !important; /* allow smaller phones to close the gap */
+	}
+}
+
+/* Show the Menu "Get in touch" right rail on phones too (desktop already hides it under 768px).
+	 Make it slim, right-aligned over the frame, and keep icons tappable while not blocking other controls. */
+	@media (max-width: 640px) {
+	.menu-contact-rail {
+		display: flex !important; /* override desktop rule that hides the rail */
+		position: absolute !important;
+		/* move the rail upward further (keep right offset as-is) */
+		right: 8px !important; /* keep edge offset */
+		top: 0.75rem !important; /* moved up further to nudge the rail much higher on phones */
+		width: var(--frame-vertical, 36px) !important;
+		height: calc(100% - 7.5rem) !important;
+		align-items: center !important;
+		justify-content: center !important;
+		z-index: 85 !important; /* above many mobile elements but below overlays */
+		pointer-events: none !important; /* allow inner .rail-inner to control clicks */
+	}
+
+	.menu-contact-rail .rail-inner {
+		pointer-events: auto !important; /* make icons tappable */
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		gap: 8px !important;
+		color: #d1d1d1 !important;
+		transform: translateY(-88px) !important; /* stronger upward nudge for mobile */
+	}
+
+	.menu-contact-rail .rail-text {
+		writing-mode: vertical-rl !important;
+		transform: rotate(180deg) !important;
+		font-size: 10px !important;
+		letter-spacing: 1.2px !important;
+		text-transform: uppercase !important;
+		color: #d0d0d0 !important;
+		opacity: 0.9 !important;
+		pointer-events: none !important; /* non-interactive text */
+	}
+
+	.menu-contact-rail .rail-icons { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+	.menu-contact-rail .rail-icon {
+		width: 26px !important;
+		height: 26px !important;
+		border-radius: 999px !important;
+		background: rgba(255,255,255,0.06) !important;
+		border: 1px solid rgba(255,255,255,0.08) !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		color: #eaeaea !important;
+		pointer-events: auto !important; /* icons should be tappable */
+	}
+
+	/* keep hover/focus affordances mobile-friendly */
+	.menu-contact-rail .rail-icon:active, .menu-contact-rail .rail-icon:focus { transform: translateY(-1px) scale(1.03) !important; }
+
+	/* If the rail overlaps the red next-arrow or similar interactive elements, nudge it slightly inward */
+	.arc-dish-carousel-wrapper, .menu-inner-container { z-index: 1 !important; }
+}
+
+@media (max-width: 640px) {
+	/* Small mobile topper nav (compact, desktop-styled pills for phones). Visible only on small screens. */
+	.mobile-topper-nav {
+		display: flex !important;
+		gap: 8px !important;
+		justify-content: center !important;
+		align-items: center !important;
+		/* Pin the topper adjacent to the hamburger: absolute positioning within header */
+		position: absolute !important;
+	top: 10px !important; /* small offset from header top (increased for taller rail) */
+		right: 56px !important; /* place left of the hamburger (adjust if needed) */
+		padding: 3px 8px !important;
+		margin: 0 !important; /* absolute positioning removes flow margins */
+		max-width: none !important;
+		width: auto !important;
+		box-sizing: border-box !important;
+		/* blend with existing grey rail: no separate card, no border */
+		background: transparent !important;
+		border-radius: 0 !important;
+		border: none !important;
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+		z-index: 80 !important;
+	}
+
+	.mobile-topper-nav a.mobile-topper-link {
+		color: #e6e6e6 !important;
+		font-size: 0.92rem !important;
+		padding: 6px 10px !important;
+		text-decoration: none !important;
+		display: inline-block !important;
+		border-radius: 999px !important;
+		transition: color 160ms ease, transform 160ms ease, opacity 160ms ease !important;
+		opacity: 0.95 !important;
+	}
+
+	/* Hover / active affordance for better tap targets */
+	.mobile-topper-nav a.mobile-topper-link:active,
+	.mobile-topper-nav a.mobile-topper-link:focus {
+		transform: translateY(-1px) !important;
+		outline: none !important;
+	}
+
+	/* When the link becomes `active` (the site's `initActiveNavOnScroll` toggles `active` on header nav links),
+		 show a small blinking red indicator to match desktop behavior. */
+	.mobile-topper-nav a.mobile-topper-link.active {
+		color: var(--accent-red, #c70000) !important;
+		font-weight: 600 !important;
+		position: relative !important;
+	}
+
+	.mobile-topper-nav a.mobile-topper-link.active::after {
+		content: '' !important;
+		position: absolute !important;
+		left: 50% !important;
+		transform: translateX(-50%) !important;
+		bottom: -6px !important;
+		width: 8px !important;
+		height: 8px !important;
+		border-radius: 999px !important;
+		background: var(--accent-red, #c70000) !important;
+		box-shadow: 0 0 8px rgba(199,0,0,0.55) !important;
+		animation: mobile-topper-blink 1s linear infinite !important;
+	}
+
+	@keyframes mobile-topper-blink {
+		0% { opacity: 1; transform: translateX(-50%) scale(1); }
+		50% { opacity: 0.25; transform: translateX(-50%) scale(0.9); }
+		100% { opacity: 1; transform: translateX(-50%) scale(1); }
+	}
+
+	/* Reduce header nav top padding on small screens so the topper fits closer to header like desktop */
+	header { position: relative !important; }
+	/* Slightly increase top/bottom padding of the header on mobile so the nav rail reads taller */
+	header .home-anim-nav-inner { padding-top: 0.6rem !important; padding-bottom: 0.6rem !important; }
+
+	/* Reduce hero height so header + hero fit comfortably without extra vertical scroll */
+	.hero-section {
+		height: auto !important;
+		min-height: calc(100vh - 56px) !important; /* subtract typical header height on small screens */
+	}
+
+} /* end mobile-topper-nav media */
+@media (max-width: 640px) {
+	/* Make outlet detail modal smaller and more compact on phones */
+	#outlet-modal {
+		padding: 0.75rem !important; /* reduce overlay padding */
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	#outlet-modal-content {
+		max-width: 92vw !important; /* keep modal inside viewport */
+		width: 100% !important;
+		border-radius: 14px !important;
+		padding: 0.4rem !important; /* tighter padding */
+		max-height: 92vh !important;
+		overflow-y: auto !important; /* allow scrolling so all info (contact/location) is reachable */
+		-webkit-overflow-scrolling: touch !important;
+	}
+
+	/* Shrink hero image inside modal so it doesn't dominate small screens */
+	#outlet-modal-image {
+		max-height: 180px !important;
+		min-height: 120px !important;
+		border-top-left-radius: 12px !important;
+		border-top-right-radius: 12px !important;
+		box-shadow: none !important;
+	}
+
+	/* Tighter text and controls */
+	#outlet-modal-title {
+		font-size: 1.25rem !important;
+		margin: 0.5rem 0 0.25rem 0 !important;
+		line-height: 1.15 !important;
+	}
+	#outlet-modal-image-count { font-size: 0.78rem !important; }
+	#outlet-modal-content .p-6, #outlet-modal-content .p-5 {
+		padding: 0.6rem !important; /* reduce inner padding */
+	}
+
+	/* Make modal nav/close buttons smaller and closer to the image */
+	#outlet-modal-prev, #outlet-modal-next, #outlet-modal-close {
+		width: 40px !important;
+		height: 40px !important;
+		border-radius: 999px !important;
+		right: auto !important;
+	}
+
+	/* Very small screens: tighten further (rules moved to dedicated 420px block at end) */
+
+	/* Ensure modal image shows fully (no crop) on phones and let image determine the visual height */
+	#outlet-modal-image {
+		object-fit: contain !important; /* show full image */
+		object-position: center center !important;
+		width: auto !important;
+		max-width: 96vw !important;
+		max-height: 58vh !important; /* keep image from overflowing viewport */
+		height: auto !important;
+		display: block !important;
+		margin: 0 auto !important;
+	}
+
+	/* Let the image wrapper collapse to the image height so nav buttons center on the image
+		 (select the nested relative wrapper inside the modal content) */
+	#outlet-modal-content .relative > .relative {
+		min-height: auto !important;
+		max-height: none !important;
+		padding: 0 !important;
+	}
+
+	/* Position arrows aligned to the image middle and closer to edges on small screens */
+	#outlet-modal-prev {
+		left: 10px !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+	}
+	#outlet-modal-next {
+		right: 10px !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+	}
+
+	/* Slightly lift the close button so it doesn't overlap the image */
+	#outlet-modal-close { top: 8px !important; right: 8px !important; }
+
+	/* Make outlet cards medium-sized on phones so they don't span edge-to-edge
+		 — reduce image height, tighten paddings, limit card width and center them. */
+	/* Compact two-column outlet grid on mobile: smaller cards, tighter gaps */
+	#outlet-cards-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* exactly two columns */
+		justify-content: stretch !important; /* use full width */
+		gap: 0.5rem !important; /* tighter gutters */
+		padding-left: 0.5rem !important;
+		padding-right: 0.5rem !important;
+	}
+
+	.outlet-card {
+		max-width: none !important; /* allow grid column to size card */
+		width: 100% !important; /* fill the column */
+		margin: 0 !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
+		transition: transform 180ms ease, box-shadow 180ms ease !important;
+	}
+
+	/* Normalize images for both static and dynamically-inserted cards (extra-outlet)
+		 — some cards use Tailwind utility classes like `h-48` or `aspect-[]`; override
+		 those and enforce a consistent 16:9 visual crop on small screens. */
+	.outlet-card img,
+	.outlet-card img.w-full.h-48,
+	.outlet-card.extra-outlet img,
+	.extra-outlet img {
+		width: 100% !important;
+		height: auto !important; /* override Tailwind h-48 */
+		aspect-ratio: 16 / 9 !important; /* ensure consistent frame */
+		max-height: 160px !important; /* cap image height so cards feel compact */
+		object-fit: cover !important; /* keep visual crop consistent */
+		display: block !important;
+	}
+
+	.outlet-card .p-5 {
+		padding: 0.75rem !important; /* reduce inner padding */
+	}
+
+	.outlet-card h3 {
+		font-size: 1.05rem !important;
+		margin: 0 !important;
+		letter-spacing: 0.2px !important;
+	}
+
+	/* Smallest outlet-card adjustments moved to dedicated 420px block at end */
+
+	/* Mobile: present outlet modal as a single compact card (no inner scroll) */
+	@media (max-width: 640px) {
+		#outlet-modal {
+			padding: 8px !important;
+			align-items: center !important;
+			justify-content: center !important;
+		}
+
+		#outlet-modal-content {
+			max-width: 96vw !important;
+			width: 100% !important;
+			border-radius: 12px !important;
+			padding: 0 !important;
+			max-height: calc(100vh - 16px) !important; /* keep inside viewport */
+			overflow: hidden !important; /* no internal scroll — single card */
+			display: flex !important;
+			flex-direction: column !important;
+			justify-content: flex-start !important;
+		}
+
+		/* Image becomes a contained banner that consumes a portion of the viewport */
+		#outlet-modal-image {
+			width: 100% !important;
+			height: auto !important;
+			max-height: 40vh !important; /* leave room for details */
+			object-fit: contain !important; /* leave room for details */
+			object-position: center center !important;
+			border-top-left-radius: 12px !important;
+			border-top-right-radius: 12px !important;
+			margin: 0 !important;
+		}
+
+		/* Content block below the image should be compact and fully visible */
+		#outlet-modal-content > .w-full.flex.flex-col.items-center.px-8.pt-6.pb-8,
+		#outlet-modal-content .w-full.bg-black\/60 {
+			padding: 10px !important;
+		}
+
+		#outlet-modal-title { font-size: 1.05rem !important; margin: 8px 0 6px !important; }
+		#outlet-modal-image-count { font-size: 0.75rem !important; margin-bottom: 6px !important; }
+
+		/* Make Open Maps smaller and inline-friendly */
+		#outlet-modal-maps { padding: 6px 10px !important; font-size: 0.85rem !important; }
+
+		/* Prev/Next arrows sit at the sides of the image and vertically center on it */
+		#outlet-modal-prev { left: 8px !important; top: 50% !important; transform: translateY(-50%) !important; }
+		#outlet-modal-next { right: 8px !important; top: 50% !important; transform: translateY(-50%) !important; }
+		/* Close button tucked into the corner */
+		#outlet-modal-close { top: 8px !important; right: 8px !important; }
+
+		/* Make outlet cards medium-sized on phones so they don't span edge-to-edge
+			 — reduce image height, tighten paddings, limit card width and center them. */
+		@media (max-width: 640px) {
+			.menu-arc-guide,
+			.menu-arc-guide.inner {
+				transform-origin: left top !important;
+				/* amplify size and widen more for a stronger presence on phones */
+				transform: translateX(-20%) translateY(-14%) scale(1.9) !important;
+				/* ensure the decorative element can expand without clipping */
+				width: auto !important;
+				height: auto !important;
+				max-width: none !important;
+				max-height: none !important;
+				opacity: 1 !important;
+				filter: drop-shadow(0 18px 40px rgba(199,0,0,0.14)) !important;
+			}
+		}
+
+	}
+
+} /* end mobile-only wrapper */
+
+/* Mobile: tidy the Meet Our Team cards so each member photo is a neat tile on phones */
+@media (max-width: 640px) {
+	/* Make Team and Our Story headings a bit bigger on mobile */
+	.team-header h2, #team-heading {
+		font-size: clamp(1.6rem, 6.8vw, 2.3rem) !important;
+		line-height: 1.1 !important;
+		letter-spacing: 0.3px !important;
+	}
+	.team-header .section-underline { width: clamp(120px, 40vw, 200px) !important; height: 2px !important; }
+
+	/* Our Story card heading slightly larger for emphasis on phones */
+	#about .story-text-container h3 {
+		font-size: clamp(1.35rem, 7vw, 1.85rem) !important;
+		line-height: 1.18 !important;
+	}
+	/* Slightly increase decorative logo visibility on mobile */
+	.team-logo-outline { opacity: 0.42 !important; }
+	/* Make the group photo larger on mobile, especially height, without distortion */
+	.team-group-photo .group-photo-full-border {
+		display: block !important;
+		max-width: 100vw !important;
+		border-radius: 2rem !important; /* match original radius for a clean border */
+		border: 3px solid var(--accent-red) !important; /* ensure crisp border on mobile */
+		overflow: hidden !important; /* clip image corners neatly within the border */
+		margin-left: auto !important;
+		margin-right: auto !important;
+		width: 100% !important; /* let border box follow container width */
+		box-sizing: border-box !important; /* include border in total width */
+		background: #181818 !important; /* ensure clean edge behind rounded corners */
+	}
+	.team-group-photo .group-photo-bordered {
+		width: 100% !important;        /* fill the border box exactly — no right gap */
+		max-width: 100% !important;
+		height: auto !important;       /* retain clarity; no scaling blur */
+		display: block !important;
+		border-radius: inherit !important; /* match wrapper corners perfectly */
+		/* remove transforms to prevent blur on mobile */
+		transform: none !important;
+		will-change: auto !important;
+	}
+
+	/* Member grid below the group photo: two columns and centered items */
+	.team-grid {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* two columns on phones */
+		gap: 0.5rem 0.5rem !important; /* small gaps between tiles */
+		align-items: start !important;
+		justify-items: center !important;
+		padding-left: 0.5rem !important;
+		padding-right: 0.5rem !important;
+		margin-top: 0.6rem !important;
+	}
+
+	/* Card containers (team-item) sizing */
+	.team-item, .team-card {
+		width: 100% !important;
+		max-width: 240px !important; /* limit wide cards on larger small screens */
+		border-radius: 12px !important;
+		overflow: hidden !important;
+		background: transparent !important;
+		box-shadow: 0 6px 18px rgba(0,0,0,0.35) !important;
+		transition: transform 180ms ease, box-shadow 180ms ease !important;
+	}
+
+	/* Restore portrait style (previous look) for member photos on mobile */
+	.team-item img, .team-card img, .team-card-imageonly img {
+		width: 100% !important;
+		height: auto !important;
+		aspect-ratio: 3 / 4 !important; /* portrait tiles, original feel */
+		object-fit: cover !important;
+		display: block !important;
+	}
+
+	/* Improve focus/active affordance for keyboard users */
+	.team-item:focus-within, .team-item:active, .team-item:hover,
+	.team-card:focus, .team-card:active, .team-card:hover {
+		transform: translateY(-4px) !important;
+		box-shadow: 0 12px 28px rgba(0,0,0,0.45) !important;
+	}
+
+	/* If there are an odd number of items, center the last one visually by spanning both columns
+	   but constrain its width to match a single tile so size remains unchanged */
+	.team-grid > .team-item:last-child:nth-child(odd),
+	.team-grid > .team-card:last-child:nth-child(odd) {
+		grid-column: 1 / -1 !important; /* take both columns to allow true centering */
+		justify-self: center !important;
+		width: min(calc((100% - 0.5rem) / 2), 240px) !important; /* match one-column tile width */
+	}
+
+	/* Very small screens: slightly smaller tiles */
+	@media (max-width: 420px) {
+		.team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 0.4rem !important; }
+		.team-item, .team-card { max-width: 180px !important; }
+		/* Keep the last odd item centered at the same visual width as peers on tiniest phones */
+		.team-grid > .team-item:last-child:nth-child(odd),
+		.team-grid > .team-card:last-child:nth-child(odd) {
+			width: min(calc((100% - 0.4rem) / 2), 180px) !important;
+		}
+	}
+}
+
+
+/* Additional very-small-screen overrides (<=420px) kept as a single top-level media
+	 block so they are not nested inside other media queries. These rules apply only
+	 to the smallest phone sizes and were previously located inside other blocks. */
+@media (max-width: 420px) {
+	/* Event details — slightly smaller posters on very small phones */
+	.event-details-page .card img { max-width: 240px !important; max-height: 220px !important; }
+	.event-details-page .card .p-6 { padding: 0.85rem !important; }
+	.event-details-page .card h3 { font-size: 1.15rem !important; }
+
+	/* Story slideshow/text tighter on very small phones */
+	.story-slideshow { height: 240px !important; }
+	.story-text-container { padding: 0.75rem !important; }
+	.story-text-container h3 { font-size: 1.25rem !important; }
+	.story-text-container p { font-size: 0.9rem !important; }
+
+	/* Hero tweaks for very small screens */
+	.hero-section .main-title { font-size: clamp(1.4rem, 7.2vw, 2rem) !important; }
+	.hero-section .home-anim > div { transform: translate(-12px, 10px) !important; }
+
+	/* Extra nudge for the CTA on the smallest screens */
+	.home-anim-cta { transform: translateY(-8px) !important; }
+
+	/* Contact/quote rail micro-adjusts */
+	.home-contact-rail .rail-inner { transform: translate(8px, -46px) !important; }
+	.home-quote-rail .quote-inner { transform: translateY(-56px); }
+
+	/* Ensure hero logo & text stay horizontally aligned on the smallest screens too */
+	.hero-section .home-anim { flex-direction: row !important; align-items: center !important; }
+	.hero-section #home-logo { margin-top: 0 !important; }
+	.hero-section .home-anim > div { transform: none !important; }
+
+	/* Modal micro-tighten for very small screens */
+	#outlet-modal-content { max-width: 96vw !important; padding: 0.35rem !important; }
+	#outlet-modal-image { max-height: 140px !important; min-height: 100px !important; }
+	#outlet-modal-title { font-size: 1.05rem !important; }
+	#outlet-modal-prev, #outlet-modal-next, #outlet-modal-close { width: 36px !important; height: 36px !important; }
+
+	/* Outlets: smallest layout caps */
+	/* Force two columns on very small phones too and tighten cards */
+	#outlet-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 0.4rem !important; }
+	.outlet-card { max-width: none !important; width: 100% !important; }
+	.outlet-card img { max-height: 140px !important; }
+	.outlet-card .p-5 { padding: 0.6rem !important; }
+	.outlet-card h3 { font-size: 1rem !important; }
+}
+
+/* Mobile: increase the visible height of the framed home video so it reads larger on phones */
+@media (max-width: 640px) {
+	/* Make the video wrap much taller on phones (about 85% of the viewport). */
+	.with-container-frame > .home-video-wrap {
+		height: 85vh !important;
+		min-height: 85vh !important;
+		max-height: 85vh !important;
+		top: 0 !important;
+		bottom: 0 !important;
+		border-radius: 6px !important;
+		overflow: hidden !important;
+	}
+
+	/* Fill the container and crop as needed so the video reads larger on narrow viewports. */
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt {
+		width: 100% !important;
+		height: 100% !important;
+		object-fit: cover !important; /* fills the frame, may crop edges slightly */
+		object-position: center center !important;
+	}
+
+	/* Minimize paddings so the video gets as much vertical space as possible. */
+	.hero-section { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+}
+
+/* Mobile: visually lengthen the contact image without increasing the section height
+	 We keep the wrapper's computed height the same but scale the image vertically and clip overflow. */
+@media (max-width: 640px) {
+	.contact-img-wrapper {
+		overflow: hidden !important; /* clip the scaled image so section height doesn't grow */
+		position: relative !important;
+		height: auto !important; /* preserve existing responsive height */
+	}
+
+	/* Scale the image vertically so it appears taller inside the same wrapper */
+	.contact-img-main {
+		/* Further crop from the top and slightly reduce vertical scale so the image reads as shorter on phones.
+			 Increasing translateY moves the image down so the wrapper clips more of the top edge. */
+		transform: scaleY(1.02) translateY(12%) !important;
+		transform-origin: center top !important;
+		will-change: transform !important;
+		/* keep width 100% so it still fills horizontally */
+		width: 100% !important;
+		height: auto !important;
+		object-fit: cover !important;
+	}
+
+	/* Ensure the blurred background uses a matching focal position and slightly larger size */
+	.contact-img-blur {
+		filter: blur(18px) brightness(0.72) !important;
+		background-position: center 42% !important;
+		background-size: cover !important;
+	}
+}
+
+/* Additional Menu-section mobile tweaks: make the dish carousel sit lower and shrink title/desc/button */
+@media (max-width: 640px) {
+	/* Make the Menu section heading compact but leave a clearer gap above the carousel */
+	#menu .section-title {
+		font-size: 1.20rem !important; /* slightly smaller per request */
+		line-height: 1.15 !important;
+		margin-bottom: 0.9rem !important; /* increased to prevent overlap */
+	}
+
+	/* Move the arc/dish carousel further down and tighten spacing */
+	.menu-carousel-and-info-wrapper,
+	.arc-dish-carousel-wrapper,
+	#single-arc-carousel {
+		margin-top: 1.6rem !important; /* push carousel lower on mobile */
+	}
+
+	/* Make the dish info (title/description/cta) smaller and more compact */
+	#current-dish-title {
+		font-size: clamp(1.3rem, 6vw, 1.6rem) !important;
+		font-weight: 700 !important;
+		margin-top: 0.25rem !important; /* nudge title further down */
+		margin-bottom: 0.35rem !important;
+		text-align: center !important;
+		color: var(--accent-red, #c70000) !important;
+	}
+	#current-dish-desc {
+		font-size: 0.95rem !important;
+		line-height: 1.3 !important;
+		margin-bottom: 0.5rem !important;
+		color: #d1d1d1 !important;
+	}
+	/* Smaller CTA for mobile */
+	#current-dish-cta {
+		font-size: 0.95rem !important;
+		padding: 0.55rem 1.2rem !important;
+		border-radius: 9999px !important;
+		box-shadow: 0 6px 16px rgba(199,0,0,0.22) !important;
+		letter-spacing: 0.2px !important;
+	}
+
+	/* Ensure the top dish chip list doesn't crowd the title; reduce its height */
+	/* hide the top dish list on small screens to simplify the Menu layout */
+	.dish-top-list-wrapper { margin-bottom: 0.6rem !important; display: none !important; }
+	.dish-chip { padding: 6px 8px !important; font-size: 0.86rem !important; }
+}
+
+/* Stack carousel above info and nudge it left/down on small screens so the visual arc reads larger
+	 while moving arrows remain vertically centered on the carousel. This only applies on mobile. */
+@media (max-width: 640px) {
+	.menu-carousel-and-info-wrapper {
+		display: flex !important;
+		flex-direction: column !important; /* carousel first, info below */
+		align-items: stretch !important;
+		gap: 0.8rem !important;
+	}
+
+	.arc-dish-carousel-wrapper {
+		order: 0 !important;
+		align-self: flex-start !important; /* allow left shift */
+		width: 100% !important;
+		transform: translateX(-8%) translateY(24px) !important; /* push further down to clear heading */
+		overflow: visible !important; /* allow arrow to extend beyond container */
+		padding-left: 8px !important;
+	}
+
+	/* Ensure the carousel track doesn't overflow horizontally and remains centered within its shifted container */
+	#single-arc-carousel { margin-left: 0 !important; }
+
+	/* Info block moved under the carousel and centered */
+	.dish-info {
+		order: 1 !important;
+		width: 100% !important;
+		/* place the info block under the carousel, push it further down and nudge left */
+		transform: translateX(-48px) !important; /* move a bit left from center */
+		padding: 0 0.75rem !important;
+	/* increased vertical gap so the heading/description/button sit further down under the carousel */
+	margin-top: 290px !important; /* lifted up a bit from 320px per user's request */
+		text-align: center !important;
+		align-self: center !important;
+	}
+	#current-dish-title { text-align: center !important; margin: 0.55rem auto 0.35rem !important; color: var(--accent-red, #c70000) !important; }
+	#current-dish-desc { text-align: center !important; max-width: 92% !important; margin: 0.25rem auto !important; }
+	/* Ensure the CTA / Learn more button sits under the description and is centered */
+	#current-dish-cta, .current-dish-cta, .dish-info .btn-primary {
+		display: inline-block !important;
+		margin: 14px auto 0 auto !important; /* push CTA a bit further down */
+		text-align: center !important;
+	}
+
+	/* Reposition arrows so they align with the shifted carousel and stay vertically centered */
+	#single-arc-prev, #single-arc-next {
+		position: absolute !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+		width: 40px !important;
+		height: 40px !important;
+		border-radius: 999px !important;
+	}
+	#single-arc-prev { left: 8px !important; }
+	/* move the right (red) carousel arrow closer to the screen edge on mobile and enlarge it */
+	#single-arc-next {
+		right: -74px !important; /* push further beyond container for a more edge-aligned look */
+		z-index: 80 !important;
+		/* keep it smaller as requested (decrease size) */
+		width: 44px !important;
+		height: 44px !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		box-shadow: 0 6px 16px rgba(0,0,0,0.28) !important;
+		background: var(--accent-red, #c70000) !important; /* ensure it's visible */
+		border-radius: 999px !important;
+		transform: translateY(-50%) !important; /* keep vertically centered */
+		opacity: 1 !important;
+	}
+}
+
+/* Arc carousel dots: push slightly further down on mobile */
+@media (max-width: 720px) {
+	.dish-carousel-dots { margin-top: 40px !important; }
+}
+
+	/* Center the mobile topper nav on small screens */
+	@media (max-width: 640px) {
+		.mobile-topper-nav {
+			position: relative !important; /* allow normal flow so it centers within header */
+			left: 50% !important;
+			transform: translateX(-50%) !important;
+			right: auto !important;
+			top: 10px !important; /* keep a small vertical offset from the header top */
+			display: flex !important;
+			justify-content: center !important;
+			align-items: center !important;
+			gap: 8px !important;
+			width: auto !important;
+			max-width: calc(100% - 96px) !important; /* leave room for hamburger */
+			box-sizing: border-box !important;
+		}
+		/* Ensure the links inside are centered and wrap nicely */
+		.mobile-topper-nav a.mobile-topper-link {
+			display: inline-block !important;
+			text-align: center !important;
+			white-space: nowrap !important;
+		}
+	}
+
+/* Smoothness tweak (no visual change): layer promotion for testimonial cards
+   to reduce tiny vibration during scroll while their float animation runs. */
+.testimonials-section-bg .card {
+	will-change: transform;
+	backface-visibility: hidden;
+}
+
+/* Tall mobile refinement: ensure extra breathing room between heading and carousel */
+@media (max-width: 720px) and (min-height: 780px) {
+	#menu .section-title { margin-bottom: 1.1rem !important; }
+	.menu-carousel-and-info-wrapper,
+	.arc-dish-carousel-wrapper,
+	#single-arc-carousel { margin-top: 2rem !important; }
+	.arc-dish-carousel-wrapper { transform: translateX(-8%) translateY(32px) !important; }
+}
+
+/* Global Mobile: refine Signature Dish Slider so it never crowds the heading and is easier to use */
+@media (max-width: 720px) {
+	.signature-slider { 
+		margin-top: 0.8rem !important; 
+		min-height: 360px !important;
+	}
+	.signature-slider .dish-slide { min-height: 320px !important; }
+	.signature-slider .dish-img-side { flex-basis: auto !important; height: 170px !important; }
+	.signature-slider .dish-img { width: 150px !important; height: 150px !important; border-width: 6px !important; }
+		.signature-slider .dish-info-side { padding-left: 0 !important; padding-top: 1.2rem !important; text-align: center !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+	/* Dish name: a bit further down, centered, and bigger */
+		.signature-slider .dish-info-side h3 { font-size: clamp(1.4rem, 5.8vw, 1.65rem) !important; line-height: 1.25 !important; margin: 0.6rem auto 0.5rem !important; text-align: center !important; }
+	.signature-slider .dish-info-side p { font-size: 0.95rem !important; margin-bottom: 0.7rem !important; color: #dddddd !important; }
+	/* Perfect Learn More button: compact pill, centered */
+		.signature-slider .see-details-btn { display: inline-block !important; margin: 0.5rem auto 0 !important; padding: 0.55rem 1.2rem !important; font-size: 0.95rem !important; border-radius: 9999px !important; box-shadow: 0 4px 14px rgba(199,0,0,0.28) !important; letter-spacing: 0.2px !important; }
+	.signature-slider .see-details-btn:active { transform: translateY(-1px) scale(1.01); }
+	.signature-slider .carousel-arrow { width: 40px !important; height: 40px !important; top: 52% !important; }
+	.signature-slider .carousel-arrow.prev { left: 8px !important; }
+	.signature-slider .carousel-arrow.next { right: 8px !important; }
+	/* Dots: slightly smaller, tidy spacing */
+		.signature-slider .carousel-dots { bottom: 8px !important; gap: 0.4rem !important; }
+	.signature-slider .carousel-dot { width: 10px !important; height: 10px !important; border-width: 2px !important; opacity: 0.85 !important; }
+	.signature-slider .carousel-dot.active { transform: none !important; opacity: 1 !important; }
+}
+
+@media (max-width: 720px) and (min-height: 780px) {
+	.signature-slider { margin-top: 1rem !important; }
+}
+
+/* Promote testimonials background container to stable layer (no visual change) */
+.testimonials-section-bg {
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	will-change: transform;
+}
+
+/* About slideshow: hint opacity animation for smoother fades */
+.story-slideshow img {
+	will-change: opacity;
+}
+
+/* Background sections: compositing hints to avoid rare blink during scroll */
+.events-section-bg,
+.why-choose-new-bg,
+.parallax-bg {
+	transform: translateZ(0);
+	backface-visibility: hidden;
+	will-change: transform;
+}
+
+/* Offscreen rendering optimization (no visual change):
+   allow the browser to skip painting heavy sections until needed. */
+#events, .events-section-bg {
+	content-visibility: auto;
+	contain-intrinsic-size: 1000px;
+}
+#testimonials, .testimonials-section-bg {
+	content-visibility: auto;
+	contain-intrinsic-size: 900px;
+}
+
+/* ---------------------------------------------------------------------------
+	 Global Mobile Scope refinement (<=720×720): make home video taller WITHOUT
+	 increasing section height. We maximize the video wrap height by tightening
+	 the inner frame and letting the wrap fill the section, then covering it.
+--------------------------------------------------------------------------- */
+@media (max-width: 720px) and (max-height: 720px) {
+	/* Slim inner frame so the video can occupy more vertical space inside hero */
+	.with-container-frame {
+		--frame-top: 0px !important;
+		--frame-bottom: 0px !important; /* reclaim full height for the video */
+		--frame-vertical: 2px !important; /* even thinner side rails for more width */
+	}
+
+	/* Let the video wrap fill the hero block without changing the hero's height */
+	.with-container-frame > .home-video-wrap {
+		/* Increase bleed beyond the frame for even more visible video height */
+		inset: -22px -8px -22px -8px !important;
+		height: 100% !important;
+		min-height: 100% !important;
+		max-height: 100% !important;
+		border-radius: 0 !important;
+		overflow: hidden !important;
+	}
+
+	/* Fill the wrap vertically; prefer cover so height fully fills without raising hero */
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt {
+		width: 100% !important;
+		height: 100% !important;
+		max-height: 100% !important;
+		object-fit: cover !important;
+		/* Favor a slightly higher focal point so important subject stays visible */
+		object-position: center 32% !important;
+		/* Scale up more to read larger without changing section height */
+		transform: scale(1.22) !important;
+	}
+
+	/* Hide the blurred background fill to avoid edge seams on small screens */
+	.home-bg-video-fill { display: none !important; }
+
+	/* Keep header above the enlarged video */
+	header { position: relative !important; z-index: 220 !important; }
+
+	/* Center and compact the hero content stack for small screens */
+	.hero-section .home-anim {
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		gap: clamp(8px, 2.2vw, 16px) !important;
+		text-align: center !important;
+		padding-inline: clamp(8px, 3vw, 20px) !important;
+		/* Nudge the whole stack upward some more */
+		transform: translateY(-36px) !important;
+	}
+
+	/* Logo sizing tuned for this scope so it balances with text */
+	#home-logo {
+		/* Make the home logo a bit bigger */
+		width: clamp(170px, 34vw, 320px) !important;
+		height: auto !important;
+		display: inline-block !important;
+		object-fit: contain !important;
+		/* Stronger upward nudge to align with text */
+		margin-top: -14px !important;
+	}
+
+	/* Title/subtitle readability and width limits over video */
+	.hero-section .main-title {
+		/* Allow the name to show in full (no ellipsis), and slightly bigger */
+		font-size: clamp(1.5rem, 6.6vw, 2.4rem) !important;
+		line-height: 1.12 !important;
+		max-width: 96vw !important;
+		margin: 0 auto 0.15rem auto !important;
+		text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
+		white-space: normal !important;
+		overflow: visible !important;
+		text-overflow: clip !important;
+	}
+	.hero-section .home-anim-sub {
+		font-size: clamp(0.92rem, 3.2vw, 1.05rem) !important;
+		max-width: 92vw !important;
+		margin: 0.05rem auto 0 !important;
+		color: #e6e6e6 !important;
+		text-shadow: 0 1px 2px rgba(0,0,0,0.28) !important;
+	}
+
+	/* Ensure the text container is not width-limited beside the logo on very small widths */
+	.hero-section .home-anim > div { max-width: 100% !important; }
+
+	/* CTA sizing and centering for touch comfort */
+	.hero-section .home-anim-cta, 
+	.hero-section .btn-primary {
+		/* Make the Book a Table button a bit smaller on mobile */
+		font-size: clamp(0.8rem, 1.9vw, 0.95rem) !important;
+		padding: clamp(5px, 1.3vw, 9px) clamp(9px, 2.2vw, 13px) !important;
+		margin: 0.25rem auto 0 !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+	}
+
+	/* About: clamp story text and show a Show more button on mobile */
+	#about .story-text-container { position: relative !important; }
+	#about #about-text {
+		/* Smooth expand/collapse animation */
+		transition: height 280ms ease !important;
+		display: -webkit-box !important;
+		-webkit-box-orient: vertical !important;
+		-webkit-line-clamp: 4 !important; /* show ~4 lines only */
+		line-clamp: 4 !important; /* standard property for supporting browsers */
+		overflow: hidden !important;
+		max-height: 7.5em !important; /* safety cap matching ~4 lines */
+	}
+	#about .story-text-container.expanded #about-text {
+		-webkit-line-clamp: unset !important;
+		line-clamp: unset !important;
+		display: block !important;
+		max-height: none !important;
+		overflow: visible !important;
+	}
+	/* Show the toggle button on mobile; center it */
+	.about-toggle { display: inline-block !important; margin: 0.5rem 0 0 !important; }
+
+	/* Events section: Hide descriptions, show only posters, titles, and buttons */
+	#event-details-container .event-details-card p {
+		display: none !important;
+	}
+
+	/* Center-align event title and button */
+	#event-details-container .event-details-card {
+		text-align: center !important;
+		padding: 1rem !important;
+	}
+
+	#event-details-container .event-details-card h3 {
+		font-size: clamp(1.3rem, 5vw, 1.6rem) !important;
+		margin-bottom: 1rem !important;
+	}
+
+	#event-details-container .event-details-card .learn-more-btn {
+		margin: 0 auto !important;
+		display: inline-block !important;
+	}
+
+	/* Reduce events section height from bottom */
+	#events, .events-section-bg {
+		padding-bottom: 2rem !important;
+	}
+}
+
+
+	/* ---------------------------------------------------------------------------
+		 TALL-PHONE BOOST (<=640px width, tall heights)
+		 Increase hero/video heights on tall mobile screens while keeping contain fit
+		 so the video remains uncropped and centered.
+	--------------------------------------------------------------------------- */
+	@media (max-width: 640px) and (min-height: 780px) {
+		.hero-section {
+			min-height: 86svh !important;
+			max-height: 90svh !important;
+		}
+		.with-container-frame > .home-video-wrap {
+			height: 84svh !important;
+			min-height: 84svh !important;
+			max-height: 84svh !important;
+		}
+		.with-container-frame .home-bg-video,
+		.with-container-frame .home-bg-video-alt {
+			object-fit: contain !important;
+			object-position: center center !important;
+		}
+	}
+
+	@media (max-width: 640px) and (min-height: 900px) {
+		.hero-section {
+			min-height: 90svh !important;
+			max-height: 94svh !important;
+		}
+		.with-container-frame > .home-video-wrap {
+			height: 88svh !important;
+			min-height: 88svh !important;
+			max-height: 88svh !important;
+		}
+	}
+
+/* ---------------------------------------------------------------------------
+	 FINAL MOBILE HERO NORMALIZATION (<=640px)
+	 - Resolve conflicting earlier blocks by setting a single, consistent target
+		 height for the hero and video wrap on phones
+	 - Keep the video large but avoid full-bleed/over-crop; prefer object-fit: contain
+	 - Restore frame rails visibility if hidden by previous rules
+--------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+	/* Limit hero height so content below is reachable; avoid fullscreen on phones */
+	.hero-section {
+		height: auto !important;
+		min-height: 74svh !important;
+		max-height: 78svh !important;
+		padding-top: clamp(6px, 1.4vw, 10px) !important;
+		padding-bottom: clamp(6px, 1.4vw, 10px) !important;
+		overflow: hidden !important;
+	}
+
+	/* Match video wrap slightly smaller than hero to avoid clipping header/footer */
+	.with-container-frame > .home-video-wrap {
+		top: 0 !important;
+		bottom: 0 !important;
+		height: 72svh !important;
+		min-height: 72svh !important;
+		max-height: 72svh !important;
+		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+		border-radius: 8px !important;
+		overflow: hidden !important;
+	}
+
+	/* Ensure video fills wrap without over-cropping */
+	.with-container-frame .home-bg-video,
+	.with-container-frame .home-bg-video-alt {
+		width: 100% !important;
+		height: 100% !important;
+		max-width: 100% !important;
+		max-height: 100% !important;
+		object-fit: contain !important;
+		object-position: center center !important;
+		transform: none !important;
+	}
+
+	/* Restore frame rails if any earlier block hid them */
+	.with-container-frame::before,
+	.with-container-frame::after,
+	.with-container-frame .frame-left,
+	.with-container-frame .frame-right {
+		display: block !important;
+		opacity: 1 !important;
+		width: auto !important;
+		height: auto !important;
+		pointer-events: auto !important;
+	}
+}
+
+@media (max-width: 420px) {
+	.hero-section {
+		min-height: 76svh !important;
+		max-height: 80svh !important;
+	}
+	.with-container-frame > .home-video-wrap {
+		height: 74svh !important;
+		min-height: 74svh !important;
+		max-height: 74svh !important;
+	}
+}
+
+

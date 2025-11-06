@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details - AL-REEM MANDI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/mobile-overrides.css">
+    <style>
+        :root {
+            --primary-black: #0a0a0a;
+            --primary-black-light: #111111;
+            --primary-grey: #101010;
+            --secondary-offwhite: #f5f5f5;
+            --accent-red: #c70000;
+        }
+        body {
+            background-color: var(--primary-black);
+            color: var(--secondary-offwhite);
+            font-family: 'Poppins', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+        .main-title {
+            font-family: 'Cinzel', serif;
+        }
+        .section-title {
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        .section-underline {
+            height: 1px;
+            background-color: var(--accent-red);
+            opacity: 0.9;
+        }
+        .card {
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* allow badges / overlays */
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        .btn-primary {
+            background-color: var(--accent-red);
+            color: var(--secondary-offwhite);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .btn-primary:hover {
+            background-color: #fff;
+            color: var(--accent-red);
+        }
+        /* Event badge (small, rounded) */
+        .event-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--accent-red);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 6px 10px;
+            border-radius: 999px;
+            box-shadow: 0 6px 18px rgba(199,0,0,0.28);
+            z-index: 12;
+            letter-spacing: 0.4px;
+        }
+    </style>
+</head>
+<body class="event-details-page">
+
+    <!-- Navbar intentionally removed on this page for a focused event details view -->
+
+    <main class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="section-title main-title">Upcoming Events</h2>
+                <div class="w-32 h-[1px] mx-auto section-underline" style="background-color: var(--accent-red);"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Event 1: Happy Diwali -->
+                <div class="card">
+                    <img src="assets/images/Event_poster/01event.jpg" alt="Happy Diwali" loading="eager" decoding="sync" class="w-full h-96 object-cover" style="image-rendering: crisp-edges;">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Happy Diwali</h3>
+                        <p class="text-gray-400">Celebrate Diwali with Al‑Reem Mandi — enjoy a festive special menu, traditional sweets, and family-style platters crafted for the season. Reserve a table for intimate family gatherings or lively community celebrations.</p>
+                    </div>
+                </div>
+
+                <!-- Event 2: Classic dishes -->
+                <div class="card">
+                    <img src="assets/images/Event_poster/02event.jpg" alt="Classic dishes" loading="eager" decoding="sync" class="w-full h-96 object-cover" style="image-rendering: crisp-edges;">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Classic dishes</h3>
+                        <p class="text-gray-400">Savour our timeless classics: slow‑cooked Mandi, Alfaham, and signature rice dishes prepared with house spices and slow heat. Perfect comfort food for any occasion — tried, tested, and loved by generations.</p>
+                    </div>
+                </div>
+
+                <!-- Event 3: Our New world (Bathery) -->
+                <div class="card">
+                    <span class="event-badge">New Outlet</span>
+                    <img src="assets/images/Event_poster/03event.jpg" alt="Our New world - Bathery" loading="eager" decoding="sync" class="w-full h-96 object-cover" style="image-rendering: crisp-edges;">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Our New world</h3>
+                        <p class="text-gray-400">We’ve opened a new outlet in Bathery — come experience our new world of flavours at the Bathery location. Expect inventive menu additions that blend tradition with contemporary twists, fresh ingredients, and bold spices.</p>
+                    </div>
+                </div>
+
+                <!-- Event 4: Happy onam -->
+                <div class="card">
+                    <img src="assets/images/Event_poster/04event.jpg" alt="Happy onam" loading="eager" decoding="sync" class="w-full h-96 object-cover" style="image-rendering: crisp-edges;">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Happy onam</h3>
+                        <p class="text-gray-400">Join us for Onam celebrations with delightful Sadya platters, seasonal specialties, and festive hospitality. Enjoy limited‑time offerings crafted to honour the season and its traditions.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-16">
+                <button class="btn-primary" onclick="window.location.href='index.html#events';">Back</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-16">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 AL-REEM MANDI. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
