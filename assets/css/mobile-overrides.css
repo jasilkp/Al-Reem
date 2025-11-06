@@ -112,22 +112,22 @@
   /* Keep the red underline visible (no override required) */
   #main-nav-underline { display: block !important; opacity: 1 !important; }
   
-  /* Make home video bigger */
+  /* Make home video bigger - increased even more for maximum mobile presence */
   .with-container-frame > .home-video-wrap {
-    height: 90vh !important;
-    min-height: 90vh !important;
-    max-height: 90vh !important;
+    height: 97vh !important;
+    min-height: 97vh !important;
+    max-height: 97vh !important;
   }
   
   .hero-section {
-    min-height: 92vh !important;
-    max-height: 92vh !important;
+    min-height: 98vh !important;
+    max-height: 98vh !important;
   }
   
-  /* Make home page logo bigger */
+  /* Make home page logo bigger - increased for better visibility */
   #home-logo {
-    width: 180px !important;
-    height: 180px !important;
+    width: 200px !important;
+    height: 200px !important;
   }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
@@ -295,14 +295,21 @@
 	.hero-section .home-anim-sub { font-size: clamp(0.95rem, 3.2vw, 1.05rem) !important; }
 
 
-	/* Further enlarge the framed video area for phones: make rails very slim
-		 and increase hero height so the video becomes the dominant element. */
+	/* Remove left and right rails on mobile, keep top and bottom */
 	.with-container-frame {
-		--frame-vertical: 6px !important;  /* keep slim left/right rails */
+		--frame-vertical: 0px !important;  /* remove left/right rails completely */
 		--frame-top: 1px !important;       /* near-zero top rail */
 	 /* Slightly reduced bottom rail from earlier change so it still fits the label
 		 but doesn't take too much vertical space on small screens */
 	 --frame-bottom: 40px !important;   /* slightly smaller but readable */
+	}
+	
+	/* Hide frame rail elements on mobile */
+	.with-container-frame::before,
+	.with-container-frame::after,
+	.with-container-frame .frame-left,
+	.with-container-frame .frame-right {
+		display: none !important;
 	}
 
 	/* Make the hero taller so the framed video reads as large and professional
@@ -321,20 +328,10 @@
 		display: none !important;
 	}
 
-	/* Hide the bottom rail in home section */
+	/* Hide the bottom rail in home section, keep only top rail (no left/right rails) */
 	.hero-section.with-container-frame::before {
 		background:
-			/* Keep vertical rails (left & right) */
-			linear-gradient(
-				to right,
-				var(--frame-color) 0,
-				var(--frame-color) var(--frame-vertical),
-				transparent var(--frame-vertical),
-				transparent calc(100% - var(--frame-vertical)),
-				var(--frame-color) calc(100% - var(--frame-vertical)),
-				var(--frame-color) 100%
-			),
-			/* Only top rail, no bottom rail */
+			/* Only top rail, no bottom, left, or right rails */
 			linear-gradient(
 				to bottom,
 				var(--frame-color) 0,
@@ -342,14 +339,14 @@
 				transparent var(--frame-top),
 				transparent 100%
 			) !important;
-		background-repeat: no-repeat, no-repeat !important;
-		background-size: 100% 100%, 100% 100% !important;
+		background-repeat: no-repeat !important;
+		background-size: 100% 100% !important;
 	}
 
 	/* Ensure the video wrap uses the updated frame variables and fully fills
 		 the available inset area on mobile devices. */
 	.with-container-frame > .home-video-wrap {
-		inset: var(--frame-top, 1px) var(--frame-vertical, 6px) var(--frame-bottom, 4px) var(--frame-vertical, 6px) !important;
+		inset: var(--frame-top, 1px) 0px var(--frame-bottom, 4px) 0px !important;
 		border-radius: 8px;
 		/* Ensure the wrap fills the taller hero area while respecting the frame inset */
 		top: var(--frame-top, 1px) !important;
@@ -509,7 +506,7 @@
 		background-attachment: scroll !important;
 		/* Center the focal point precisely and keep a tasteful zoom */
 		background-position: center center !important;
-		background-size: 130% auto !important; /* zoom in beyond cover */
+		background-size: 145% auto !important; /* zoom in more for better visual impact */
 		will-change: auto !important;
 		transform: none !important;
 	}
@@ -518,10 +515,10 @@
 	/* Further reduce the visible section height and bottom space on phones
 		 while ensuring the quote is centered within the section. */
 	/* Reduce the outer section min-height so the area becomes shorter on small screens. */
-	#why-us { min-height: 58vh !important; padding-bottom: 0.5rem !important; padding-top: 0.9rem !important; }
+	#why-us { min-height: 50vh !important; padding-bottom: 0.5rem !important; padding-top: 0.9rem !important; }
 	.parallax-content {
 		/* Center the quote perfectly within the section */
-		min-height: 58vh !important;
+		min-height: 50vh !important;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;
 		display: flex !important;
@@ -531,16 +528,16 @@
 	}
 	/* Ensure the immediate container centers the blockquote */
 	.parallax-content > .container { display: flex !important; align-items: center !important; justify-content: center !important; }
-	/* Make the quote centered and constrained for better readability on small screens */
+	/* Make the quote larger and more prominent on mobile for better readability - allows 3-4 lines */
 	.parallax-quote {
-		max-width: 640px !important;
+		max-width: 90% !important;
 		width: 100% !important;
 		margin: 0 auto !important;
 		text-align: center !important;
-		font-size: clamp(1.06rem, 5.1vw, 1.3rem) !important;
-		line-height: 1.5 !important;
+		font-size: clamp(1.35rem, 6.2vw, 1.85rem) !important;
+		line-height: 1.45 !important;
 		font-weight: 600 !important;
-		letter-spacing: 0.2px !important;
+		letter-spacing: 0.3px !important;
 		color: #fafafa !important;
 		/* Remove the box background; enhance legibility with layered shadows and subtle stroke */
 		text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 4px 22px rgba(0,0,0,0.45), 0 0 2px rgba(0,0,0,0.35) !important;
@@ -548,8 +545,9 @@
 		text-rendering: optimizeLegibility;
 		/* no extra nudge; keep true center */
 		margin-top: 0 !important;
+		padding: 1rem 1.5rem !important;
 	}
-	.parallax-quote .quote-mark { display: inline-block; margin: 0 6px; vertical-align: middle; font-size: 1.6rem !important; }
+	.parallax-quote .quote-mark { display: inline-block; margin: 0 8px; vertical-align: middle; font-size: 2.2rem !important; }
 }
 
 /* ---------------------------------------------------------------------------
