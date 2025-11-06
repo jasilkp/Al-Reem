@@ -2605,7 +2605,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .parallax-bg {
     position: relative;
-    background-image: url('../images/Why Choose Us -min.JPG');
+    background-image: url('../images/Why Choose Us -min.jpg');
     /* Use CSS variable so JS can update position with less layout churn */
     background-position: center var(--why-bg-y, 8%); /* mirror MIN_Y to avoid top sliver */
     background-size: cover;
