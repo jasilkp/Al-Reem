@@ -126,8 +126,8 @@
   
   /* Make home page logo bigger - increased for better visibility */
   #home-logo {
-    width: 220px !important;
-    height: 220px !important;
+    width: 250px !important;
+    height: 250px !important;
   }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
@@ -135,8 +135,8 @@
 	#logo-intro-img.intro-logo,
 	object.intro-logo,
 	.intro-logo {
-		width: clamp(380px, 56vw, 560px) !important;
-		height: clamp(380px, 56vw, 560px) !important;
+		width: clamp(420px, 62vw, 620px) !important;
+		height: clamp(420px, 62vw, 620px) !important;
 		max-width: 92vw !important;
 		max-height: 92vh !important;
 	}
@@ -284,8 +284,8 @@
 	/* Increase the hero/home logo size (override Tailwind utility sizes on small screens) */
 	#home-logo {
 		/* Bump up the hero logo size for phones */
-		width: clamp(180px, 40vw, 360px) !important;
-		height: clamp(180px, 40vw, 360px) !important;
+		width: clamp(210px, 45vw, 400px) !important;
+		height: clamp(210px, 45vw, 400px) !important;
 		display: inline-block;
 		object-fit: contain;
 	}
@@ -534,10 +534,10 @@
 		width: 100% !important;
 		margin: 0 auto !important;
 		text-align: center !important;
-		font-size: clamp(1.35rem, 6.2vw, 1.85rem) !important;
-		line-height: 1.45 !important;
-		font-weight: 600 !important;
-		letter-spacing: 0.3px !important;
+		font-size: clamp(1.5rem, 7vw, 2.1rem) !important;
+		line-height: 1.5 !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.4px !important;
 		color: #fafafa !important;
 		/* Remove the box background; enhance legibility with layered shadows and subtle stroke */
 		text-shadow: 0 2px 10px rgba(0,0,0,0.55), 0 4px 22px rgba(0,0,0,0.45), 0 0 2px rgba(0,0,0,0.35) !important;
@@ -547,7 +547,7 @@
 		margin-top: 0 !important;
 		padding: 1rem 1.5rem !important;
 	}
-	.parallax-quote .quote-mark { display: inline-block; margin: 0 8px; vertical-align: middle; font-size: 2.2rem !important; }
+	.parallax-quote .quote-mark { display: inline-block; margin: 0 8px; vertical-align: middle; font-size: 2.5rem !important; }
 }
 
 /* ---------------------------------------------------------------------------
