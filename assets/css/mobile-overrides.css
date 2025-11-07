@@ -126,8 +126,8 @@
   
   /* Make home page logo bigger - increased for better visibility */
   #home-logo {
-    width: 280px !important;
-    height: 280px !important;
+    width: 340px !important;
+    height: 340px !important;
   }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
@@ -135,10 +135,10 @@
 	#logo-intro-img.intro-logo,
 	object.intro-logo,
 	.intro-logo {
-		width: clamp(460px, 68vw, 680px) !important;
-		height: clamp(460px, 68vw, 680px) !important;
-		max-width: 92vw !important;
-		max-height: 92vh !important;
+		width: clamp(550px, 75vw, 780px) !important;
+		height: clamp(550px, 75vw, 780px) !important;
+		max-width: 94vw !important;
+		max-height: 94vh !important;
 	}
 }
 
@@ -263,8 +263,8 @@
 	/* Make the intro overlay logo a bit larger and more prominent on phones */
 	.intro-logo {
 		/* Increased values to make the intro logo noticeably larger on small phones */
-		width: clamp(270px, 50vw, 580px);
-		height: clamp(270px, 50vw, 580px);
+		width: clamp(340px, 58vw, 680px);
+		height: clamp(340px, 58vw, 680px);
 		max-width: 96vw;
 		max-height: 96vw;
 	}
@@ -275,8 +275,8 @@
 	#logo-intro-img,
 	#logo-intro-img.intro-logo,
 	object.intro-logo {
-		width: clamp(320px, 56vw, 680px) !important;
-		height: clamp(320px, 56vw, 680px) !important;
+		width: clamp(400px, 64vw, 780px) !important;
+		height: clamp(400px, 64vw, 780px) !important;
 		max-width: 96vw !important;
 		max-height: 96vw !important;
 		display: block !important;
@@ -285,8 +285,8 @@
 	/* Increase the hero/home logo size (override Tailwind utility sizes on small screens) */
 	#home-logo {
 		/* Bump up the hero logo size for phones */
-		width: clamp(240px, 50vw, 450px) !important;
-		height: clamp(240px, 50vw, 450px) !important;
+		width: clamp(300px, 58vw, 520px) !important;
+		height: clamp(300px, 58vw, 520px) !important;
 		display: inline-block;
 		object-fit: contain;
 	}
