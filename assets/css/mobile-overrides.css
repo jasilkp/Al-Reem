@@ -126,8 +126,8 @@
   
   /* Make home page logo bigger - increased for better visibility */
   #home-logo {
-    width: 340px !important;
-    height: 340px !important;
+    width: 380px !important; /* increased from 340px */
+    height: 380px !important; /* increased from 340px */
   }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
@@ -1383,10 +1383,11 @@ p, .text-gray-300, .text-gray-200 {
 		background-size: 160% !important; /* increased zoom */
 		background-position: center 42% !important; /* raise/lower focal point slightly */
 		background-attachment: scroll !important; /* ensure static behavior on mobile */
-		/* Increase vertical space from bottom */
-		min-height: 45vh !important; /* increased from 38vh */
-		padding-top: 0.8rem !important;
-		padding-bottom: 5rem !important; /* increased for more bottom space */
+		/* Increase vertical space significantly for proper section presence */
+		min-height: 55vh !important; /* increased from 45vh for more height */
+		padding-top: 1.5rem !important; /* increased top padding */
+		padding-bottom: 7rem !important; /* increased for more bottom space */
+		margin-bottom: 3rem !important; /* add separation from Meet Our Team section */
 		overflow: hidden !important; /* prevent background bleed */
 	}
 	
@@ -1395,9 +1396,9 @@ p, .text-gray-300, .text-gray-200 {
 		background-size: 140% !important;
 		background-position: center 42% !important;
 		background-attachment: scroll !important;
-		min-height: 38vh !important;
-		padding-top: 0.8rem !important;
-		padding-bottom: 0.8rem !important; /* keep original smaller padding */
+		min-height: 30vh !important; /* decreased from 38vh for less height */
+		padding-top: 0.5rem !important; /* reduced top padding */
+		padding-bottom: 0.5rem !important; /* reduced bottom padding */
 		overflow: hidden !important;
 	}
 
