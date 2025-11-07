@@ -1377,17 +1377,28 @@ p, .text-gray-300, .text-gray-200 {
 	 so small screens show a tighter, zoomed visual without extra vertical space. 
 	 EXTENDED to 768px to cover larger phones */
 @media (max-width: 768px) {
-	/* Target both the ID and the new-bg helper class to be robust */
-	#why-choose, .why-choose-new-bg {
-		/* Zoom the background image a bit for a stronger visual impact on phones */
-		background-size: 140% !important; /* zoom in */
+	/* Target only #why-choose section for increased height and zoomed background */
+	#why-choose {
+		/* Zoom the background image more for stronger visual impact on phones */
+		background-size: 160% !important; /* increased zoom */
 		background-position: center 42% !important; /* raise/lower focal point slightly */
 		background-attachment: scroll !important; /* ensure static behavior on mobile */
-		/* Reduce vertical space so the section doesn't dominate the viewport */
-		min-height: 38vh !important; /* lower than desktop; keeps some presence */
+		/* Increase vertical space from bottom */
+		min-height: 45vh !important; /* increased from 38vh */
 		padding-top: 0.8rem !important;
-		padding-bottom: 4rem !important; /* increased from 0.8rem for more bottom space */
+		padding-bottom: 5rem !important; /* increased for more bottom space */
 		overflow: hidden !important; /* prevent background bleed */
+	}
+	
+	/* Keep .why-choose-new-bg (quote section) unchanged with original values */
+	.why-choose-new-bg {
+		background-size: 140% !important;
+		background-position: center 42% !important;
+		background-attachment: scroll !important;
+		min-height: 38vh !important;
+		padding-top: 0.8rem !important;
+		padding-bottom: 0.8rem !important; /* keep original smaller padding */
+		overflow: hidden !important;
 	}
 
 	/* Further tighten the inner grid so content stacks neatly on compact phones */
