@@ -518,13 +518,11 @@
 	}
 	/* keep overlay and content static and sized sensibly on phones */
 	.parallax-overlay { position: absolute; background: rgba(0,0,0,0.34) !important; }
-	/* Further reduce the visible section height and bottom space on phones
-		 while ensuring the quote is centered within the section. */
-	/* Reduce the outer section min-height so the area becomes shorter on small screens. */
-	#why-us { min-height: 50vh !important; padding-bottom: 0.5rem !important; padding-top: 0.9rem !important; }
+	/* Make the Why Choose Us section taller on phones, adding more space mainly at the bottom */
+	#why-us { min-height: 60svh !important; padding-bottom: 1.75rem !important; padding-top: 0.8rem !important; }
 	.parallax-content {
 		/* Center the quote perfectly within the section */
-		min-height: 50vh !important;
+		min-height: 60svh !important;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;
 		display: flex !important;
