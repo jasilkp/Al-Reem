@@ -112,17 +112,17 @@
   /* Keep the red underline visible (no override required) */
   #main-nav-underline { display: block !important; opacity: 1 !important; }
   
-  /* Make home video bigger - increased even more for maximum mobile presence */
-  .with-container-frame > .home-video-wrap {
-    height: 97vh !important;
-    min-height: 97vh !important;
-    max-height: 97vh !important;
-  }
+	/* Make home video bigger - increased even more for maximum mobile presence */
+	.with-container-frame > .home-video-wrap {
+		height: 100svh !important;
+		min-height: 100svh !important;
+		max-height: 100svh !important;
+	}
   
-  .hero-section {
-    min-height: 98vh !important;
-    max-height: 98vh !important;
-  }
+	.hero-section {
+		min-height: 100svh !important;
+		max-height: 100svh !important;
+	}
   
   /* Make home page logo bigger - increased for better visibility */
   #home-logo {
@@ -246,8 +246,9 @@
 	/* Reduce the hero section height slightly so the page feels tighter */
 	.hero-section {
 		height: auto !important;
-		min-height: clamp(36svh, 42svh, 56svh) !important;
-		max-height: clamp(42svh, 50svh, 62svh) !important;
+		/* Make the hero taller on phones */
+		min-height: 100svh !important;
+		max-height: 100svh !important;
 		padding-top: clamp(4px, 1vw, 10px) !important;
 		padding-bottom: clamp(4px, 1vw, 10px) !important;
 		overflow: hidden !important;
@@ -315,10 +316,9 @@
 	/* Make the hero taller so the framed video reads as large and professional
 		 on most phones while still fitting common viewport heights. */
 	.hero-section {
-		/* Increase height more — make the hero fill the viewport on phones while
-			 keeping width unchanged. Reduce vertical padding so more of the video is visible. */
-		height: 100vh !important;
-		min-height: 94vh !important;
+		/* Increase height — fill the viewport on phones while keeping width unchanged. */
+		height: 100svh !important;
+		min-height: 100svh !important;
 		padding-top: 1rem !important;
 		padding-bottom: 1rem !important;
 	}
@@ -2649,13 +2649,13 @@ p, .text-gray-300, .text-gray-200 {
 
 @media (max-width: 420px) {
 	.hero-section {
-		min-height: 76svh !important;
-		max-height: 80svh !important;
+		min-height: 84svh !important;
+		max-height: 90svh !important;
 	}
 	.with-container-frame > .home-video-wrap {
-		height: 74svh !important;
-		min-height: 74svh !important;
-		max-height: 74svh !important;
+		height: 82svh !important;
+		min-height: 82svh !important;
+		max-height: 82svh !important;
 	}
 }
 
