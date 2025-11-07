@@ -515,10 +515,10 @@
 	/* Further reduce the visible section height and bottom space on phones
 		 while ensuring the quote is centered within the section. */
 	/* Reduce the outer section min-height so the area becomes shorter on small screens. */
-	#why-us { min-height: 60vh !important; padding-bottom: 3rem !important; padding-top: 0.9rem !important; }
+	#why-us { min-height: 75vh !important; padding-bottom: 5rem !important; padding-top: 0.9rem !important; }
 	.parallax-content {
 		/* Center the quote perfectly within the section */
-		min-height: 60vh !important;
+		min-height: 75vh !important;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;
 		display: flex !important;
