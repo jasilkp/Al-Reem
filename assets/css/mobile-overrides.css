@@ -118,11 +118,6 @@
 		min-height: 100svh !important;
 		max-height: 100svh !important;
 	}
-		/* Nudge video visual size slightly larger without layout changes */
-		.with-container-frame .home-bg-video,
-		.with-container-frame .home-bg-video-alt {
-			transform: scale(1.04) !important;
-		}
   
 	.hero-section {
 		min-height: 100svh !important;
@@ -130,19 +125,18 @@
 	}
   
   /* Make home page logo bigger - increased for better visibility */
-	#home-logo {
-		width: 270px !important;
-		height: 270px !important;
-	}
+  #home-logo {
+    width: 280px !important;
+    height: 280px !important;
+  }
   
 	/* Make intro sequence logo bigger (more than before) for <=808px */
 	#logo-intro-img,
 	#logo-intro-img.intro-logo,
 	object.intro-logo,
 	.intro-logo {
-		/* Slightly larger intro logo on mobile */
-		width: clamp(440px, 68vw, 680px) !important;
-		height: clamp(440px, 68vw, 680px) !important;
+		width: clamp(460px, 68vw, 680px) !important;
+		height: clamp(460px, 68vw, 680px) !important;
 		max-width: 92vw !important;
 		max-height: 92vh !important;
 	}
@@ -269,8 +263,8 @@
 	/* Make the intro overlay logo a bit larger and more prominent on phones */
 	.intro-logo {
 		/* Increased values to make the intro logo noticeably larger on small phones */
-		width: clamp(240px, 44vw, 520px);
-		height: clamp(240px, 44vw, 520px);
+		width: clamp(270px, 50vw, 580px);
+		height: clamp(270px, 50vw, 580px);
 		max-width: 96vw;
 		max-height: 96vw;
 	}
@@ -281,8 +275,8 @@
 	#logo-intro-img,
 	#logo-intro-img.intro-logo,
 	object.intro-logo {
-		width: clamp(280px, 50vw, 620px) !important;
-		height: clamp(280px, 50vw, 620px) !important;
+		width: clamp(320px, 56vw, 680px) !important;
+		height: clamp(320px, 56vw, 680px) !important;
 		max-width: 96vw !important;
 		max-height: 96vw !important;
 		display: block !important;
@@ -291,8 +285,8 @@
 	/* Increase the hero/home logo size (override Tailwind utility sizes on small screens) */
 	#home-logo {
 		/* Bump up the hero logo size for phones */
-		width: clamp(230px, 50vw, 440px) !important;
-		height: clamp(230px, 50vw, 440px) !important;
+		width: clamp(240px, 50vw, 450px) !important;
+		height: clamp(240px, 50vw, 450px) !important;
 		display: inline-block;
 		object-fit: contain;
 	}
@@ -518,11 +512,13 @@
 	}
 	/* keep overlay and content static and sized sensibly on phones */
 	.parallax-overlay { position: absolute; background: rgba(0,0,0,0.34) !important; }
-	/* Make the Why Choose Us section taller on phones, adding more space mainly at the bottom */
-	#why-us { min-height: 60svh !important; padding-bottom: 1.75rem !important; padding-top: 0.8rem !important; }
+	/* Further reduce the visible section height and bottom space on phones
+		 while ensuring the quote is centered within the section. */
+	/* Reduce the outer section min-height so the area becomes shorter on small screens. */
+	#why-us { min-height: 50vh !important; padding-bottom: 0.5rem !important; padding-top: 0.9rem !important; }
 	.parallax-content {
 		/* Center the quote perfectly within the section */
-		min-height: 60svh !important;
+		min-height: 50vh !important;
 		padding-top: 0 !important;
 		padding-bottom: 0 !important;
 		display: flex !important;
