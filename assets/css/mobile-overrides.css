@@ -927,7 +927,7 @@ p, .text-gray-300, .text-gray-200 {
 	footer .footer-social-icon, footer a { min-height: 34px !important; min-width: 34px !important; }
 }
 
-/* Mobile: zoom the Testimonials background and tighten the section height for phones 
+/* Mobile: zoom the Testimonials background and increase the section height for phones 
    EXTENDED to 768px to cover larger phones */
 @media (max-width: 768px) {
 	/* Target both the ID and helper/bg class to be robust */
@@ -935,9 +935,9 @@ p, .text-gray-300, .text-gray-200 {
 		background-size: 150% !important; /* zoom in */
 		background-position: center 42% !important; /* adjust focal point */
 		background-attachment: scroll !important; /* static on mobile */
-		padding-top: 1.75rem !important; /* more top space so heading isn't clipped */
-		padding-bottom: 0.9rem !important;
-		min-height: 28vh !important; /* reduce vertical footprint */
+		padding-top: 5rem !important; /* significantly increased top space for better visual presence */
+		padding-bottom: 3.5rem !important; /* increased bottom padding too */
+		min-height: 60vh !important; /* increased from 28vh for a more substantial section */
 		overflow: visible !important; /* allow heading/shadows to render fully */
 	}
 
@@ -945,15 +945,15 @@ p, .text-gray-300, .text-gray-200 {
 	#testimonials .text-center,
 	#testimonials .section-title { position: relative !important; z-index: 2 !important; }
 
-	/* Make testimonial cards a little tighter vertically so the zoomed bg doesn't overcrowd content */
+	/* Make testimonial cards comfortable with proper spacing */
 	#testimonials .card {
-		padding: 1rem !important;
-		margin-bottom: 0.6rem !important;
+		padding: 1.5rem !important; /* increased padding for better readability */
+		margin-bottom: 1.5rem !important; /* more space between cards */
 		background: transparent !important;
 	}
 
-	/* Slightly reduce heading spacing to keep everything compact */
-	#testimonials .section-title { margin-bottom: 0.5rem !important; }
+	/* Proper heading spacing for the taller section */
+	#testimonials .section-title { margin-bottom: 2rem !important; /* increased for better breathing room */ }
 }
 
 /* Mobile: nudge the home/logo down slightly so it sits lower in the hero on phones */
