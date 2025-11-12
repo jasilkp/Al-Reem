@@ -18,7 +18,10 @@
         /* Hide main content (not intro) until loaded */
         body:not(.content-loaded) main,
         body:not(.content-loaded) header,
-        body:not(.content-loaded) footer {
+        body:not(.content-loaded) footer,
+        /* Ensure any wrapper content is hidden as early as possible */
+        body:not(.content-loaded) #main-content,
+        body:not(.content-loaded) #events-page {
             opacity: 0 !important;
             visibility: hidden !important;
         }

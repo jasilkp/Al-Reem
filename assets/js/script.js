@@ -76,7 +76,21 @@ const __appInit = { done: false };
 document.addEventListener('DOMContentLoaded', () => {
     // Fallback timeout to ensure content shows even if loading detection fails
     const fallbackTimeout = setTimeout(() => {
-        console.warn('Loading detection timed out, showing content');
+        // Never reveal the main content before the intro overlay runs.
+        // If the intro overlay exists, keep content hidden and let the intro
+        // sequence reveal it when finished. We only remove the lightweight
+        // loading screen so users aren't staring at two overlays.
+        const overlay = document.getElementById('logo-intro-overlay');
+        if (overlay) {
+            console.warn('Loading timed out, keeping intro overlay and holding content until intro completes');
+            const loadingScreen = document.querySelector('.loading-screen');
+            if (loadingScreen) {
+                loadingScreen.remove();
+            }
+            return; // Do NOT add content-loaded here
+        }
+
+        console.warn('Loading detection timed out, revealing content (no intro overlay present)');
         document.body.classList.add('content-loaded');
         const loadingScreen = document.querySelector('.loading-screen');
         if (loadingScreen) {
@@ -537,7 +551,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIntro = () => {
             if (!introStarted) {
                 introStarted = true;
-                setTimeout(() => introLogoSequence(), 80);
+                    // Extra guard: only start if overlay still exists (wasn't removed prematurely)
+                    const overlay = document.getElementById('logo-intro-overlay');
+                    if (!overlay) {
+                        // If overlay missing, reveal content immediately (avoid stuck hidden state)
+                        document.body.classList.add('content-loaded');
+                        return;
+                    }
+                    setTimeout(() => introLogoSequence(), 80);
             }
         };
         
@@ -3083,10 +3104,18 @@ function initHomeBgVideoSequence() {
                     setTimeout(doReveal, 120);
                 }
             }).catch(() => {
-                // If autoplay is blocked, reveal poster by fading overlay (fallback)
+                // If autoplay is blocked, ensure the poster is visible and remove any hard cover.
+                try {
+                    // Make sure the video element transitions to the visible state so the poster shows
+                    video.classList.add('visible');
+                    video.classList.remove('visible-partial');
+                } catch (e) {}
+
                 if (KEEP_OVERLAY) {
+                    // Keep a subtle dim, but don't fully hide the content area
                     keepOverlayPersistent();
                 } else {
+                    // Fade the overlay away so at least the poster is clearly visible
                     revealOverlay(overlay, { mode: 'fade' });
                 }
             });
