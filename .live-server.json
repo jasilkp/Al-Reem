@@ -1,0 +1,10 @@
+{
+  "port": 5503,
+  "host": "127.0.0.1",
+  "open": "index.html",
+  "ignore": [
+    "**/node_modules/**",
+    "**/.git/**",
+    "diagnostics/**"
+  ]
+}

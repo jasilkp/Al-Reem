@@ -540,21 +540,64 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => introLogoSequence(), 80);
             }
         };
+        
         const logoImg = document.getElementById('logo-intro-img');
-        // Wait for logo image to load
-        const waitForLogo = new Promise(resolve => {
+        const logoPng = new Image();
+        logoPng.src = 'assets/images/logo.png';
+        
+        // Wait for SVG logo to load
+        const waitForSvgLogo = new Promise(resolve => {
             if (!logoImg) return resolve();
-            if (logoImg.complete) return resolve();
-            logoImg.addEventListener('load', resolve, { once: true });
-            logoImg.addEventListener('error', resolve, { once: true });
+            
+            // For SVG object elements, check if contentDocument is loaded
+            const checkSvgLoaded = () => {
+                try {
+                    if (logoImg.contentDocument && logoImg.contentDocument.querySelector('svg')) {
+                        return true;
+                    }
+                } catch (e) {
+                    // If accessing contentDocument fails, check complete status
+                    if (logoImg.complete) return true;
+                }
+                return false;
+            };
+            
+            if (checkSvgLoaded()) {
+                resolve();
+            } else {
+                logoImg.addEventListener('load', resolve, { once: true });
+                logoImg.addEventListener('error', resolve, { once: true });
+                // Extra safety check for SVG
+                setTimeout(() => {
+                    if (checkSvgLoaded()) resolve();
+                }, 500);
+            }
         });
+        
+        // Wait for PNG logo to load
+        const waitForPngLogo = new Promise(resolve => {
+            if (logoPng.complete) {
+                resolve();
+            } else {
+                logoPng.addEventListener('load', resolve, { once: true });
+                logoPng.addEventListener('error', resolve, { once: true });
+            }
+        });
+        
         // Wait for web fonts (if supported)
         const waitForFonts = (window.document.fonts && window.document.fonts.ready) ? window.document.fonts.ready : Promise.resolve();
-        // Fallback: always start intro after 1.2s
-        const fallback = setTimeout(startIntro, 1200);
-        Promise.all([waitForLogo, waitForFonts]).then(() => {
+        
+        // Fallback: always start intro after 2 seconds if resources haven't loaded
+        const fallback = setTimeout(startIntro, 2000);
+        
+        Promise.all([waitForSvgLogo, waitForPngLogo, waitForFonts]).then(() => {
             clearTimeout(fallback);
-            startIntro();
+            // Small delay to ensure everything is painted
+            setTimeout(startIntro, 100);
+        }).catch(() => {
+            // If any error occurs, start intro anyway
+            clearTimeout(fallback);
+            setTimeout(startIntro, 100);
         });
     });
 
@@ -1067,8 +1110,45 @@ function initStickyHeader() {
 function initBackToTop() {
     const btn = document.getElementById('back-to-top');
     if (!btn) return;
+    
+    // Keep button hidden until intro sequence completes
+    let introComplete = document.body.classList.contains('content-loaded');
+    
+    if (!introComplete) {
+        // Wait for intro to complete before showing button
+        const checkIntro = () => {
+            if (document.body.classList.contains('content-loaded')) {
+                btn.style.display = '';
+                introComplete = true;
+            }
+        };
+        
+        // Use MutationObserver for reliable detection
+        const observer = new MutationObserver(checkIntro);
+        observer.observe(document.body, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+        });
+        
+        // Also check periodically as fallback
+        const fallbackCheck = setInterval(() => {
+            if (document.body.classList.contains('content-loaded')) {
+                btn.style.display = '';
+                introComplete = true;
+                clearInterval(fallbackCheck);
+                observer.disconnect();
+            }
+        }, 100);
+    } else {
+        // Intro already complete, show button immediately
+        btn.style.display = '';
+    }
+    
     const showAt = 400; // px
     const onScroll = () => {
+        // Don't show button if intro isn't complete yet
+        if (!introComplete) return;
+        
         if (window.scrollY > showAt) {
             btn.classList.remove('pointer-events-none');
             btn.style.opacity = '1';
@@ -1716,6 +1796,18 @@ function initArcDishCarousel() {
 
         if (!img || img.dataset.processed === '1') return;
 
+        // Check cache first to avoid reprocessing
+        try {
+            const cached = sessionStorage.getItem(`dish_bg_${img.alt || img.src}`);
+            if (cached) {
+                img.src = cached;
+                img.dataset.processed = '1';
+                return;
+            }
+        } catch (e) {
+            // Cache not available, continue processing
+        }
+
         await new Promise(resolve => {
             if (img.complete) resolve();
             else {
@@ -1857,11 +1949,18 @@ function initArcDishCarousel() {
             }
 
             ctx.putImageData(imgData, 0, 0);
+            // Keep PNG format to preserve transparency (alpha channel)
             const dataUrl = canvas.toDataURL('image/png');
             const prevVisibility = img.style.visibility;
             img.style.visibility = 'hidden';
             img.src = dataUrl;
             img.dataset.processed = '1';
+            // Cache processed image in sessionStorage to avoid reprocessing
+            try {
+                sessionStorage.setItem(`dish_bg_${img.alt || img.src}`, dataUrl);
+            } catch (storageErr) {
+                // Storage full, ignore
+            }
             requestAnimationFrame(() => { img.style.visibility = prevVisibility || 'visible'; });
         } catch (e) {
             console.warn('Background removal failed:', e);
@@ -1870,6 +1969,17 @@ function initArcDishCarousel() {
 
     // Crop transparent borders so the dish fills more of the circle
     async function cropTransparentBorders(img) {
+        // Check cache first to avoid reprocessing
+        try {
+            const cached = sessionStorage.getItem(`dish_crop_${img.alt || img.src}`);
+            if (cached) {
+                img.src = cached;
+                return;
+            }
+        } catch (e) {
+            // Cache not available, continue processing
+        }
+        
         await new Promise(resolve => {
             if (img.complete) resolve();
             else { img.addEventListener('load', resolve, { once: true }); img.addEventListener('error', resolve, { once: true }); }
@@ -1906,8 +2016,15 @@ function initArcDishCarousel() {
             cctx.imageSmoothingEnabled = true;
             cctx.imageSmoothingQuality = 'high';
             cctx.drawImage(canvas, left, top, cw, ch, 0, 0, cw, ch);
+            // Keep PNG format to preserve transparency (alpha channel)
             const dataUrl = cropCanvas.toDataURL('image/png');
             img.src = dataUrl;
+            // Cache cropped image in sessionStorage
+            try {
+                sessionStorage.setItem(`dish_crop_${img.alt || img.src}`, dataUrl);
+            } catch (storageErr) {
+                // Storage full, ignore
+            }
         } catch (e) { /* ignore */ }
     }
 
@@ -2781,253 +2898,55 @@ function initHomeBgVideoSequence() {
     if (!video || !overlay) return;
     // Guard to prevent double-starts
     let videoStartRequested = false;
-
-    // Robust crossfade loop to avoid a visible black blink when the video loops.
-    // Approach: create a standby video element, keep it preloaded, and when the
-    // active player is close to the end, start the standby at t=0 and crossfade
-    // their opacities. If autoplay/decoding doesn't allow the standby to start
-    // in time, gracefully fall back to a short fade+seek on the active player.
-    (function setupCrossfadeLoop(v) {
+    // Configuration: keep the semi-dark overlay visible permanently instead of removing it after first reveal
+    const KEEP_OVERLAY = true;
+    function keepOverlayPersistent() {
         try {
-            if (!v || typeof v.currentTime !== 'number' || !isFinite(v.duration) || v.duration === 0) return;
-            try { v.removeAttribute('loop'); } catch (e) {}
+            overlay.style.display = '';
+            overlay.classList.add('persistent');
+            overlay.classList.remove('hidden');
+            overlay.classList.remove('split-open');
+            // Ensure halves reset
+            const left = overlay.querySelector('.overlay-half.left');
+            const right = overlay.querySelector('.overlay-half.right');
+            if (left) left.style.transform = 'translateX(0)';
+            if (right) right.style.transform = 'translateX(0)';
+        } catch (e) { /* swallow */ }
+    }
 
-            const crossMs = 700; // crossfade duration in ms (matches CSS transition for smooth loop)
-            const threshold = 1.5; // seconds before end to start crossfade (start earlier to overlap)
-            const standbyTimeout = 1000; // ms to wait for standby first-frame before falling back
-
-            function createStandby() {
-                const alt = document.createElement('video');
-                alt.id = 'home-bg-video-alt';
-                alt.className = v.className + ' home-bg-video-alt';
-                alt.muted = true;
-                alt.playsInline = true;
-                alt.preload = 'auto';
-                alt.autoplay = false;
-                alt.setAttribute('aria-hidden', 'true');
-                const poster = v.getAttribute('poster');
-                if (poster) alt.setAttribute('poster', poster);
-                Array.from(v.querySelectorAll('source')).forEach(s => alt.appendChild(s.cloneNode(true)));
-
-                // Inline sizing to match the original; rely on existing positioning CSS
-                alt.style.position = 'absolute';
-                alt.style.inset = '0';
-                alt.style.width = '100%';
-                alt.style.height = '100%';
-                alt.style.objectFit = 'contain';
-                alt.style.objectPosition = 'center';
-                alt.style.opacity = '0';
-                alt.style.filter = 'blur(6px) saturate(0.9) brightness(0.95)';
-                alt.style.transition = `opacity ${crossMs}ms cubic-bezier(.2,.9,.28,1), filter ${crossMs}ms cubic-bezier(.2,.9,.28,1)`;
-                alt.style.pointerEvents = 'none';
-
-                if (v.parentNode) v.parentNode.insertBefore(alt, v.nextSibling);
-                return alt;
-            }
-
-            function waitForFirstFrame(vid, timeoutMs) {
-                return new Promise((resolve) => {
-                    if (!vid) return resolve(false);
-                    // If readyState already indicates decoded data, resolve immediately
-                    if (vid.readyState >= 2) return resolve(true);
-
-                    let resolved = false;
-                    const cleanup = () => {
-                        resolved = true;
-                        vid.removeEventListener('playing', onPlaying);
-                        vid.removeEventListener('canplay', onCanPlay);
-                        if (typeof vid.requestVideoFrameCallback === 'function' && typeof rvcb === 'function') {
-                            try { /* nothing to cancel for requestVideoFrameCallback */ } catch (e) {}
-                        }
-                    };
-
-                    const onPlaying = () => { if (!resolved) { cleanup(); resolve(true); } };
-                    const onCanPlay = () => { if (!resolved) { cleanup(); resolve(true); } };
-
-                    vid.addEventListener('playing', onPlaying, { once: true });
-                    vid.addEventListener('canplay', onCanPlay, { once: true });
-
-                    // If requestVideoFrameCallback exists, use it after a small attempt
-                    let rvcb;
-                    try {
-                        if (typeof vid.requestVideoFrameCallback === 'function') {
-                            rvcb = () => { if (!resolved) { cleanup(); resolve(true); } };
-                            try { vid.requestVideoFrameCallback(rvcb); } catch (e) { /* ignore */ }
-                        }
-                    } catch (e) {}
-
-                    // Timeout fallback: resolve false so caller can fallback
-                    setTimeout(() => { if (!resolved) { cleanup(); resolve(false); } }, timeoutMs || 800);
-                });
-            }
-
-            const standby = createStandby();
-            // Loop shield: a simple black overlay that covers the video area (but not content)
-            // We'll fade this in/out to mask any brief decoding gap during seek.
-            function getOrCreateShield() {
+    // Simple infinite loop with native loop attribute + safety fallback
+    // This ensures continuous playback without complex crossfade logic that can fail
+    (function setupInfiniteLoop(v) {
+        try {
+            if (!v) return;
+            // Ensure native loop attribute is present
+            v.setAttribute('loop', 'loop');
+            v.loop = true;
+            
+            // Safety fallback: if video stops for any reason, restart it
+            const safetyCheck = () => {
                 try {
-                    const wrap = v.parentNode || document.querySelector('.home-video-wrap');
-                    if (!wrap) return null;
-                    let sh = wrap.querySelector('.home-loop-shield');
-                    if (!sh) {
-                        sh = document.createElement('div');
-                        sh.className = 'home-loop-shield';
-                        // ensure shield sits above the dim but below content
-                        sh.style.zIndex = '2';
-                        sh.style.opacity = '0';
-                        sh.style.pointerEvents = 'none';
-                        wrap.appendChild(sh);
+                    if (v.paused && !document.hidden) {
+                        v.play().catch(() => {});
                     }
-                    return sh;
-                } catch (e) { return null; }
-            }
-
-            async function doShieldLoop() {
-                const shield = getOrCreateShield();
-                const fadeMs = 700; // match CSS transition for smooth fade
-                if (!shield) {
-                    // fallback to class-based fade with smooth timing (matches initial reveal)
-                    try { active.classList.add('loop-fade'); } catch (e) {}
-                    await new Promise(r => setTimeout(r, fadeMs));
-                    try { active.pause(); } catch (e) {}
-                    try { active.currentTime = 0.001; } catch (e) { try { active.currentTime = 0; } catch(e) {} }
-                    try { await active.play().catch(()=>{}); } catch (e) {}
-                    await new Promise(r => setTimeout(r, 50)); // small delay before removing fade
-                    try { active.classList.remove('loop-fade'); } catch (e) {}
-                    return;
-                }
-
+                } catch (e) {}
+            };
+            
+            // Check every few seconds
+            setInterval(safetyCheck, 3000);
+            
+            // Also restart if video ends (shouldn't happen with loop, but just in case)
+            v.addEventListener('ended', () => {
                 try {
-                    // Fade shield in with smooth easing
-                    shield.style.transition = `opacity ${fadeMs}ms cubic-bezier(.2,.9,.28,1)`;
-                    shield.style.opacity = '1';
-                    await new Promise(r => setTimeout(r, fadeMs + 20));
-
-                    // Seek and resume active video while shield hides any gap
-                    try { active.pause(); } catch (e) {}
-                    try { active.currentTime = 0.001; } catch (e) { try { active.currentTime = 0; } catch(e) {} }
-                    try { await active.play().catch(()=>{}); } catch (e) {}
-
-                    // Fade shield out with smooth easing
-                    shield.style.transition = `opacity ${fadeMs}ms cubic-bezier(.2,.9,.28,1)`;
-                    shield.style.opacity = '0';
-                    await new Promise(r => setTimeout(r, fadeMs + 20));
-                } catch (e) {
-                    // swallow
-                }
-            }
-            let active = v;
-            let swapping = false;
-            let standbyReady = false;
-
-            // Pre-warm the standby early so it has time to decode and present a frame.
-            // This reduces the chance the standby will still be decoding when we try to
-            // crossfade near the end of the active clip.
-            (async function prewarm() {
-                try {
-                    // Try to play the standby briefly to kick decoding; many browsers
-                    // allow muted autoplay when user interaction has occurred or when
-                    // the main video is already playing. We catch/recover if it fails.
-                    try { standby.currentTime = 0.001; } catch (e) {}
-                    await standby.play().catch(() => { /* may reject on some browsers */ });
-                    const ok = await waitForFirstFrame(standby, 1200);
-                    if (ok) {
-                        try { standby.pause(); } catch (e) {}
-                        try { standby.currentTime = 0.001; } catch (e) {}
-                        standbyReady = true;
-                        // ensure standby remains invisible until used
-                        standby.style.opacity = '0';
-                    }
-                } catch (e) {
-                    // if prewarm fails, we'll fall back to the guarded path at cross time
-                    standbyReady = false;
-                }
-            })();
-
-            async function tryCrossfade() {
-                if (swapping) return;
-                swapping = true;
-                try {
-                    try { standby.currentTime = 0.001; } catch (e) {}
-                    // Play standby; may reject but we'll handle below
-                    let playRejected = false;
-                    try { await standby.play(); } catch (e) { playRejected = true; }
-
-                    // Wait for the standby to present its first frame
-                    const ready = await waitForFirstFrame(standby, standbyTimeout);
-                    if (!ready || playRejected) {
-                        // fallback: smooth fade+seek on the active player (matches initial reveal timing)
-                        try {
-                            const fadeMs = 700; // match CSS transition timing
-                            active.classList.add('loop-fade');
-                            setTimeout(() => {
-                                try { active.pause(); } catch (e) {}
-                                try { active.currentTime = 0.001; } catch (e) { try { active.currentTime = 0; } catch(e) {} }
-                                active.play().catch(()=>{});
-                                setTimeout(() => { try { active.classList.remove('loop-fade'); } catch (e) {} }, 100);
-                            }, fadeMs);
-                        } catch (e) {}
-                        swapping = false;
-                        return;
-                    }
-
-                    // Ensure standby sits above active for the duration of the crossfade
-                    try {
-                        standby.style.zIndex = (parseInt(window.getComputedStyle(active).zIndex, 10) || 0) + 1;
-                        // Use same smooth easing as initial reveal for seamless loop
-                        active.style.transition = `opacity ${crossMs}ms cubic-bezier(.2,.9,.28,1), filter ${crossMs}ms cubic-bezier(.2,.9,.28,1)`;
-                        standby.style.transition = `opacity ${crossMs}ms cubic-bezier(.2,.9,.28,1), filter ${crossMs}ms cubic-bezier(.2,.9,.28,1)`;
-                        standby.style.visibility = 'visible';
-                        standby.style.willChange = 'opacity, filter';
-                        active.style.willChange = 'opacity, filter';
-                    } catch (e) {}
-
-                    // Crossfade with a short paint-synced overlap to avoid revealing a black frame.
-                    try {
-                        // Bring standby up first and clear its blur filter (like initial reveal)
-                        standby.style.opacity = '1';
-                        standby.style.filter = 'blur(0) saturate(1) brightness(1)';
-                        // Wait for the browser to paint the standby: use two rAFs + a tiny timeout
-                        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-                        await new Promise(r => setTimeout(r, 40));
-                        // Now fade the active out with blur
-                        active.style.opacity = '0';
-                        active.style.filter = 'blur(6px) saturate(0.9) brightness(0.95)';
-                    } catch (e) {}
-
-                    // After cross, pause/reset the previous active so it becomes the standby
-                    await new Promise(r => setTimeout(r, crossMs + 20));
-                    try {
-                        active.pause();
-                        try { active.currentTime = 0.001; } catch (e) {}
-                        // swap references
-                        const prev = active;
-                        active = standby;
-                        // ensure prev is hidden, blurred, and ready to be the standby for next loop
-                        prev.style.opacity = '0';
-                        prev.style.filter = 'blur(6px) saturate(0.9) brightness(0.95)';
-                        prev.style.transition = `opacity ${crossMs}ms cubic-bezier(.2,.9,.28,1), filter ${crossMs}ms cubic-bezier(.2,.9,.28,1)`;
-                        // The DOM nodes remain; the next cross will use the other node as standby
-                    } catch (e) {}
-                } finally {
-                    swapping = false;
-                }
-            }
-
-            function onTime(e) {
-                if (e && e.target !== active) return;
-                if (!active.duration || active.duration === Infinity) return;
-                const remain = active.duration - active.currentTime;
-                if (remain <= threshold && !swapping) {
-                    tryCrossfade().catch(()=>{ swapping = false; });
-                }
-            }
-
-            active.addEventListener('timeupdate', onTime);
-            active.addEventListener('ended', onTime);
-
+                    v.currentTime = 0;
+                    v.play().catch(() => {});
+                } catch (e) {}
+            });
+            
+            // Removed complex crossfade logic - native loop is more reliable and doesn't stop
+            
         } catch (err) {
-            console.warn('Crossfade loop setup failed', err);
+            console.warn('Video loop setup failed', err);
         }
     })(video);
 
@@ -3035,39 +2954,32 @@ function initHomeBgVideoSequence() {
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
         // keep overlay hidden (or show poster only)
-        revealOverlay(overlay, { mode: 'fade' });
+        if (KEEP_OVERLAY) {
+            keepOverlayPersistent();
+        } else {
+            revealOverlay(overlay, { mode: 'fade' });
+        }
         return;
     }
 
     function startWhenReady() {
-        // On mobile, start the video immediately after the main home animations begin
-        // (logo/title/sub/cta), without waiting for side rails/nav to finish.
-        const isMobile = (window.matchMedia && window.matchMedia('(max-width: 720px)').matches);
-
-        const quickKick = () => {
-            if (videoStartRequested) return;
-            // small delay so the logo/title appear first, then reveal video
-            setTimeout(() => { if (!videoStartRequested) triggerVideoStart(); }, 450);
-        };
+        // Always wait for ALL animations (text, rails, nav) to complete before starting video
+        // This ensures smooth, coordinated reveal without overlapping motion
 
         const fullWait = () => {
             if (!videoStartRequested) waitForHomeAnimations();
-        };
-
-        const onAnimPlay = () => {
-            if (isMobile) quickKick(); else fullWait();
         };
 
         if (!document.body.classList.contains('home-anim-play')) {
             const mo = new MutationObserver(() => {
                 if (document.body.classList.contains('home-anim-play')) {
                     mo.disconnect();
-                    onAnimPlay();
+                    fullWait();
                 }
             });
             mo.observe(document.body, { attributes: true, attributeFilter: ['class'] });
         } else {
-            onAnimPlay();
+            fullWait();
         }
     }
 
@@ -3118,41 +3030,65 @@ function initHomeBgVideoSequence() {
                 } catch (e) {}
 
                 video.play().then(() => {
-                // Use requestVideoFrameCallback when available to ensure a frame has been painted
+                // Optimized reveal with smooth multi-stage fade-in
                 const doReveal = () => {
-                    // Step 1: make the video partially visible (reduced blur, partial opacity)
-                    video.classList.add('visible-partial');
-                    // Step 2: after a short partial delay, run the split reveal
-                    const partialDelay = 160; // ms before starting split
-                    setTimeout(() => {
-                        revealOverlay(overlay, { mode: 'split' });
-                        // After overlay cleanup, promote video to fully visible
-                        const overlayCleanupMs = 1000; // should match CSS cleanup timings
-                        setTimeout(() => {
-                            video.classList.add('visible');
-                            video.classList.remove('visible-partial');
-                        }, overlayCleanupMs);
-                    }, partialDelay);
+                    // Verify video is decoded and ready
+                    if (video.videoWidth > 0 && video.videoHeight > 0 && video.readyState >= 2) {
+                        // Enable GPU acceleration for smooth transitions
+                        video.style.willChange = 'opacity, filter';
+                        
+                        // Stage 1: Fade overlay immediately
+                        revealOverlay(overlay, { mode: 'fade' });
+                        
+                        // Stage 2: Begin video fade-in with slight blur (very subtle)
+                        requestAnimationFrame(() => {
+                            video.classList.add('visible-partial');
+                            
+                            // Stage 3: Progressive reveal to full visibility with smooth deblur
+                            setTimeout(() => {
+                                requestAnimationFrame(() => {
+                                    video.classList.add('visible');
+                                    video.classList.remove('visible-partial');
+                                    
+                                    // Clean up GPU optimization hints after transition
+                                    setTimeout(() => {
+                                        video.style.willChange = 'auto';
+                                    }, 1000);
+                                    
+                                    // If persistent overlay requested, restore it
+                                    if (KEEP_OVERLAY) keepOverlayPersistent();
+                                });
+                            }, 500); // Smooth 500ms fade
+                        });
+                    } else {
+                        // Video not fully ready, retry quickly
+                        setTimeout(doReveal, 60);
+                    }
                 };
 
+                // Wait for multiple frames to ensure smooth start (no stutter)
                 if (typeof video.requestVideoFrameCallback === 'function') {
-                    // requestVideoFrameCallback passes timestamp/frame info; we only need the callback
                     try {
                         video.requestVideoFrameCallback(() => {
-                            // small settle to let decode settle if needed
-                            setTimeout(doReveal, 80);
+                            // Second frame ensures decode is stable
+                            video.requestVideoFrameCallback(() => {
+                                setTimeout(doReveal, 30);
+                            });
                         });
                     } catch (e) {
-                        // fallback to short timeout
-                        setTimeout(doReveal, 220);
+                        setTimeout(doReveal, 120);
                     }
                 } else {
-                    // fallback: short timeout to let first frame be available
-                    setTimeout(doReveal, 220);
+                    // Fallback for browsers without requestVideoFrameCallback
+                    setTimeout(doReveal, 120);
                 }
             }).catch(() => {
                 // If autoplay is blocked, reveal poster by fading overlay (fallback)
-                revealOverlay(overlay, { mode: 'fade' });
+                if (KEEP_OVERLAY) {
+                    keepOverlayPersistent();
+                } else {
+                    revealOverlay(overlay, { mode: 'fade' });
+                }
             });
         }
 

@@ -11,8 +11,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Experience the authentic taste of Arabian Mandi at Al-Reem Mandi, Kerala's pioneering Mandi restaurant with over 20 outlets. Since 2010.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Prevent content flash before intro sequence -->
+    <style>
+        /* Hide main content (not intro) until loaded */
+        body:not(.content-loaded) main,
+        body:not(.content-loaded) header,
+        body:not(.content-loaded) footer {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+    </style>
+    <meta name="description" content="Al-Reem Restaurant - Authentic Arabic Cuisine">
     <meta name="keywords" content="Al Reem Mandi, Arabian Mandi Kerala, Yemeni cuisine Kerala, Mandi restaurant Kerala, authentic mandi" />
     <meta name="author" content="AL-REEM MANDI" />
     <meta property="og:title" content="AL-REEM MANDI - The Real Arabian Taste" />
@@ -29,21 +40,43 @@
             #logo-intro-overlay { background: #101010 !important; }
         </style>
     <link rel="icon" type="image/png" href="assets/logo.png" />
+    
+    <!-- DNS Prefetch and Preconnect for faster CDN/external resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    
+    <!-- Critical CSS - loaded immediately -->
+    <link rel="stylesheet" href="assets/css/style.min.css?v=20251107r11">
+    <!-- Defer Tailwind as it's not critical for initial render -->
+    <script src="https://cdn.tailwindcss.com" defer></script>
+    <!-- Defer isotope and imagesloaded - only needed for filtering -->
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js" defer></script>
     <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js" defer></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.min.css?v=20251107r13">
-    <link rel="stylesheet" href="assets/css/signature-slider.min.css">
-    <link rel="stylesheet" href="assets/css/team-section.css?v=20251011">
-    <!-- Mobile-only overrides (loaded last so desktop is untouched) -->
-    <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251107r13">
-    <!-- Header social icons -->
-    <link rel="stylesheet" href="assets/css/header-social.css?v=20251105">
+    <!-- Defer font loading to improve initial page load -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet"></noscript>
+    <!-- Non-critical CSS - defer loading -->
+    <link rel="stylesheet" href="assets/css/signature-slider.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/team-section.css?v=20251011" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251107r11" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/header-social.css?v=20251105" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="assets/css/signature-slider.min.css">
+        <link rel="stylesheet" href="assets/css/team-section.css?v=20251011">
+        <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251107r11">
+        <link rel="stylesheet" href="assets/css/header-social.css?v=20251105">
+    </noscript>
 
-    <!-- Preload critical background images for faster rendering and less blinking -->
+    <!-- Preload critical intro assets first (highest priority) -->
+    <link rel="preload" as="image" href="assets/images/newlogo.svg" type="image/svg+xml" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/logo.png" type="image/png" fetchpriority="high">
+    
+    <!-- Preload critical background images and hero video for faster rendering -->
+    <link rel="preload" as="video" href="assets/images/1085(1)new.mp4" type="video/mp4">
     <link rel="preload" as="image" href="assets/images/Why Choose Us -min.jpg" imagesrcset="assets/images/Why Choose Us -min.jpg 1x">
     <link rel="preload" as="image" href="assets/images/bg02.JPG" imagesrcset="assets/images/bg02.JPG 1x">
     <link rel="preload" as="image" href="assets/images/IMG_3730-min.JPG" imagesrcset="assets/images/IMG_3730-min.JPG 1x">
@@ -195,8 +228,8 @@
                      object-fit: contain (so the main video remains unzoomed and uncropped). -->
                 <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: url('assets/images/video-poster.jpg')"></div>
 
-                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="auto" poster="assets/images/video-poster.jpg">
-                    <source src="assets/images/1085(1).mp4" type="video/mp4">
+                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="auto" poster="assets/images/video-poster.jpg" disablePictureInPicture disableRemotePlayback>
+                    <source src="assets/images/1085(1)new.mp4" type="video/mp4">
                     <!-- Add WebM alternative if available for better compression/support -->
                 </video>
                 <!-- Persistent dim layer to improve contrast between video and foreground content -->
@@ -426,35 +459,35 @@
                                 <div id="single-arc-carousel" class="single-arc-carousel">
                                     <!-- Dish 1: Chicken Mandi -->
                                     <div class="single-dish-slide active" data-index="0">
-                                        <img src="assets/images/Chicken Mandi.jpg" alt="Chicken Mandi" class="single-dish-img">
+                                        <img src="assets/images/Chicken Mandi.jpg" alt="Chicken Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 2: Chicken Masala Mandi -->
                                     <div class="single-dish-slide" data-index="1">
-                                        <img src="assets/images/Chicken Masala Mandi.jpg" alt="Chicken Masala Mandi" class="single-dish-img">
+                                        <img src="assets/images/Chicken Masala Mandi.jpg" alt="Chicken Masala Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 3: Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="2">
-                                        <img src="assets/images/Alfaham Mandi.jpg" alt="Alfaham Mandi" class="single-dish-img">
+                                        <img src="assets/images/Alfaham Mandi.jpg" alt="Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 4: Peri Peri Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="3">
-                                        <img src="assets/images/Peri Peri Alfaham Mandi.jpg" alt="Peri Peri Alfaham Mandi" class="single-dish-img">
+                                        <img src="assets/images/Peri Peri Alfaham Mandi.jpg" alt="Peri Peri Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 5: Honey Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="4">
-                                        <img src="assets/images/Honey Alfaham Mandi.jpg" alt="Honey Alfaham Mandi" class="single-dish-img">
+                                        <img src="assets/images/Honey Alfaham Mandi.jpg" alt="Honey Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 6: Mutton Mandi -->
                                     <div class="single-dish-slide" data-index="5">
-                                        <img src="assets/images/Mutton Mandi.jpg" alt="Mutton Mandi" class="single-dish-img">
+                                        <img src="assets/images/Mutton Mandi.jpg" alt="Mutton Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 7: Beef Mandi -->
                                     <div class="single-dish-slide" data-index="6">
-                                        <img src="assets/images/Beef Mandi.jpg" alt="Beef Mandi" class="single-dish-img">
+                                        <img src="assets/images/Beef Mandi.jpg" alt="Beef Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 8: Beef Ribs Mandi -->
                                     <div class="single-dish-slide" data-index="7">
-                                        <img src="assets/images/Beef Ribs Mandi.jpg" alt="Beef Ribs Mandi" class="single-dish-img">
+                                        <img src="assets/images/Beef Ribs Mandi.jpg" alt="Beef Ribs Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                 </div>
                                 
@@ -940,16 +973,17 @@
         </div>
     </div>
     
-    <!-- Back to Top Button -->
+    <!-- Back to Top Button (hidden during intro sequence) -->
     <button id="back-to-top" aria-label="Back to top"
         class="fixed bottom-6 right-6 z-[110] w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"
-        style="background-color: var(--accent-red);">
+        style="background-color: var(--accent-red); display: none;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
         </svg>
     </button>
 
-    <script src="assets/js/script.js?v=20251106r7"></script>
+    <!-- Main JavaScript - deferred for better performance -->
+    <script src="assets/js/script.js?v=20251106r7" defer></script>
 </body>
 </html>
 

@@ -628,19 +628,28 @@ img {
     object-position: center center;
     background-color: #000; /* letterbox bars will blend with site */
     opacity: 0;
-    filter: blur(6px) saturate(0.8) brightness(0.92);
-    transition: opacity 900ms cubic-bezier(.2,.9,.28,1), filter 900ms cubic-bezier(.2,.9,.28,1);
+    filter: blur(8px) saturate(0.85) brightness(0.9);
+    /* Optimized transition for ultra-smooth fade with easeOutQuart timing */
+    transition: opacity 800ms cubic-bezier(0.165, 0.84, 0.44, 1), 
+                filter 800ms cubic-bezier(0.165, 0.84, 0.44, 1);
+    /* Hardware acceleration for smooth performance */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: opacity, filter;
 }
 .home-bg-video.visible {
     opacity: 1;
     filter: blur(0) saturate(1) brightness(1);
 }
 
-/* intermediate visible state: low-opacity, less blurred to avoid black-frame jump */
+/* intermediate visible state: smooth progressive fade with minimal blur */
 .home-bg-video.visible-partial {
-    /* semi-visible state during reveal — do not apply transforms that scale/zoom */
-    opacity: 0.45;
-    filter: blur(3px) saturate(0.9) brightness(0.96);
+    /* semi-visible state during reveal — gentle blur for smooth transition */
+    opacity: 0.5;
+    filter: blur(2px) saturate(0.92) brightness(0.95);
+    /* Faster transition for partial state (smoother perceived animation) */
+    transition: opacity 400ms cubic-bezier(0.165, 0.84, 0.44, 1), 
+                filter 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Standby video used for crossfade (inserted dynamically). Match sizing and transitions
