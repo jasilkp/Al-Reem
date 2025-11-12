@@ -4,3 +4,9 @@ dist/
 build/
 *.log
 .DS_Store
+
+# Backup files
+*.bak
+
+# Test files
+test-*.html
