@@ -3015,8 +3015,10 @@ function initHomeBgVideoSequence() {
     }
 
     function waitForHomeAnimations() {
-        // Desktop/tablet path: wait for primary animated items and rails/nav to finish.
-        const elems = Array.from(document.querySelectorAll('.home-anim-item, .home-anim-side-left, .home-anim-side-right, .home-anim-nav-inner'));
+        // Start the video shortly after the core text animations complete.
+        // Focus only on main title, subtitle, and CTA inside the home section.
+        const home = document.getElementById('home') || document;
+        const elems = Array.from(home.querySelectorAll('.home-anim-title, .home-anim-sub, .home-anim-cta'));
         let pending = elems.length;
         if (!pending) return triggerVideoStart();
 
@@ -3028,16 +3030,16 @@ function initHomeBgVideoSequence() {
 
         elems.forEach(el => {
             const cs = window.getComputedStyle(el);
+            // If no animation is running (or already finished), reduce pending immediately.
             if (!cs || cs.animationName === 'none') {
-                pending--; // no animation running
+                pending--; 
                 return;
             }
-            // add listener (some elements may already have finished — animationend will still fire if animation occurred)
             el.addEventListener('animationend', onEnd, { once: true });
         });
 
-        // safety fallback if animationend doesn't fire for any reason
-        setTimeout(() => { if (pending > 0) triggerVideoStart(); }, 3000);
+        // Soft cap: ensure the video starts even if events don't fire (e.g., reduced motion or race conditions)
+        setTimeout(() => { triggerVideoStart(); }, 1500);
     }
 
     function triggerVideoStart() {
