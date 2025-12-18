@@ -2917,6 +2917,16 @@ function initHomeBgVideoSequence() {
     const video = document.getElementById('home-bg-video');
     const overlay = document.getElementById('home-video-overlay');
     if (!video || !overlay) return;
+    // User requirement: do not show any poster image before video
+    try {
+        // Remove poster attribute to prevent UA from rendering poster frame
+        video.removeAttribute('poster');
+        // Ensure no poster value remains
+        video.poster = '';
+        // Hide decorative fill layer so only video shows
+        const fill = document.querySelector('.home-bg-video-fill');
+        if (fill) fill.style.display = 'none';
+    } catch (e) {}
     // Guard to prevent double-starts
     let videoStartRequested = false;
     // Configuration: keep the semi-dark overlay visible permanently instead of removing it after first reveal
@@ -3058,11 +3068,7 @@ function initHomeBgVideoSequence() {
                         // Enable GPU acceleration for smooth transitions
                         video.style.willChange = 'opacity, filter';
                         
-                        // Hide the poster fill as video is ready to display
-                        const fill = document.querySelector('.home-bg-video-fill');
-                        if (fill) {
-                            fill.classList.remove('show-fallback');
-                        }
+                        // Poster and fill are already disabled; proceed with reveal
                         
                         // Stage 1: Begin video fade-in FIRST (before fading overlay)
                         requestAnimationFrame(() => {
@@ -3112,15 +3118,11 @@ function initHomeBgVideoSequence() {
                     setTimeout(doReveal, 120);
                 }
             }).catch(() => {
-                // If autoplay is blocked, ensure the poster is visible and remove any hard cover.
+                // If autoplay is blocked, do not show any poster; reveal area gracefully.
                 try {
-                    // Make sure the video element transitions to the visible state so the poster shows
-                    // Show the poster fill as fallback since video autoplay failed
-                    const fill = document.querySelector('.home-bg-video-fill');
-                    if (fill) fill.classList.add('show-fallback');
-
-                    video.classList.add('visible');
+                    // Keep the area clean (black background) and softly fade overlay
                     video.classList.remove('visible-partial');
+                    // Do not add 'visible' to avoid forcing a poster frame; background stays black
                 } catch (e) {}
 
                 if (KEEP_OVERLAY) {
