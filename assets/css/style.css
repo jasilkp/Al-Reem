@@ -200,9 +200,15 @@
     background-repeat: no-repeat;
     filter: blur(16px) brightness(0.78) saturate(0.9);
     transform: scale(1.06);
-    transition: none;
+    opacity: 0;
+    transition: opacity 400ms cubic-bezier(0.2, 0.9, 0.28, 1);
     pointer-events: none;
     z-index: 0; /* behind the main video */
+}
+
+/* Show poster fill only as a fallback when video fails or doesn't load */
+.home-bg-video-fill.show-fallback {
+    opacity: 1 !important;
 }
 
 /* Hide the filler on small screens to save bandwidth and CPU on mobile */

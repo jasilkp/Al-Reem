@@ -3058,12 +3058,20 @@ function initHomeBgVideoSequence() {
                         // Enable GPU acceleration for smooth transitions
                         video.style.willChange = 'opacity, filter';
                         
-                        // Stage 1: Fade overlay immediately
-                        revealOverlay(overlay, { mode: 'fade' });
+                        // Hide the poster fill as video is ready to display
+                        const fill = document.querySelector('.home-bg-video-fill');
+                        if (fill) {
+                            fill.classList.remove('show-fallback');
+                        }
                         
-                        // Stage 2: Begin video fade-in with slight blur (very subtle)
+                        // Stage 1: Begin video fade-in FIRST (before fading overlay)
                         requestAnimationFrame(() => {
                             video.classList.add('visible-partial');
+                            
+                            // Stage 2: Start fading overlay once video starts appearing
+                            setTimeout(() => {
+                                revealOverlay(overlay, { mode: 'fade' });
+                            }, 50); // Small delay to ensure video is rendering
                             
                             // Stage 3: Progressive reveal to full visibility with smooth deblur
                             setTimeout(() => {
@@ -3107,6 +3115,10 @@ function initHomeBgVideoSequence() {
                 // If autoplay is blocked, ensure the poster is visible and remove any hard cover.
                 try {
                     // Make sure the video element transitions to the visible state so the poster shows
+                    // Show the poster fill as fallback since video autoplay failed
+                    const fill = document.querySelector('.home-bg-video-fill');
+                    if (fill) fill.classList.add('show-fallback');
+
                     video.classList.add('visible');
                     video.classList.remove('visible-partial');
                 } catch (e) {}
