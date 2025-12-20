@@ -550,6 +550,11 @@
 	.parallax-quote .quote-mark { display: inline-block; margin: 0 8px; vertical-align: middle; font-size: 2.5rem !important; }
 }
 
+/* Back-to-top button: lift above footer when needed */
+#back-to-top.btp-raised {
+	bottom: calc(7rem + env(safe-area-inset-bottom, 0px)) !important; /* sits well above footer credit */
+}
+
 /* ---------------------------------------------------------------------------
    Unified fluid/responsive rules (APPENDED)
    - Provide smooth, automatic scaling for hero height, the video wrap, headings,

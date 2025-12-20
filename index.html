@@ -47,15 +47,13 @@
     <!-- DNS Prefetch and Preconnect for faster CDN/external resource loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
     <link rel="dns-prefetch" href="https://unpkg.com" />
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" />
     <link rel="preconnect" href="https://unpkg.com" crossorigin />
     
     <!-- Critical CSS - loaded immediately -->
     <link rel="stylesheet" href="assets/css/style.min.css?v=20251107r11">
-    <!-- Defer Tailwind as it's not critical for initial render -->
-    <script src="https://cdn.tailwindcss.com" defer></script>
+    <!-- Tailwind (local build) - avoids CDN blocks and keeps styling consistent -->
+    <link rel="stylesheet" href="assets/css/tailwind-local.css?v=20251220r1">
     <!-- Defer isotope and imagesloaded - only needed for filtering -->
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js" defer></script>
     <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js" defer></script>
@@ -953,8 +951,14 @@
                       </ul>
                     </div>
                 </div>
-                <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
-                     <p>&copy; 2025 AL-REEM MANDI. All Rights Reserved.</p>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center md:text-left text-gray-500">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-2">
+                        <p class="text-sm">
+                            <span class="opacity-80">Developed by</span>
+                            <a href="https://jaas-stack-studio.netlify.app/" class="font-semibold text-white hover:text-accent-red transition-colors">Jaas Stack Studio</a>
+                        </p>
+                        <p class="text-sm md:text-right">&copy; 2025 AL-REEM MANDI. All Rights Reserved.</p>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -978,7 +982,7 @@
     
     <!-- Back to Top Button (hidden during intro sequence) -->
     <button id="back-to-top" aria-label="Back to top"
-        class="fixed bottom-6 right-6 z-[110] w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"
+        class="fixed bottom-4 right-6 z-[110] w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"
         style="background-color: var(--accent-red); display: none;">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />

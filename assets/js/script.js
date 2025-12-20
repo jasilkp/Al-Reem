@@ -1184,6 +1184,23 @@ function initBackToTop() {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
+
+    // Lift button above footer when footer is visible to avoid overlap
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const adjustForFooter = (entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) btn.classList.add('btp-raised');
+                else btn.classList.remove('btp-raised');
+            }
+        };
+        const io = new IntersectionObserver(adjustForFooter, {
+            root: null,
+            threshold: 0,
+            rootMargin: '0px 0px 0px 0px'
+        });
+        io.observe(footer);
+    }
 }
 
 function initScrollAnimations() {
