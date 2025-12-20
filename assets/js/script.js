@@ -72,6 +72,46 @@ function initTeamModal() {
 // Prevent multiple initializations if script is included twice
 const __appInit = { done: false };
 
+const __externalScriptPromises = Object.create(null);
+
+function loadExternalScriptOnce(src) {
+    if (__externalScriptPromises[src]) return __externalScriptPromises[src];
+    __externalScriptPromises[src] = new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+            if (existing.dataset.loaded === 'true') {
+                resolve();
+                return;
+            }
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+            return;
+        }
+
+        const s = document.createElement('script');
+        s.src = src;
+        s.async = true;
+        s.addEventListener('load', () => {
+            s.dataset.loaded = 'true';
+            resolve();
+        }, { once: true });
+        s.addEventListener('error', () => reject(new Error(`Failed to load ${src}`)), { once: true });
+        document.head.appendChild(s);
+    });
+    return __externalScriptPromises[src];
+}
+
+function ensureMenuLayoutLibs() {
+    const promises = [];
+    if (typeof imagesLoaded !== 'function') {
+        promises.push(loadExternalScriptOnce('https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js'));
+    }
+    if (typeof Isotope === 'undefined') {
+        promises.push(loadExternalScriptOnce('https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js'));
+    }
+    return Promise.all(promises);
+}
+
 function startHomeBackgroundVideo() {
     const video = document.getElementById('home-bg-video');
     if (!video) return;
@@ -1630,35 +1670,98 @@ function initAboutShowMore() {
 
 function initInteractiveMenu() {
     const menuGrid = document.getElementById('menu-grid');
-    if (!menuGrid || typeof Isotope === 'undefined') {
-        console.log('Isotope not loaded or menu-grid not found');
-        return;
+    if (!menuGrid) return;
+
+    let menuIsoPromise = null;
+
+    function initMenuIsotopeFiltering() {
+        if (menuGrid.dataset.isotopeInitialized === 'true') {
+            return Promise.resolve(menuGrid.__iso || null);
+        }
+
+        if (typeof Isotope === 'undefined' || typeof imagesLoaded !== 'function') {
+            console.log('Isotope/imagesLoaded not available; menu filtering will be disabled');
+            return Promise.resolve(null);
+        }
+
+        menuGrid.dataset.isotopeInitialized = 'true';
+
+        return new Promise((resolve) => {
+            imagesLoaded(menuGrid, function () {
+                const iso = new Isotope(menuGrid, {
+                    itemSelector: '.menu-item-card',
+                    layoutMode: 'fitRows',
+                    transitionDuration: '0.6s',
+                });
+
+                menuGrid.__iso = iso;
+
+                // Filter functionality
+                const filterContainer = document.getElementById('menu-filters');
+                if (filterContainer) {
+                    filterContainer.addEventListener('click', (e) => {
+                        const btn = e.target.closest('.menu-filter-btn');
+                        if (!btn) return;
+
+                        const filterValue = btn.getAttribute('data-filter');
+                        iso.arrange({ filter: filterValue });
+
+                        const currentActive = filterContainer.querySelector('.active');
+                        if (currentActive) currentActive.classList.remove('active');
+                        btn.classList.add('active');
+                    });
+                }
+
+                resolve(iso);
+            });
+        });
     }
 
-    // Initialize Isotope after images are loaded
-    imagesLoaded( menuGrid, function() {
-        const iso = new Isotope(menuGrid, {
-            itemSelector: '.menu-item-card',
-            layoutMode: 'fitRows',
-            transitionDuration: '0.6s',
-        });
+    function startMenuIsotope() {
+        if (menuIsoPromise) return menuIsoPromise;
+        menuIsoPromise = ensureMenuLayoutLibs()
+            .then(() => initMenuIsotopeFiltering())
+            .catch((e) => {
+                console.warn('Failed to load menu layout libs:', e);
+                return null;
+            });
+        return menuIsoPromise;
+    }
 
-        // Filter functionality
-        const filterContainer = document.getElementById('menu-filters');
-        if (filterContainer) {
-            filterContainer.addEventListener('click', (e) => {
-                if (!e.target.matches('.menu-filter-btn')) return;
-                
-                const filterValue = e.target.getAttribute('data-filter');
+    // Lazy-load Isotope/imagesLoaded only when Menu is reached (performance)
+    const menuSection = document.getElementById('menu') || menuGrid;
+    if ('IntersectionObserver' in window && menuSection) {
+        const obs = new IntersectionObserver((entries, observer) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    startMenuIsotope();
+                    observer.disconnect();
+                    break;
+                }
+            }
+        }, { rootMargin: '200px 0px' });
+        obs.observe(menuSection);
+    }
+
+    // Click fallback: if user taps filters before the observer triggers
+    const filterContainer = document.getElementById('menu-filters');
+    if (filterContainer) {
+        filterContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.menu-filter-btn');
+            if (!btn) return;
+
+            if (menuGrid.__iso) return;
+
+            const filterValue = btn.getAttribute('data-filter');
+            startMenuIsotope().then((iso) => {
+                if (!iso) return;
                 iso.arrange({ filter: filterValue });
-
-                // Update active button state
                 const currentActive = filterContainer.querySelector('.active');
                 if (currentActive) currentActive.classList.remove('active');
-                e.target.classList.add('active');
+                btn.classList.add('active');
             });
-        }
-    });
+        }, { capture: true });
+    }
     
     // Modal functionality
     const modal = document.getElementById('menu-modal');

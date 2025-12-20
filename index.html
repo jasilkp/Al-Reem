@@ -45,9 +45,7 @@
     <link rel="stylesheet" href="assets/css/style.min.css?v=20251107r11">
     <!-- Tailwind (local build) - avoids CDN blocks and keeps styling consistent -->
     <link rel="stylesheet" href="assets/css/tailwind-local.css?v=20251220r1">
-    <!-- Defer isotope and imagesloaded - only needed for filtering -->
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js" defer></script>
-    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js" defer></script>
+    <!-- Isotope/imagesLoaded are lazy-loaded by JS when Menu is reached -->
     <!-- Defer font loading to improve initial page load -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet"></noscript>
@@ -986,7 +984,7 @@
     </button>
 
     <!-- Main JavaScript - deferred for better performance -->
-    <script src="assets/js/script.js?v=20251220r2" defer></script>
+    <script src="assets/js/script.js?v=20251220r3" defer></script>
 </body>
 </html>
 
