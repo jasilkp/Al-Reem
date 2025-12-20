@@ -213,9 +213,9 @@
                 <!-- Filler layer: use a blurred poster image (avoids downloading video twice).
                      It visually fills the framed area while the main `#home-bg-video` plays with
                      object-fit: contain (so the main video remains unzoomed and uncropped). -->
-                <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: url('assets/images/video-poster.jpg')"></div>
+                <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg')); background-image: -webkit-image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg'))"></div>
 
-                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="none" poster="assets/images/video-poster.jpg" disablePictureInPicture disableRemotePlayback>
+                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="none" poster="assets/images/video-poster.webp" disablePictureInPicture disableRemotePlayback>
                     <source data-src="assets/images/1085(1)new-720p.webm" type="video/webm">
                     <source data-src="assets/images/1085(1)new-720p.mp4" type="video/mp4">
                 </video>
