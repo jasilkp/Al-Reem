@@ -193,34 +193,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 3000); // 3 second timeout
 
-    // Ensure all critical resources are loaded before showing content
-    Promise.all([
-        // Wait for fonts to load
-        document.fonts.ready,
-        // Wait for critical images to load
-        new Promise(resolve => {
-            const criticalImages = document.querySelectorAll('img[loading="eager"], #home-logo, #about-logo');
-            let loadedCount = 0;
-            const totalImages = criticalImages.length;
-            
-            if (totalImages === 0) {
-                resolve();
+    // Ensure key above-the-fold resources are loaded before showing content.
+    // IMPORTANT: don't block the initial reveal indefinitely on web fonts.
+    const fontsReady = (document.fonts && document.fonts.ready)
+        ? Promise.race([
+            document.fonts.ready,
+            new Promise(resolve => setTimeout(resolve, 700))
+        ])
+        : Promise.resolve();
+
+    const criticalImagesReady = new Promise(resolve => {
+        // Keep this list very small to avoid delaying first paint.
+        const criticalImages = document.querySelectorAll('#home-logo, #logo-intro-img, img[fetchpriority="high"], img[loading="eager"]');
+        let loadedCount = 0;
+        const totalImages = criticalImages.length;
+
+        if (totalImages === 0) {
+            resolve();
+            return;
+        }
+
+        criticalImages.forEach(img => {
+            if (img.complete) {
+                loadedCount++;
+                if (loadedCount === totalImages) resolve();
                 return;
             }
-            
-            criticalImages.forEach(img => {
-                if (img.complete) {
-                    loadedCount++;
-                    if (loadedCount === totalImages) resolve();
-                } else {
-                    img.onload = img.onerror = () => {
-                        loadedCount++;
-                        if (loadedCount === totalImages) resolve();
-                    };
-                }
-            });
-        })
-    ]).then(() => {
+            const onDone = () => {
+                img.removeEventListener('load', onDone);
+                img.removeEventListener('error', onDone);
+                loadedCount++;
+                if (loadedCount === totalImages) resolve();
+            };
+            img.addEventListener('load', onDone, { once: true });
+            img.addEventListener('error', onDone, { once: true });
+        });
+    });
+
+    Promise.all([fontsReady, criticalImagesReady]).then(() => {
         // Clear the fallback timeout since loading completed successfully
         clearTimeout(fallbackTimeout);
 
