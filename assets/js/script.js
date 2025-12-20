@@ -35,7 +35,7 @@ function initTeamModal() {
     const closeBtn = document.getElementById('team-modal-close');
     if (!modal || !modalImg || !closeBtn) return;
     function openModal(src, alt) {
-        modalImg.src = src;
+        setImgPreferWebp(modalImg, src);
         modalImg.alt = alt || 'Team member large';
         modal.classList.remove('hidden');
         modal.setAttribute('aria-hidden', 'false');
@@ -71,6 +71,32 @@ function initTeamModal() {
 }
 // Prevent multiple initializations if script is included twice
 const __appInit = { done: false };
+
+function setImgPreferWebp(img, originalSrc) {
+    if (!img) return;
+
+    // Reset any previous handlers to avoid stacking
+    img.onerror = null;
+
+    if (typeof originalSrc !== 'string') {
+        img.src = originalSrc;
+        return;
+    }
+
+    const hasJpegExt = /\.(jpe?g)$/i.test(originalSrc);
+    if (!hasJpegExt) {
+        img.src = originalSrc;
+        return;
+    }
+
+    const webpSrc = originalSrc.replace(/\.(jpe?g)$/i, '.webp');
+    img.onerror = () => {
+        // If WebP fails, fall back to the original JPG
+        img.onerror = null;
+        img.src = originalSrc;
+    };
+    img.src = webpSrc;
+}
 
 const __externalScriptPromises = Object.create(null);
 
@@ -920,7 +946,7 @@ function initOutlets() {
             nextBtn.disabled = true;
             return;
         }
-        imageEl.src = currentImages[idx].src;
+        setImgPreferWebp(imageEl, currentImages[idx].src);
         imageEl.alt = currentImages[idx].alt;
         imageCountEl.textContent = `Photo ${idx + 1} of ${currentImages.length}`;
         prevBtn.disabled = idx === 0;
@@ -1062,7 +1088,7 @@ function initOutlets() {
             btn.className = 'card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group extra-outlet';
             btn.setAttribute('data-outlet', outlet.name);
             btn.innerHTML = `
-                <img src="assets/images/${outlet.folder}/Main.jpg" alt="AL-REEM MANDI - ${outlet.name} main" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]" loading="lazy">
+                <img src="assets/images/${outlet.folder}/Main.webp" alt="AL-REEM MANDI - ${outlet.name} main" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-[1.02]" loading="lazy">
                 <div class="p-5">
                     <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
                         <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
@@ -1070,11 +1096,15 @@ function initOutlets() {
                     </h3>
                 </div>`;
             const img = btn.querySelector('img');
-            // Fallback if Main.jpg is not present yet
+            // Fallback chain: WebP -> JPG -> logo
             img.addEventListener('error', () => {
-                img.src = 'assets/images/logo.png';
-                img.classList.remove('object-cover');
-                img.classList.add('object-contain', 'bg-black');
+                img.onerror = null;
+                img.src = `assets/images/${outlet.folder}/Main.jpg`;
+                img.addEventListener('error', () => {
+                    img.src = 'assets/images/logo.png';
+                    img.classList.remove('object-cover');
+                    img.classList.add('object-contain', 'bg-black');
+                }, { once: true });
             }, { once: true });
             return btn;
         }
@@ -1787,7 +1817,7 @@ function initInteractiveMenu() {
         modalTitle.textContent = title;
         modalDescription.textContent = description + " A detailed description about the ingredients and the way it is cooked to make it more appealing.";
         modalPrice.textContent = price;
-        modalImg.src = imgSrc;
+        setImgPreferWebp(modalImg, imgSrc);
 
         // Show modal
         modal.classList.remove('hidden');
@@ -2296,7 +2326,7 @@ function initArcDishCarousel() {
         }
         modalPrice.textContent = '';
         // Use the original image path for maximum clarity in the modal
-        modalImg.src = data.image || (img ? img.src : '');
+        setImgPreferWebp(modalImg, data.image || (img ? img.src : ''));
 
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';

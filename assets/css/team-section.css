@@ -116,7 +116,8 @@
     z-index: 1;
     filter: saturate(1.05) contrast(1.08) brightness(1);
     /* Blend black away so only logo strokes remain */
-    background-image: url('../images/newlogooutline.jpg');
+    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
     background-repeat: no-repeat;
     background-position: right top;
         background-size: 900%;

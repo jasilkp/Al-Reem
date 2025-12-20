@@ -1063,7 +1063,8 @@ h1, h2, h3, h4, h5, h6 {
 .events-section-bg {
     position: relative;
     /* Background image: preload added in HTML to avoid flash when scrolling */
-    background-image: url('../images/IMG_3730-min.JPG');
+    background-image: image-set(url('../images/IMG_3730-min.webp') type('image/webp'), url('../images/IMG_3730-min.JPG') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/IMG_3730-min.webp') type('image/webp'), url('../images/IMG_3730-min.JPG') type('image/jpeg'));
     /* Use cover so the browser can better composite the image and avoid repaints from fractional scaling */
     background-size: cover; /* prefer cover to avoid temporary re-layout */
     /* Fallback background color similar to image median to prevent flashes while image repaints */
@@ -1408,7 +1409,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Testimonials section background using newly added image */
 .testimonials-section-bg {
     /* Dark overlay for readability + background image */
-    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('../images/IMG_3795.JPG');
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), image-set(url('../images/IMG_3795.webp') type('image/webp'), url('../images/IMG_3795.JPG') type('image/jpeg'));
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), -webkit-image-set(url('../images/IMG_3795.webp') type('image/webp'), url('../images/IMG_3795.JPG') type('image/jpeg'));
     /* Unzoom a bit more to reveal a wider frame of the photo */
     background-size: 95%;
     background-position: center center;
@@ -1953,7 +1955,8 @@ h1, h2, h3, h4, h5, h6 {
     height: min(70vw, 900px);
     pointer-events: none;
     z-index: 8; /* above inner content and arc */
-    background-image: url('../images/newlogooutline.jpg');
+    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
     background-repeat: no-repeat;
     background-position: right top;
     background-size: 460%;
@@ -2620,7 +2623,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .parallax-bg {
     position: relative;
-    background-image: url('../images/Why Choose Us -min.jpg');
+    background-image: image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg'));
     /* Use CSS variable so JS can update position with less layout churn */
     background-position: center var(--why-bg-y, 8%); /* mirror MIN_Y to avoid top sliver */
     background-size: cover;
@@ -2699,7 +2703,8 @@ html {
 /* New Why Choose section background */
 .why-choose-new-bg {
     position: relative;
-    background-image: url('../images/bg02.JPG');
+    background-image: image-set(url('../images/bg02.webp') type('image/webp'), url('../images/bg02.JPG') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/bg02.webp') type('image/webp'), url('../images/bg02.JPG') type('image/jpeg'));
     background-size: 120% auto; /* less zoom, show more image */
     background-position: center 65%; /* move image slightly up */
     background-repeat: no-repeat;

@@ -2679,6 +2679,7 @@ p, .text-gray-300, .text-gray-200 {
 /* Global override: Ensure correct case-sensitive path for Why Choose Us background on all screens
    (Linux/Cloudflare servers are case-sensitive, file is .jpg lowercase) */
 .parallax-bg {
-	background-image: url('../images/Why Choose Us -min.jpg') !important;
+	background-image: image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
+	background-image: -webkit-image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
 }
 
