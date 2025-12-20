@@ -72,6 +72,34 @@ function initTeamModal() {
 // Prevent multiple initializations if script is included twice
 const __appInit = { done: false };
 
+function startHomeBackgroundVideo() {
+    const video = document.getElementById('home-bg-video');
+    if (!video) return;
+
+    const sources = video.querySelectorAll('source[data-src]');
+    if (sources && sources.length) {
+        sources.forEach((source) => {
+            const hasSrc = !!source.getAttribute('src');
+            const dataSrc = source.getAttribute('data-src');
+            if (!hasSrc && dataSrc) {
+                source.setAttribute('src', dataSrc);
+            }
+        });
+    }
+
+    try {
+        if (video.preload === 'none') {
+            video.preload = 'auto';
+        }
+    } catch (e) {}
+
+    try { video.load(); } catch (e) {}
+    try {
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (e) {}
+}
+
 // Handle loading state
 document.addEventListener('DOMContentLoaded', () => {
     // Fallback timeout to ensure content shows even if loading detection fails
@@ -92,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.warn('Loading detection timed out, revealing content (no intro overlay present)');
         document.body.classList.add('content-loaded');
+        startHomeBackgroundVideo();
         const loadingScreen = document.querySelector('.loading-screen');
         if (loadingScreen) {
             loadingScreen.remove();
@@ -143,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Otherwise reveal immediately with a small delay for smoothness
         setTimeout(() => {
             document.body.classList.add('content-loaded');
+            startHomeBackgroundVideo();
 
             // Remove loading screen after transition
             setTimeout(() => {
@@ -157,6 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear timeout and show content even if there's an error
         clearTimeout(fallbackTimeout);
         document.body.classList.add('content-loaded');
+        startHomeBackgroundVideo();
     });
 
     if (__appInit.done) return;
@@ -204,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('An error occurred during script execution:', error);
         // Ensure content is shown even if there's an error
         document.body.classList.add('content-loaded');
+        startHomeBackgroundVideo();
     }
 });
 
@@ -225,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Remove overlay if present and reveal content immediately
                     if (overlay) try { overlay.remove(); } catch (e) {}
                     document.body.classList.add('content-loaded');
+                    startHomeBackgroundVideo();
                     document.body.style.overflow = originalOverflow;
                     try {
                         const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -281,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     try { if (sessionStorage && sessionStorage.setItem) sessionStorage.setItem(playedKey, '1'); } catch (e) {}
                     // reveal page
                     document.body.classList.add('content-loaded');
+                    startHomeBackgroundVideo();
                     document.body.style.overflow = originalOverflow;
                     // Trigger home text animations unless reduced motion is preferred
                     try {
@@ -334,15 +368,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Apply SVG filter that preserves the logo's own colors (colored glow)
                 try {
-                    const svgObj = document.getElementById('logo-intro-img');
-                    if (svgObj && svgObj.contentDocument) {
-                        const svg = svgObj.contentDocument.querySelector('svg');
+                    const logoEl = document.getElementById('logo-intro-img');
+
+                    if (logoEl && logoEl.tagName === 'OBJECT' && logoEl.contentDocument) {
+                        const svg = logoEl.contentDocument.querySelector('svg');
                         if (svg && !svg.querySelector('#alreem-glow-filter')) {
-                            // Inject filter definition
                             const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
                             filter.setAttribute('id', 'alreem-glow-filter');
-                            // Blur the graphic and merge it back with the source so the blurred color
-                            // halo matches the logo artwork (keeps original hues).
                             filter.innerHTML = `
                                                                     <feGaussianBlur stdDeviation="8" result="blur"/>
                                                                     <feMerge>
@@ -352,24 +384,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             `;
                             svg.insertBefore(filter, svg.firstChild);
                         }
-                        // Apply the filter to the logo
                         if (svg) {
                             svg.style.filter = 'url(#alreem-glow-filter)';
-                        } else if (svgObj) {
-                            // Fallback: if we can't access inner svg, apply a CSS filter to the object element
-                            // We can't reproduce multi-colored blur reliably in CSS; use a subtle drop-shadow
-                            // fallback so there's still a glow effect even when inner svg access is blocked.
-                            svgObj.style.filter = 'drop-shadow(0 0 18px rgba(255,255,255,0.85)) brightness(1.15) saturate(1.05)';
+                            svg.animate([
+                                { filter: 'url(#alreem-glow-filter) brightness(1.05) saturate(1.05)' },
+                                { filter: 'url(#alreem-glow-filter) brightness(1.45) saturate(1.45)' },
+                                { filter: 'url(#alreem-glow-filter) brightness(1.05) saturate(1.05)' }
+                            ], {
+                                duration: shineDuration,
+                                easing: 'cubic-bezier(.35,.85,.3,1)'
+                            });
                         }
-                        // Animate the filter intensity for a glowing effect (slower, more pronounced)
-                        svg.animate([
-                            { filter: 'url(#alreem-glow-filter) brightness(1.05) saturate(1.05)' },
-                            { filter: 'url(#alreem-glow-filter) brightness(1.45) saturate(1.45)' },
-                            { filter: 'url(#alreem-glow-filter) brightness(1.05) saturate(1.05)' }
-                        ], {
-                            duration: shineDuration,
-                            easing: 'cubic-bezier(.35,.85,.3,1)'
-                        });
+                    } else if (logoEl) {
+                        // IMG (or any non-OBJECT): do NOT add a white glow halo.
+                        // Keep the original look by relying on the existing CSS shine-ray and mild brightness.
+                        try { logoEl.style.filter = ''; } catch (e) {}
                     }
                 } catch (e) {}
                 overlay.classList.add('gleam');
@@ -402,16 +431,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     try { const ss = document.getElementById('intro-glow-style'); if (ss) ss.remove(); } catch (e) {}
                     // Remove SVG filter before rolling begins
                     try {
-                        const svgObj = document.getElementById('logo-intro-img');
-                        if (svgObj) {
+                        const logoEl = document.getElementById('logo-intro-img');
+                        if (logoEl) {
                             try {
-                                const svg = svgObj.contentDocument && svgObj.contentDocument.querySelector && svgObj.contentDocument.querySelector('svg');
+                                const svg = logoEl.contentDocument && logoEl.contentDocument.querySelector && logoEl.contentDocument.querySelector('svg');
                                 if (svg) svg.style.filter = '';
-                                else svgObj.style.filter = '';
-                            } catch (e) {
-                                // If accessing contentDocument throws, clear any filter applied to the object element
-                                svgObj.style.filter = '';
-                            }
+                            } catch (e) {}
+                            try { logoEl.style.filter = ''; } catch (e) {}
                         }
                     } catch (e) {}
                 }, Math.max(40, shineDuration - 80));
@@ -438,15 +464,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
                                 // clear any filters applied to the <object> or inner svg as an extra safety
                                 try {
-                                    const svgObjClear = document.getElementById('logo-intro-img');
-                                    if (svgObjClear) {
+                                    const logoElClear = document.getElementById('logo-intro-img');
+                                    if (logoElClear) {
                                         try {
-                                            const inner = svgObjClear.contentDocument && svgObjClear.contentDocument.querySelector && svgObjClear.contentDocument.querySelector('svg');
+                                            const inner = logoElClear.contentDocument && logoElClear.contentDocument.querySelector && logoElClear.contentDocument.querySelector('svg');
                                             if (inner) inner.style.filter = '';
-                                            else svgObjClear.style.filter = '';
-                                        } catch (e) {
-                                            svgObjClear.style.filter = '';
-                                        }
+                                        } catch (e) {}
+                                        try { logoElClear.style.filter = ''; } catch (e) {}
                                     }
                                 } catch (e) {}
                             } catch (e) {}
@@ -493,6 +517,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 // Reveal content and remove overlay after a short fade
                                 document.body.classList.add('content-loaded');
+                                startHomeBackgroundVideo();
                                 document.body.style.overflow = originalOverflow;
                                 // Persist that the intro has played so it won't run again on refresh
                                 try { if (sessionStorage && sessionStorage.setItem) sessionStorage.setItem(playedKey, '1'); } catch (e) {}
@@ -542,6 +567,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const overlay = document.getElementById('logo-intro-overlay');
             if (overlay) overlay.remove();
             document.body.classList.add('content-loaded');
+            startHomeBackgroundVideo();
         }
     }
 
@@ -556,6 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!overlay) {
                         // If overlay missing, reveal content immediately (avoid stuck hidden state)
                         document.body.classList.add('content-loaded');
+                        startHomeBackgroundVideo();
                         return;
                     }
                     setTimeout(() => introLogoSequence(), 80);
@@ -566,18 +593,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const logoPng = new Image();
         logoPng.src = 'assets/images/logo.png';
         
-        // Wait for SVG logo to load
+        // Wait for intro logo (SVG) to load
         const waitForSvgLogo = new Promise(resolve => {
             if (!logoImg) return resolve();
             
             // For SVG object elements, check if contentDocument is loaded
             const checkSvgLoaded = () => {
                 try {
-                    if (logoImg.contentDocument && logoImg.contentDocument.querySelector('svg')) {
-                        return true;
+                    if (logoImg.tagName === 'OBJECT') {
+                        if (logoImg.contentDocument && logoImg.contentDocument.querySelector('svg')) return true;
+                        return false;
                     }
+                    // IMG (or others)
+                    if (logoImg.complete) return true;
                 } catch (e) {
-                    // If accessing contentDocument fails, check complete status
                     if (logoImg.complete) return true;
                 }
                 return false;
@@ -588,10 +617,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 logoImg.addEventListener('load', resolve, { once: true });
                 logoImg.addEventListener('error', resolve, { once: true });
-                // Extra safety check for SVG
-                setTimeout(() => {
-                    if (checkSvgLoaded()) resolve();
-                }, 500);
+                // Extra safety checks in case load events are flaky
+                setTimeout(() => { if (checkSvgLoaded()) resolve(); }, 500);
+                setTimeout(() => { if (checkSvgLoaded()) resolve(); }, 1500);
             }
         });
         

@@ -1,12 +1,3 @@
-                        <!-- Team Member Modal (Lightbox) -->
-                        <div id="team-modal" class="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" aria-hidden="true">
-                            <div class="relative max-w-md w-full max-h-[90vh] flex flex-col items-center">
-                                <button id="team-modal-close" class="absolute top-3 right-3 text-white hover:text-accent-red z-10 transition-transform hover:scale-110" aria-label="Close team photo">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                </button>
-                                <img id="team-modal-image" src="" alt="" class="object-contain w-full max-h-[80vh] rounded-2xl shadow-2xl bg-black" style="image-rendering: auto;" />
-                            </div>
-                        </div>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,13 +66,8 @@
     <!-- Preload critical intro assets first (highest priority) -->
     <link rel="preload" as="image" href="assets/images/newlogo.svg" type="image/svg+xml" fetchpriority="high">
     <link rel="preload" as="image" href="assets/images/logo.png" type="image/png" fetchpriority="high">
-    
-    <!-- Preload critical background images and hero video for faster rendering -->
-    <link rel="preload" as="video" href="assets/images/1085(1)new.mp4" type="video/mp4">
-    <link rel="preload" as="image" href="assets/images/Why Choose Us -min.jpg" imagesrcset="assets/images/Why Choose Us -min.jpg 1x">
-    <link rel="preload" as="image" href="assets/images/bg02.JPG" imagesrcset="assets/images/bg02.JPG 1x">
-    <link rel="preload" as="image" href="assets/images/IMG_3730-min.JPG" imagesrcset="assets/images/IMG_3730-min.JPG 1x">
-    <link rel="preload" as="image" href="assets/images/IMG_3795.JPG" imagesrcset="assets/images/IMG_3795.JPG 1x">
+
+    <!-- Avoid preloading heavy background/video assets to keep CSS/JS priority on first load -->
     
     <!-- Prevent FOUC (Flash of Unstyled Content) -->
     <style>
@@ -164,7 +150,7 @@
             <!-- Masked fill that animates from bottom -> top. data-src used by JS to create clone with same mask -->
             <div class="logo-mask" data-src="assets/images/logo.png" aria-hidden="true"></div>
             <!-- Outline image for subtle edge/texture during intro -->
-        <object id="logo-intro-img" type="image/svg+xml" data="assets/images/newlogo.svg" class="intro-logo" width="320" height="320" aria-hidden="true"></object>
+            <img id="logo-intro-img" src="assets/images/newlogo.svg" class="intro-logo" width="320" height="320" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
         </div>
     </div>
 
@@ -229,9 +215,9 @@
                      object-fit: contain (so the main video remains unzoomed and uncropped). -->
                 <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: url('assets/images/video-poster.jpg')"></div>
 
-                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="auto" poster="assets/images/video-poster.jpg" disablePictureInPicture disableRemotePlayback>
-                    <source src="assets/images/1085(1)new.mp4" type="video/mp4">
-                    <!-- Add WebM alternative if available for better compression/support -->
+                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="none" poster="assets/images/video-poster.jpg" disablePictureInPicture disableRemotePlayback>
+                    <source data-src="assets/images/1085(1)new-720p.webm" type="video/webm">
+                    <source data-src="assets/images/1085(1)new-720p.mp4" type="video/mp4">
                 </video>
                 <!-- Persistent dim layer to improve contrast between video and foreground content -->
                 <div class="home-video-dim" aria-hidden="true"></div>
@@ -979,6 +965,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Team Member Modal (Lightbox) -->
+    <div id="team-modal" class="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" aria-hidden="true">
+        <div class="relative max-w-md w-full max-h-[90vh] flex flex-col items-center">
+            <button id="team-modal-close" class="absolute top-3 right-3 text-white hover:text-accent-red z-10 transition-transform hover:scale-110" aria-label="Close team photo">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <img id="team-modal-image" src="" alt="" class="object-contain w-full max-h-[80vh] rounded-2xl shadow-2xl bg-black" style="image-rendering: auto;" />
+        </div>
+    </div>
     
     <!-- Back to Top Button (hidden during intro sequence) -->
     <button id="back-to-top" aria-label="Back to top"
@@ -990,7 +986,7 @@
     </button>
 
     <!-- Main JavaScript - deferred for better performance -->
-    <script src="assets/js/script.js?v=20251218r1" defer></script>
+    <script src="assets/js/script.js?v=20251220r2" defer></script>
 </body>
 </html>
 
