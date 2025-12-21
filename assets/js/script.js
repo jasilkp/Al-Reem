@@ -224,6 +224,38 @@ document.addEventListener('DOMContentLoaded', () => {
         runWhenIdle(step, 2500);
     };
 
+    const observeSectionOnce = (sectionId, onEnter, options = {}) => {
+        const el = document.getElementById(sectionId);
+        if (!el) return;
+
+        const rootMargin = options.rootMargin || '250px 0px';
+        const threshold = typeof options.threshold === 'number' ? options.threshold : 0.01;
+
+        const run = () => {
+            try { onEnter(); } catch (e) { console.warn(`Init for #${sectionId} failed`, e); }
+        };
+
+        if (!('IntersectionObserver' in window)) {
+            // Fallback: run after a short idle window.
+            runWhenIdle(() => run(), 1500);
+            return;
+        }
+
+        let ran = false;
+        const obs = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting && !ran) {
+                    ran = true;
+                    try { obs.disconnect(); } catch (e) {}
+                    run();
+                    break;
+                }
+            }
+        }, { root: null, rootMargin, threshold });
+
+        obs.observe(el);
+    };
+
     // Fallback timeout to ensure content shows even if loading detection fails
     const fallbackTimeout = setTimeout(() => {
         // If the intro overlay exists, keep the overlay in place so the user
@@ -336,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deferredStarted) return;
             deferredStarted = true;
 
+            // Lightweight global behaviors
             runInitQueueIdle([
                 () => initActiveNavOnScroll(),
                 () => initStickyHeader(),
@@ -343,38 +376,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 () => initWhyUsParallax(),
                 () => initHomePageAnimations(),
                 () => initStorySlideshow(),
-                () => initInteractiveMenu(),
-                () => initArcDishCarousel(),
-                // Delay event carousel until events section is visible
-                () => {
-                    let eventCarouselStarted = false;
-                    const eventsSection = document.getElementById('events');
-                    if (eventsSection && 'IntersectionObserver' in window) {
-                        const observer = new IntersectionObserver((entries, obs) => {
-                            entries.forEach(entry => {
-                                if (entry.isIntersecting && !eventCarouselStarted) {
-                                    eventCarouselStarted = true;
-                                    initEventCarousel();
-                                    obs.disconnect();
-                                }
-                            });
-                        }, { threshold: 0.2 });
-                        observer.observe(eventsSection);
-                    } else {
-                        initEventCarousel();
-                    }
-                },
-                () => initAboutSectionAnimations(),
-                () => { try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); } },
-                () => initArcGuideToggle(),
-                () => initBackToTop(),
-                () => initContactForm(),
-                () => initOutlets(),
-                () => initTeamSection(),
-                () => initTeamModal(),
-                () => initEventsScrollOptimization(),
-                () => initMenuScrollOptimization()
+                () => initBackToTop()
             ]);
+
+            // Section-based heavy initializations (run only when needed)
+            observeSectionOnce('events', () => {
+                try { initEventCarousel(); } catch (e) { console.warn('Event carousel init failed', e); }
+                try { initEventsScrollOptimization(); } catch (e) { console.warn('Events scroll optimization init failed', e); }
+            }, { rootMargin: '350px 0px', threshold: 0.05 });
+
+            observeSectionOnce('about', () => {
+                try { initAboutSectionAnimations(); } catch (e) { console.warn('About animations init failed', e); }
+                try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); }
+                try { initArcGuideToggle(); } catch (e) { console.warn('Arc guide toggle init failed', e); }
+            }, { rootMargin: '350px 0px', threshold: 0.05 });
+
+            observeSectionOnce('menu', () => {
+                try { initInteractiveMenu(); } catch (e) { console.warn('Menu init failed', e); }
+                try { initArcDishCarousel(); } catch (e) { console.warn('Dish carousel init failed', e); }
+                try { initMenuScrollOptimization(); } catch (e) { console.warn('Menu scroll optimization init failed', e); }
+            }, { rootMargin: '450px 0px', threshold: 0.05 });
+
+            observeSectionOnce('outlets', () => {
+                try { initOutlets(); } catch (e) { console.warn('Outlets init failed', e); }
+            }, { rootMargin: '450px 0px', threshold: 0.05 });
+
+            observeSectionOnce('team', () => {
+                try { initTeamSection(); } catch (e) { console.warn('Team section init failed', e); }
+                try { initTeamModal(); } catch (e) { console.warn('Team modal init failed', e); }
+            }, { rootMargin: '450px 0px', threshold: 0.05 });
+
+            observeSectionOnce('contact', () => {
+                try { initContactForm(); } catch (e) { console.warn('Contact form init failed', e); }
+            }, { rootMargin: '450px 0px', threshold: 0.05 });
         };
 
         // Prefer starting deferred tasks after content is revealed (or at least soon after).
