@@ -32,6 +32,8 @@
         <style>
             body { background: #101010 !important; }
             #logo-intro-overlay { background: #101010 !important; }
+            /* Ensure hero fills the *visible* viewport across mobile browsers */
+            .hero-section { height: 100vh; height: 100svh; height: 100dvh; }
         </style>
     <link rel="icon" type="image/png" href="assets/logo.png" />
     
@@ -90,6 +92,12 @@
             height: 80px;
             animation: pulse 2s infinite;
         }
+
+        /* The intro overlay is the real first-screen UI; avoid a logo flash from the loading screen */
+        .loading-logo { display: none !important; }
+
+          /* Our Menu dish carousel: avoid black placeholder background (older cached CSS had background:#0a0a0a) */
+          .single-dish-img { background: transparent !important; }
         
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -144,8 +152,8 @@
     <div id="intro-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
     <!-- Logo Intro Overlay (plays once per session) -->
-    <div id="logo-intro-overlay" class="fixed inset-0 z-[9998] flex items-center justify-center bg-black">
-        <div id="logo-intro-inner" aria-hidden="true">
+    <div id="logo-intro-overlay" class="fixed inset-0 z-[9998] flex items-center justify-center bg-black" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:#101010;">
+        <div id="logo-intro-inner" aria-hidden="true" style="opacity:0; visibility:hidden;">
             <!-- Masked fill that animates from bottom -> top. data-src used by JS to create clone with same mask -->
             <div class="logo-mask" data-src="assets/images/logo.png" aria-hidden="true"></div>
             <!-- Outline image for subtle edge/texture during intro -->
@@ -445,35 +453,35 @@
                                 <div id="single-arc-carousel" class="single-arc-carousel">
                                     <!-- Dish 1: Chicken Mandi -->
                                     <div class="single-dish-slide active" data-index="0">
-                                        <img src="assets/images/Chicken Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Chicken Mandi.jpg';" alt="Chicken Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Chicken Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Chicken Mandi.jpg?v=20251221d1';" alt="Chicken Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 2: Chicken Masala Mandi -->
                                     <div class="single-dish-slide" data-index="1">
-                                        <img src="assets/images/Chicken Masala Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Chicken Masala Mandi.jpg';" alt="Chicken Masala Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Chicken Masala Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Chicken Masala Mandi.jpg?v=20251221d1';" alt="Chicken Masala Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 3: Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="2">
-                                        <img src="assets/images/Alfaham Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Alfaham Mandi.jpg';" alt="Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Alfaham Mandi.jpg?v=20251221d1';" alt="Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 4: Peri Peri Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="3">
-                                        <img src="assets/images/Peri Peri Alfaham Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Peri Peri Alfaham Mandi.jpg';" alt="Peri Peri Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Peri Peri Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Peri Peri Alfaham Mandi.jpg?v=20251221d1';" alt="Peri Peri Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 5: Honey Alfaham Mandi -->
                                     <div class="single-dish-slide" data-index="4">
-                                        <img src="assets/images/Honey Alfaham Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Honey Alfaham Mandi.jpg';" alt="Honey Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Honey Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Honey Alfaham Mandi.jpg?v=20251221d1';" alt="Honey Alfaham Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 6: Mutton Mandi -->
                                     <div class="single-dish-slide" data-index="5">
-                                        <img src="assets/images/Mutton Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Mutton Mandi.jpg';" alt="Mutton Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Mutton Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Mutton Mandi.jpg?v=20251221d1';" alt="Mutton Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 7: Beef Mandi -->
                                     <div class="single-dish-slide" data-index="6">
-                                        <img src="assets/images/Beef Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Beef Mandi.jpg';" alt="Beef Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Beef Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Beef Mandi.jpg?v=20251221d1';" alt="Beef Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                     <!-- Dish 8: Beef Ribs Mandi -->
                                     <div class="single-dish-slide" data-index="7">
-                                        <img src="assets/images/Beef Ribs Mandi.webp" onerror="this.onerror=null;this.src='assets/images/Beef Ribs Mandi.jpg';" alt="Beef Ribs Mandi" class="single-dish-img" loading="lazy">
+                                        <img src="assets/images/Beef Ribs Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Beef Ribs Mandi.jpg?v=20251221d1';" alt="Beef Ribs Mandi" class="single-dish-img" loading="lazy">
                                     </div>
                                 </div>
                                 
@@ -986,7 +994,7 @@
     </button>
 
     <!-- Main JavaScript - deferred for better performance -->
-    <script src="assets/js/script.js?v=20251221r3" defer></script>
+    <script src="assets/js/script.js?v=20251221r9" defer></script>
 </body>
 </html>
 

@@ -1032,7 +1032,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-section {
     background-color: var(--primary-black);
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
+    min-height: 100dvh;
 }
 
 /* NEW Sticky Header Style */

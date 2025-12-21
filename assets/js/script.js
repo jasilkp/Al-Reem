@@ -100,6 +100,20 @@ function setImgPreferWebp(img, originalSrc) {
 
 const __externalScriptPromises = Object.create(null);
 
+const __prefetchedImages = Object.create(null);
+
+function prefetchImageOnce(url) {
+    if (!url || typeof url !== 'string') return;
+    if (__prefetchedImages[url]) return;
+    __prefetchedImages[url] = true;
+    try {
+        const img = new Image();
+        img.decoding = 'async';
+        img.loading = 'eager';
+        img.src = url;
+    } catch (e) {}
+}
+
 function loadExternalScriptOnce(src) {
     if (__externalScriptPromises[src]) return __externalScriptPromises[src];
     __externalScriptPromises[src] = new Promise((resolve, reject) => {
@@ -175,6 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return window.setTimeout(() => callback({ didTimeout: true, timeRemaining: () => 0 }), Math.min(timeoutMs, 200));
     };
 
+    const prefetchImage = (url) => {
+        try {
+            const img = new Image();
+            img.decoding = 'async';
+            img.loading = 'eager';
+            img.src = url;
+        } catch (e) {}
+    };
+
     const whenContentLoaded = (callback) => {
         if (document.body.classList.contains('content-loaded')) {
             callback();
@@ -222,6 +245,41 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         runWhenIdle(step, 2500);
+    };
+
+    // Avoid running heavy init while the user is actively scrolling.
+    // This prevents noticeable "freezes" when a section first becomes visible.
+    const runAfterScrollSettles = (callback, { quietMs = 180, idleTimeoutMs = 2500 } = {}) => {
+        let done = false;
+        let timerId = null;
+
+        const cleanup = () => {
+            try { window.removeEventListener('scroll', onScroll, { passive: true }); } catch (e) {}
+            try { window.removeEventListener('scroll', onScroll); } catch (e) {}
+            if (timerId) {
+                clearTimeout(timerId);
+                timerId = null;
+            }
+        };
+
+        const run = () => {
+            if (done) return;
+            done = true;
+            cleanup();
+            runWhenIdle(() => {
+                try { callback(); } catch (e) { console.warn('Deferred init (after scroll) failed', e); }
+            }, idleTimeoutMs);
+        };
+
+        const onScroll = () => {
+            if (done) return;
+            if (timerId) clearTimeout(timerId);
+            timerId = setTimeout(run, quietMs);
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // Also schedule even if user doesn't scroll again.
+        timerId = setTimeout(run, quietMs);
     };
 
     const observeSectionOnce = (sectionId, onEnter, options = {}) => {
@@ -368,6 +426,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (deferredStarted) return;
             deferredStarted = true;
 
+            // Warm up likely-next resources so scrolling doesn't feel like it "loads" sections.
+            // 1) Parallax background image (Why Choose Us)
+            runWhenIdle(() => prefetchImage('assets/images/Why Choose Us -min.webp'), 2500);
+
+            // 2) Menu layout libs (Isotope/imagesLoaded).
+            // Start shortly after reveal (not purely idle) so scroll-to-menu doesn't feel like it "loads".
+            window.setTimeout(() => {
+                try {
+                    const p = ensureMenuLayoutLibs();
+                    if (p && typeof p.catch === 'function') p.catch(() => {});
+                } catch (e) {}
+            }, 800);
+
             // Lightweight global behaviors
             runInitQueueIdle([
                 () => initActiveNavOnScroll(),
@@ -381,21 +452,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Section-based heavy initializations (run only when needed)
             observeSectionOnce('events', () => {
-                try { initEventCarousel(); } catch (e) { console.warn('Event carousel init failed', e); }
-                try { initEventsScrollOptimization(); } catch (e) { console.warn('Events scroll optimization init failed', e); }
+                runInitQueueIdle([
+                    () => { try { initEventCarousel(); } catch (e) { console.warn('Event carousel init failed', e); } },
+                    () => { try { initEventsScrollOptimization(); } catch (e) { console.warn('Events scroll optimization init failed', e); } }
+                ]);
             }, { rootMargin: '350px 0px', threshold: 0.05 });
 
             observeSectionOnce('about', () => {
-                try { initAboutSectionAnimations(); } catch (e) { console.warn('About animations init failed', e); }
-                try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); }
-                try { initArcGuideToggle(); } catch (e) { console.warn('Arc guide toggle init failed', e); }
+                runInitQueueIdle([
+                    () => { try { initAboutSectionAnimations(); } catch (e) { console.warn('About animations init failed', e); } },
+                    () => { try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); } },
+                    () => { try { initArcGuideToggle(); } catch (e) { console.warn('Arc guide toggle init failed', e); } }
+                ]);
             }, { rootMargin: '350px 0px', threshold: 0.05 });
 
             observeSectionOnce('menu', () => {
-                try { initInteractiveMenu(); } catch (e) { console.warn('Menu init failed', e); }
-                try { initArcDishCarousel(); } catch (e) { console.warn('Dish carousel init failed', e); }
-                try { initMenuScrollOptimization(); } catch (e) { console.warn('Menu scroll optimization init failed', e); }
-            }, { rootMargin: '450px 0px', threshold: 0.05 });
+                // Start fetching the first few dish images as soon as the Menu is near the viewport.
+                // This is lightweight (network only) and helps ensure the arc carousel doesn't animate before images arrive.
+                try {
+                    const candidates = Array.from(document.querySelectorAll('#menu .single-dish-img'));
+                    candidates.slice(0, 3).forEach((img, i) => {
+                        const src = img && img.getAttribute ? (img.getAttribute('src') || img.src) : '';
+                        if (src) prefetchImageOnce(src);
+                        try {
+                            img.decoding = 'async';
+                            img.loading = 'eager';
+                            if (i === 0 && 'fetchPriority' in img) img.fetchPriority = 'high';
+                        } catch (e) {}
+                    });
+                } catch (e) {}
+
+                // Don't run heavy init while the user is actively scrolling.
+                runAfterScrollSettles(() => {
+                    runInitQueueIdle([
+                        () => { try { initInteractiveMenu(); } catch (e) { console.warn('Menu init failed', e); } },
+                        () => { try { initArcDishCarousel(); } catch (e) { console.warn('Dish carousel init failed', e); } },
+                        () => { try { initMenuScrollOptimization(); } catch (e) { console.warn('Menu scroll optimization init failed', e); } }
+                    ]);
+                });
+            }, { rootMargin: '1200px 0px', threshold: 0.01 });
 
             observeSectionOnce('outlets', () => {
                 try { initOutlets(); } catch (e) { console.warn('Outlets init failed', e); }
@@ -456,6 +551,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // Reveal the intro logo only when the animation sequence starts.
+            try {
+                introInner.style.transition = 'opacity 80ms linear';
+                introInner.style.visibility = 'visible';
+                introInner.style.opacity = '1';
+            } catch (e) {}
+
             const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReduced) {
                 overlay.remove();
@@ -514,10 +616,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 skipBtn.tabIndex = 0;
             }
 
-            const riseDuration = 1100; // ms for bottom→center with one roll (faster)
-            // Very small gap before the stronger blink/shine so it doesn't feel instant
-            // (a value ~60-120ms creates a subtle, perceptible pause).
-            const pauseAfterRise = 90; // ms (very small)
+            const riseDuration = 1100; // ms for bottom→center with one roll
+            // Give the browser a bit more time during the intro to fetch/decode below-the-fold assets.
+            // This makes the initial load feel fast while reducing scroll stalls later.
+            const pauseAfterRise = 650; // ms (slightly longer hold)
+
+            // Warm up likely-next resources while the intro runs (non-blocking).
+            // Keep this VERY lightweight to avoid causing a network/CPU burst during the intro.
+            try {
+                window.setTimeout(() => {
+                    try {
+                        // Background images for upcoming sections
+                        prefetchImageOnce('assets/images/Why Choose Us -min.webp');
+                        prefetchImageOnce('assets/images/IMG_3730-min.webp');
+
+                        // Warm menu libs early so reaching Menu doesn't trigger a long fetch+init burst.
+                        const p = ensureMenuLayoutLibs();
+                        if (p && typeof p.catch === 'function') p.catch(() => {});
+                    } catch (e) {}
+                }, 250);
+            } catch (e) {}
             const centerHold = 800; // ms to hold at center before moving to header (slightly longer)
             const shineDuration = 1300; // ms duration of strong shine animation (slower)
             const moveDuration = 1400; // ms to move/roll to header (slower)
@@ -1505,10 +1623,43 @@ function initWhyUsParallax() {
         if (!rafId) rafId = requestAnimationFrame(animate);
     };
 
-    window.addEventListener('scroll', computeTarget, { passive: true });
-    window.addEventListener('resize', computeTarget, { passive: true });
-    // Initialize once
-    computeTarget();
+    let active = false;
+    const onScrollOrResize = () => {
+        if (!active) return;
+        computeTarget();
+    };
+
+    const start = () => {
+        if (active) return;
+        active = true;
+        window.addEventListener('scroll', onScrollOrResize, { passive: true });
+        window.addEventListener('resize', onScrollOrResize, { passive: true });
+        computeTarget();
+    };
+
+    const stop = () => {
+        if (!active) return;
+        active = false;
+        try { window.removeEventListener('scroll', onScrollOrResize); } catch (e) {}
+        try { window.removeEventListener('resize', onScrollOrResize); } catch (e) {}
+        if (rafId) {
+            try { cancelAnimationFrame(rafId); } catch (e) {}
+            rafId = null;
+        }
+    };
+
+    // Only do parallax work while the section is near the viewport.
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) start();
+                else stop();
+            }
+        }, { root: null, threshold: 0, rootMargin: '250px 0px' });
+        io.observe(whyUsSection);
+    } else {
+        start();
+    }
 }
 
 function initHomePageAnimations() {
@@ -1852,35 +2003,38 @@ function initInteractiveMenu() {
 
         menuGrid.dataset.isotopeInitialized = 'true';
 
-        return new Promise((resolve) => {
-            imagesLoaded(menuGrid, function () {
-                const iso = new Isotope(menuGrid, {
-                    itemSelector: '.menu-item-card',
-                    layoutMode: 'fitRows',
-                    transitionDuration: '0.6s',
-                });
-
-                menuGrid.__iso = iso;
-
-                // Filter functionality
-                const filterContainer = document.getElementById('menu-filters');
-                if (filterContainer) {
-                    filterContainer.addEventListener('click', (e) => {
-                        const btn = e.target.closest('.menu-filter-btn');
-                        if (!btn) return;
-
-                        const filterValue = btn.getAttribute('data-filter');
-                        iso.arrange({ filter: filterValue });
-
-                        const currentActive = filterContainer.querySelector('.active');
-                        if (currentActive) currentActive.classList.remove('active');
-                        btn.classList.add('active');
-                    });
-                }
-
-                resolve(iso);
-            });
+        // Initialize Isotope immediately (don't block rendering while waiting for all images).
+        const iso = new Isotope(menuGrid, {
+            itemSelector: '.menu-item-card',
+            layoutMode: 'fitRows',
+            transitionDuration: '0.6s',
         });
+        menuGrid.__iso = iso;
+
+        // Filter functionality
+        const filterContainer = document.getElementById('menu-filters');
+        if (filterContainer) {
+            filterContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.menu-filter-btn');
+                if (!btn) return;
+
+                const filterValue = btn.getAttribute('data-filter');
+                iso.arrange({ filter: filterValue });
+
+                const currentActive = filterContainer.querySelector('.active');
+                if (currentActive) currentActive.classList.remove('active');
+                btn.classList.add('active');
+            });
+        }
+
+        // Relayout once images are loaded (helps avoid item overlap without delaying section appearance).
+        try {
+            imagesLoaded(menuGrid, function () {
+                try { iso.layout(); } catch (e) {}
+            });
+        } catch (e) {}
+
+        return Promise.resolve(iso);
     }
 
     function startMenuIsotope() {
@@ -1905,7 +2059,7 @@ function initInteractiveMenu() {
                     break;
                 }
             }
-        }, { rootMargin: '200px 0px' });
+        }, { rootMargin: '1200px 0px' });
         obs.observe(menuSection);
     }
 
@@ -2099,6 +2253,63 @@ function initArcDishCarousel() {
 
     let currentIndex = 0;
     let isAnimating = false;
+
+    const getDishImg = (index) => {
+        const slide = dishSlides[index];
+        return slide ? slide.querySelector('.single-dish-img') : null;
+    };
+
+    const ensureDishImgReady = (index, { timeoutMs = 2500 } = {}) => {
+        const img = getDishImg(index);
+        if (!img) return Promise.resolve();
+
+        try {
+            img.decoding = 'async';
+            img.loading = 'eager';
+            if ('fetchPriority' in img && index === currentIndex) img.fetchPriority = 'high';
+        } catch (e) {}
+
+        const markLoaded = () => {
+            try { img.classList.add('loaded'); } catch (e) {}
+        };
+
+        if (img.complete && img.naturalWidth > 0) {
+            markLoaded();
+            return Promise.resolve();
+        }
+
+        // Also kick off a parallel prefetch to warm cache (doesn't touch DOM).
+        try {
+            const src = img.getAttribute('src') || img.currentSrc || img.src;
+            if (src) prefetchImageOnce(src);
+        } catch (e) {}
+
+        return new Promise((resolve) => {
+            let done = false;
+            const finish = () => {
+                if (done) return;
+                done = true;
+                markLoaded();
+                resolve();
+            };
+            img.addEventListener('load', finish, { once: true });
+            img.addEventListener('error', finish, { once: true });
+            try {
+                if (typeof img.decode === 'function') {
+                    img.decode().then(finish).catch(() => {});
+                }
+            } catch (e) {}
+            window.setTimeout(finish, timeoutMs);
+        });
+    };
+
+    const primeAround = (index) => {
+        // Prime current + next 2 images so transitions never hit a cold cache.
+        const count = dishSlides.length;
+        void ensureDishImgReady(index, { timeoutMs: 2500 });
+        void ensureDishImgReady((index + 1) % count, { timeoutMs: 2500 });
+        void ensureDishImgReady((index + 2) % count, { timeoutMs: 2500 });
+    };
 
     // Helper: convert rgb to hsl (0..1 ranges)
     function rgbToHsl(r, g, b) {
@@ -2363,19 +2574,17 @@ function initArcDishCarousel() {
         } catch (e) { /* ignore */ }
     }
 
-    // Kick off background removal and cropping for all dish images
+    // IMPORTANT PERF NOTE:
+    // The previous implementation performed heavy canvas-based image processing
+    // (getImageData + flood fill + PNG re-encode) for ALL dish images.
+    // On many devices this causes multi-second main-thread freezes when reaching the Menu section.
+    // Keep images as-authored (lazy/async) to avoid scroll hitches.
     const dishImgs = carousel.querySelectorAll('.single-dish-img');
-    // Hint the browser for best quality and prioritize loading of these images
     dishImgs.forEach((img) => {
         try {
-            img.loading = 'eager';
-            img.decoding = 'sync';
-            if ('fetchPriority' in img) img.fetchPriority = 'high';
+            img.decoding = 'async';
+            // do not force eager loading here
         } catch (_) {}
-    });
-    dishImgs.forEach(async (img) => {
-        await removeDarkBackground(img);
-        await cropTransparentBorders(img);
     });
 
     function centerActiveChip(index) {
@@ -2472,15 +2681,20 @@ function initArcDishCarousel() {
         }, 10);
     }
 
-    function updateCarousel(newIndex, direction = 'next') {
+    async function updateCarousel(newIndex, direction = 'next') {
         if (isAnimating) return;
+        if (newIndex === currentIndex) return;
         isAnimating = true;
+
+        // Keep current slide visible until the next slide image is ready.
+        await ensureDishImgReady(newIndex, { timeoutMs: 2500 });
 
         dishSlides[currentIndex].classList.remove('active');
 
         setTimeout(() => {
             dishSlides[newIndex].classList.add('active');
             setActiveChip(newIndex);
+            primeAround(newIndex);
         }, 100);
 
         currentIndex = newIndex;
@@ -2492,12 +2706,12 @@ function initArcDishCarousel() {
 
     function nextDish() {
         const newIndex = (currentIndex + 1) % dishSlides.length;
-        updateCarousel(newIndex, 'next');
+        void updateCarousel(newIndex, 'next');
     }
 
     function prevDish() {
         const newIndex = (currentIndex - 1 + dishSlides.length) % dishSlides.length;
-        updateCarousel(newIndex, 'prev');
+        void updateCarousel(newIndex, 'prev');
     }
 
     // Event listeners
@@ -2510,7 +2724,7 @@ function initArcDishCarousel() {
             ch.addEventListener('click', () => {
                 const idx = Number(ch.dataset.index);
                 if (!Number.isNaN(idx)) {
-                    updateCarousel(idx, idx > currentIndex ? 'next' : 'prev');
+                    void updateCarousel(idx, idx > currentIndex ? 'next' : 'prev');
                 }
             });
         });
@@ -2575,8 +2789,14 @@ function initArcDishCarousel() {
         });
     }
 
-    // Auto-play carousel
-    let autoPlayInterval = setInterval(nextDish, 4000);
+    // Prime initial images and start autoplay only after the first slide is ready.
+    primeAround(0);
+
+    let autoPlayInterval = null;
+    ensureDishImgReady(0, { timeoutMs: 2500 }).then(() => {
+        if (autoPlayInterval) return;
+        autoPlayInterval = setInterval(nextDish, 4000);
+    });
 
     // Pause on hover (desktop only). Keep autoplay uninterrupted on global mobile screens.
     const allowHoverPause = (
@@ -2586,10 +2806,12 @@ function initArcDishCarousel() {
     );
     if (allowHoverPause) {
         carousel.addEventListener('mouseenter', () => {
-            clearInterval(autoPlayInterval);
+            if (autoPlayInterval) clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
         });
 
         carousel.addEventListener('mouseleave', () => {
+            if (autoPlayInterval) return;
             autoPlayInterval = setInterval(nextDish, 4000);
         });
     }
