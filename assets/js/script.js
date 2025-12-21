@@ -168,20 +168,76 @@ function startHomeBackgroundVideo() {
 
 // Handle loading state
 document.addEventListener('DOMContentLoaded', () => {
+    const runWhenIdle = (callback, timeoutMs = 1500) => {
+        if (typeof window.requestIdleCallback === 'function') {
+            return window.requestIdleCallback(callback, { timeout: timeoutMs });
+        }
+        return window.setTimeout(() => callback({ didTimeout: true, timeRemaining: () => 0 }), Math.min(timeoutMs, 200));
+    };
+
+    const whenContentLoaded = (callback) => {
+        if (document.body.classList.contains('content-loaded')) {
+            callback();
+            return;
+        }
+
+        let called = false;
+        const safeCall = () => {
+            if (called) return;
+            called = true;
+            try { callback(); } catch (e) { console.warn('Deferred init callback failed', e); }
+        };
+
+        const obs = new MutationObserver(() => {
+            if (document.body.classList.contains('content-loaded')) {
+                try { obs.disconnect(); } catch (e) {}
+                safeCall();
+            }
+        });
+        try {
+            obs.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+        } catch (e) {
+            // If MutationObserver fails for any reason, fall back to a timer.
+        }
+
+        // Safety: don't block forever; run deferred init shortly after.
+        window.setTimeout(safeCall, 2000);
+    };
+
+    const runInitQueueIdle = (tasks) => {
+        let idx = 0;
+        const step = (deadline) => {
+            const timeRemaining = typeof deadline?.timeRemaining === 'function' ? deadline.timeRemaining() : 0;
+            const didTimeout = !!deadline?.didTimeout;
+
+            // Run as many tasks as we reasonably can without blocking.
+            while (idx < tasks.length && (didTimeout || timeRemaining > 8)) {
+                const task = tasks[idx++];
+                try { task(); } catch (e) { console.warn('Deferred init failed', e); }
+            }
+
+            if (idx < tasks.length) {
+                runWhenIdle(step, 2500);
+            }
+        };
+
+        runWhenIdle(step, 2500);
+    };
+
     // Fallback timeout to ensure content shows even if loading detection fails
     const fallbackTimeout = setTimeout(() => {
-        // Never reveal the main content before the intro overlay runs.
-        // If the intro overlay exists, keep content hidden and let the intro
-        // sequence reveal it when finished. We only remove the lightweight
-        // loading screen so users aren't staring at two overlays.
+        // If the intro overlay exists, keep the overlay in place so the user
+        // sees the intended sequence. However, we can still mark the main
+        // content as ready behind it so the browser can paint/layout it.
         const overlay = document.getElementById('logo-intro-overlay');
         if (overlay) {
             console.warn('Loading timed out, keeping intro overlay and holding content until intro completes');
+            document.body.classList.add('content-loaded');
             const loadingScreen = document.querySelector('.loading-screen');
             if (loadingScreen) {
                 loadingScreen.remove();
             }
-            return; // Do NOT add content-loaded here
+            return;
         }
 
         console.warn('Loading detection timed out, revealing content (no intro overlay present)');
@@ -240,8 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         if (overlay && !prefersReduced) {
-            // Do not reveal content here; introLogoSequence will call `document.body.classList.add('content-loaded')`
-            // Also keep the loading screen until the intro sequence removes it.
+            // Keep the intro overlay visible, but allow the main content to be
+            // painted behind it so LCP can be detected earlier.
+            document.body.classList.add('content-loaded');
             return;
         }
 
@@ -269,44 +326,59 @@ document.addEventListener('DOMContentLoaded', () => {
     if (__appInit.done) return;
     __appInit.done = true;
     try {
+        // Essential (keep navigation responsive immediately)
         initMobileMenu();
         initSmoothScroll();
-        initActiveNavOnScroll();
-        initScrollAnimations();
-        initWhyUsParallax();
-        initHomePageAnimations();
-        initStorySlideshow();
-        initInteractiveMenu();
-        initArcDishCarousel();
-        initStickyHeader();
-        // Delay event carousel until events section is visible
-        let eventCarouselStarted = false;
-        const eventsSection = document.getElementById('events');
-        if (eventsSection && 'IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !eventCarouselStarted) {
-                        eventCarouselStarted = true;
+
+        // Defer everything else so it doesn't block first paint/interaction.
+        let deferredStarted = false;
+        const startDeferred = () => {
+            if (deferredStarted) return;
+            deferredStarted = true;
+
+            runInitQueueIdle([
+                () => initActiveNavOnScroll(),
+                () => initStickyHeader(),
+                () => initScrollAnimations(),
+                () => initWhyUsParallax(),
+                () => initHomePageAnimations(),
+                () => initStorySlideshow(),
+                () => initInteractiveMenu(),
+                () => initArcDishCarousel(),
+                // Delay event carousel until events section is visible
+                () => {
+                    let eventCarouselStarted = false;
+                    const eventsSection = document.getElementById('events');
+                    if (eventsSection && 'IntersectionObserver' in window) {
+                        const observer = new IntersectionObserver((entries, obs) => {
+                            entries.forEach(entry => {
+                                if (entry.isIntersecting && !eventCarouselStarted) {
+                                    eventCarouselStarted = true;
+                                    initEventCarousel();
+                                    obs.disconnect();
+                                }
+                            });
+                        }, { threshold: 0.2 });
+                        observer.observe(eventsSection);
+                    } else {
                         initEventCarousel();
-                        obs.disconnect();
                     }
-                });
-            }, { threshold: 0.2 });
-            observer.observe(eventsSection);
-        } else {
-            // Fallback: start immediately if IntersectionObserver not supported
-            initEventCarousel();
-        }
-    initAboutSectionAnimations();
-    try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); }
-        initArcGuideToggle();
-        initBackToTop();
-        initContactForm();
-        initOutlets();
-        initTeamSection();
-        initTeamModal();
-        initEventsScrollOptimization();
-        initMenuScrollOptimization();
+                },
+                () => initAboutSectionAnimations(),
+                () => { try { initAboutShowMore(); } catch (e) { console.warn('About show more init failed', e); } },
+                () => initArcGuideToggle(),
+                () => initBackToTop(),
+                () => initContactForm(),
+                () => initOutlets(),
+                () => initTeamSection(),
+                () => initTeamModal(),
+                () => initEventsScrollOptimization(),
+                () => initMenuScrollOptimization()
+            ]);
+        };
+
+        // Prefer starting deferred tasks after content is revealed (or at least soon after).
+        whenContentLoaded(() => runWhenIdle(() => startDeferred(), 1500));
     } catch (error) {
         console.error('An error occurred during script execution:', error);
         // Ensure content is shown even if there's an error
