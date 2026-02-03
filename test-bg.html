@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script>
+      // Live Server sometimes opens the last/active file (e.g. test-bg.html).
+      // Redirect to the real homepage by default.
+      // Add ?stay=1 to the URL if you want to keep this test page open.
+      (function () {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          if (params.has('stay')) return;
+          if (/\/test-bg\.html$/i.test(window.location.pathname)) {
+            window.location.replace('index.html' + window.location.search + window.location.hash);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>Test Background Image</title>
     <style>
         .test-bg {

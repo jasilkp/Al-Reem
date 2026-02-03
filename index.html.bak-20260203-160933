@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Prevent content flash before intro sequence -->
+    <style>
+        /* Hide main content (not intro) until loaded */
+        body:not(.content-loaded) main,
+        body:not(.content-loaded) header,
+        body:not(.content-loaded) footer,
+        /* Ensure any wrapper content is hidden as early as possible */
+        body:not(.content-loaded) #main-content,
+        body:not(.content-loaded) #events-page {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+    </style>
+    <meta name="description" content="Al-Reem Restaurant - Authentic Arabic Cuisine">
+    <meta name="keywords" content="Al Reem Mandi, Arabian Mandi Kerala, Yemeni cuisine Kerala, Mandi restaurant Kerala, authentic mandi" />
+    <meta name="author" content="AL-REEM MANDI" />
+    <meta property="og:title" content="AL-REEM MANDI - The Real Arabian Taste" />
+    <meta property="og:description" content="Authentic Arabian Mandi in Kerala since 2010. 18 outlets serving traditional flavors." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://alreemmandi.example.com" />
+    <meta property="og:image" content="assets/images/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="canonical" href="https://alreemmandi.example.com/" />
+        <title>AL-REEM MANDI - The Real Arabian Taste</title>
+        <!-- Inline critical CSS to prevent white blink before external CSS loads -->
+        <style>
+            body { background: #101010 !important; }
+            #logo-intro-overlay { background: #101010 !important; }
+            /* Ensure hero fills the *visible* viewport across mobile browsers */
+            .hero-section { height: 100vh; height: 100svh; height: 100dvh; }
+        </style>
+    <link rel="icon" type="image/png" href="assets/images/logo.png" />
+    
+    <!-- DNS Prefetch and Preconnect for faster CDN/external resource loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    
+    <!-- Critical CSS - loaded immediately -->
+    <link rel="stylesheet" href="assets/css/style.min.css?v=20251107r11">
+    <link rel="stylesheet" href="assets/css/webp-overrides.css?v=20251220r1">
+    <!-- Tailwind (local build) - avoids CDN blocks and keeps styling consistent -->
+    <link rel="stylesheet" href="assets/css/tailwind-local.css?v=20251220r1">
+    <!-- Isotope/imagesLoaded are lazy-loaded by JS when Menu is reached -->
+    <!-- Defer font loading to improve initial page load -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&family=Cinzel:wght@700&display=swap" rel="stylesheet"></noscript>
+    <!-- Non-critical CSS - defer loading -->
+    <link rel="stylesheet" href="assets/css/signature-slider.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/team-section.css?v=20251011" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251220r1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/header-social.css?v=20251105" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="assets/css/signature-slider.min.css">
+        <link rel="stylesheet" href="assets/css/team-section.css?v=20251011">
+        <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251220r1">
+        <link rel="stylesheet" href="assets/css/header-social.css?v=20251105">
+    </noscript>
+
+    <!-- Preload critical intro assets first (highest priority) -->
+    <link rel="preload" as="image" href="assets/images/newlogo-intro.svg" type="image/svg+xml" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/logo-intro.png" type="image/png" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/logo.png" type="image/png" fetchpriority="high">
+    <!-- Avoid preloading heavy background/video assets to keep CSS/JS priority on first load -->
+    
+    <!-- Prevent FOUC (Flash of Unstyled Content) -->
+    <style>
+        /* Hide content until CSS and JS are loaded */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            animation: pulse 2s infinite;
+        }
+
+        /* The intro overlay is the real first-screen UI; avoid a logo flash from the loading screen */
+        .loading-logo { display: none !important; }
+
+          /* Our Menu dish carousel: avoid black placeholder background (older cached CSS had background:#0a0a0a) */
+          .single-dish-img { background: transparent !important; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+        
+        /* Initially hide main content */
+        #main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        #events-page {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+        
+        /* Show content when loaded */
+        .content-loaded #main-content,
+        .content-loaded #events-page {
+            opacity: 1;
+        }
+        
+        .content-loaded .loading-screen {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Fallback for when JavaScript is disabled */
+        noscript + .loading-screen {
+            display: none;
+        }
+        
+    </style>
+</head>
+<body class="bg-primary-black text-secondary-offwhite" style="background:#101010;">
+
+    <!-- Fallback message for users without JavaScript -->
+    <noscript>
+        <style>
+            .loading-screen { display: none !important; }
+            #main-content, #events-page { opacity: 1 !important; }
+        </style>
+    </noscript>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <img src="assets/images/logo.png" alt="Loading..." class="loading-logo">
+    </div>
+
+    <!-- ARIA live region for intro announcements -->
+    <div id="intro-live" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Logo Intro Overlay (plays once per session) -->
+    <div id="logo-intro-overlay" class="fixed inset-0 z-[9998] flex items-center justify-center bg-black" style="position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; background:#101010;">
+        <div id="logo-intro-inner" aria-hidden="true" style="opacity:0; visibility:hidden;">
+            <!-- Masked fill that animates from bottom -> top. data-src used by JS to create clone with same mask -->
+            <div class="logo-mask" data-src="assets/images/logo-intro.png" aria-hidden="true"></div>
+            <!-- Outline image for subtle edge/texture during intro -->
+            <img id="logo-intro-img" src="assets/images/newlogo-intro.svg" class="intro-logo" width="320" height="320" alt="" aria-hidden="true" decoding="async" fetchpriority="high">
+        </div>
+    </div>
+
+    <div id="main-content">
+        <!-- Header & Navigation -->
+        <header class="w-full z-50 sticky top-0 home-anim-nav" id="header">
+            <nav class="container mx-auto px-6 py-4 flex justify-end md:justify-center items-center home-anim-nav-inner">
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#events" class="nav-link">Events</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#menu" class="nav-link">Menu</a>
+                    <a href="#outlets" class="nav-link">Outlets</a>
+                    <a href="#team" class="nav-link">Our Team</a>
+                    <a href="#testimonials" class="nav-link">Testimonials</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none" aria-label="Toggle menu">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </nav>
+            <!-- Mobile topper nav: a compact 4-item bar shown on phones only. It complements the existing mobile menu
+                 button and uses the same `nav-link` class so the site's active-nav logic can toggle the `active` state. -->
+            <nav class="mobile-topper-nav md:hidden" aria-label="Quick links: Home, Menu, Outlets, Contact">
+                <a href="#home" class="nav-link mobile-topper-link">Home</a>
+                <a href="#menu" class="nav-link mobile-topper-link">Menu</a>
+                <a href="#outlets" class="nav-link mobile-topper-link">Outlets</a>
+                <a href="#contact" class="nav-link mobile-topper-link">Contact</a>
+            </nav>
+            <div id="mobile-menu" class="hidden md:hidden bg-primary-black bg-opacity-90 text-center">
+                 <a href="#home" class="block py-2 px-4 text-sm nav-link">Home</a>
+                 <a href="#events" class="block py-2 px-4 text-sm nav-link">Events</a>
+                 <a href="#about" class="block py-2 px-4 text-sm nav-link">About</a>
+                 <a href="#menu" class="block py-2 px-4 text-sm nav-link">Menu</a>
+                 <a href="#outlets" class="block py-2 px-4 text-sm nav-link">Outlets</a>
+                 <a href="#team" class="block py-2 px-4 text-sm nav-link">Our Team</a>
+                 <a href="#testimonials" class="block py-2 px-4 text-sm nav-link">Testimonials</a>
+                 <a href="#contact" class="block py-2 px-4 text-sm nav-link">Contact</a>
+            </div>
+        </header>
+        <!-- Top header social icons (Instagram, Facebook) placed above the red underline -->
+        <div class="header-social" aria-label="Social links">
+            <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" class="header-social-icon" aria-label="Instagram" title="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" class="header-social-icon" aria-label="Facebook" title="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9V12.1h2.54V9.86c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.22.2 2.22.2v2.44h-1.25c-1.23 0-1.61.77-1.61 1.56v1.91h2.74l-.44 2.88h-2.3V22c4.78-.75 8.44-4.92 8.44-9.93z"/></svg>
+            </a>
+        </div>
+        <!-- Underline now outside sticky header so it scrolls away -->
+        <div id="main-nav-underline" class="w-32 h-[1px] mx-auto underline-animated" style="background-color: var(--accent-red);"></div>
+
+    <!-- Home Section -->
+    <section id="home" class="hero-section with-container-frame flex flex-col justify-center items-center text-center px-4 relative">
+            <!-- Decorative looping background video (hidden until intro+text animations finish) -->
+            <div class="home-video-wrap" aria-hidden="true">
+                <!-- Filler layer: use a blurred poster image (avoids downloading video twice).
+                     It visually fills the framed area while the main `#home-bg-video` plays with
+                     object-fit: contain (so the main video remains unzoomed and uncropped). -->
+                <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg')); background-image: -webkit-image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg'))"></div>
+
+                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="none" poster="assets/images/video-poster.webp" disablePictureInPicture disableRemotePlayback>
+                    <source data-src="assets/images/1085(1)new-720p.webm" type="video/webm">
+                    <source data-src="assets/images/1085(1)new-720p.mp4" type="video/mp4">
+                </video>
+                <!-- Persistent dim layer to improve contrast between video and foreground content -->
+                <div class="home-video-dim" aria-hidden="true"></div>
+                <div class="home-video-overlay" id="home-video-overlay">
+                    <div class="overlay-half left" aria-hidden="true"></div>
+                    <div class="overlay-half right" aria-hidden="true"></div>
+                    <div class="overlay-vignette" aria-hidden="true"></div>
+                </div>
+            </div>
+            <!-- Right Vertical Quote Rail for Home Section -->
+            <!-- Right Vertical Quote Rail for Home Section -->
+                <aside class="home-quote-rail home-anim-side-right" aria-hidden="true">
+                <div class="quote-inner">
+                    <span class="quote-text">Crafted with passion, served with pride</span>
+                </div>
+            </aside>
+            <!-- Left Vertical Contact Rail for Home Section -->
+            <aside class="home-contact-rail home-anim-side-left" aria-label="Get in touch">
+                <div class="rail-inner">
+                    <span class="rail-text">Get in touch</span>
+                    <nav class="rail-icons" aria-label="Social links">
+                        <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" aria-label="Instagram" class="rail-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>
+                        </a>
+                        <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" aria-label="Facebook" class="rail-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9V12.1h2.54V9.86c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.22.2 2.22.2v2.44h-1.25c-1.23 0-1.61.77-1.61 1.56v1.91h2.74l-.44 2.88h-2.3V22c4.78-.75 8.44-4.92 8.44-9.93z"/></svg>
+                        </a>
+                        <a href="#outlets" aria-label="Our Outlets" class="rail-icon" title="Our Outlets">
+                            <!-- Replaced inactive WhatsApp icon with a Locations icon linking to Our Outlets -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+                        </a>
+                    </nav>
+                </div>
+            </aside>
+            <!-- Bottom rail label (centered text inside the bottom frame rail) -->
+            <div class="frame-bottom-label" aria-hidden="true">Since 2010 — Authentic Arabian Mandi</div>
+            
+            <div class="home-anim fade-in flex items-center justify-center mb-6">
+                                <img id="home-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-52 md:w-52 mr-6 home-anim-item home-anim-logo" loading="eager" fetchpriority="high" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+                                <div>
+                                        <h1 class="text-4xl md:text-6xl text-secondary-offwhite main-title home-anim-item home-anim-title">Al-Reem Mandi</h1>
+                                        <p class="mt-2 text-lg md:text-xl text-gray-300 home-anim-item home-anim-sub">The Real Arabian Taste</p>
+                                </div>
+                        </div>
+                        <div class="fade-in home-anim-cta-wrap" style="opacity: 0;">
+                            <a href="#outlets" class="btn-primary inline-block mt-2 home-anim-item home-anim-cta">Book a Table</a>
+                        </div>
+        </section>
+        
+        <main>
+            <!-- Events Section -->
+            <section id="events" class="py-20 relative events-section-bg">
+                <div class="container mx-auto px-6 pt-12 relative">
+                    <div class="text-center mb-16">
+                        <h2 class="section-title scroll-animate main-title">Latest Events</h2>
+                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center">
+                        <div class="lg:col-span-3 relative events-carousel-wrapper">
+                            <div class="events-carousel-container">
+                                <!-- Event Slide 1 -->
+                                <div class="event-slide">
+                                    <img src="assets/images/Event_poster/01event.webp" onerror="this.onerror=null;this.src='assets/images/Event_poster/01event.jpg';" alt="Event Poster 1" loading="lazy" decoding="async">
+                                </div>
+                                <!-- Event Slide 2 -->
+                                <div class="event-slide">
+                                    <img src="assets/images/Event_poster/02event.webp" onerror="this.onerror=null;this.src='assets/images/Event_poster/02event.jpg';" alt="Event Poster 2" loading="lazy" decoding="async">
+                                </div>
+                                <!-- Event Slide 3 -->
+                                <div class="event-slide">
+                                    <span class="event-badge">New Outlet</span>
+                                    <img src="assets/images/Event_poster/03event.webp" onerror="this.onerror=null;this.src='assets/images/Event_poster/03event.jpg';" alt="Event Poster 3" loading="lazy" decoding="async">
+                                </div>
+                                <!-- Event Slide 4 -->
+                                <div class="event-slide">
+                                    <img src="assets/images/Event_poster/04event.webp" onerror="this.onerror=null;this.src='assets/images/Event_poster/04event.jpg';" alt="Event Poster 4" loading="lazy" decoding="async">
+                                </div>
+                                 <!-- Cloned slides for seamless loop will be added by JS -->
+                            </div>
+                            <button id="prev-event" class="carousel-arrow left-0" aria-label="Previous Event">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <button id="next-event" class="carousel-arrow right-0" aria-label="Next Event">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                            <div id="event-dots" class="carousel-dots"></div>
+                        </div>
+                         <div id="event-details-card" class="lg:col-span-2 scroll-animate h-full flex flex-col justify-center text-center lg:text-left">
+                            <div id="event-details-container" class="relative flex-grow flex flex-col justify-center">
+                                <!-- Dynamic event details will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="py-20 bg-primary-black relative">
+                <div class="container mx-auto px-6 pt-12">
+                    <div class="text-center mb-16">
+                        <h2 class="section-title scroll-animate">Our Story</h2>
+                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div class="story-text-container scroll-animate">
+                            <div class="flex items-center mb-6">
+                                <img id="about-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-40 md:w-40 mr-6 flex-shrink-0" loading="lazy" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+                                <h3 class="text-3xl font-bold main-title">A Legacy of Taste Since 2010</h3>
+                            </div>
+                                    <p id="about-text" class="text-gray-300 leading-relaxed">From a single spark of culinary passion in Athani, Ernakulam, a legacy was born. In 2010, AL-REEM MANDI introduced Kerala to the true essence of Arabian Mandi, becoming one of the very first to share this rich heritage. Our journey, which started from that single location, has since expanded to a constellation of over 20 restaurants across the state.<br><br>
+                            We are committed to preserving the authenticity of Arabian flavors, blending tradition with innovation in every dish we serve. Our chefs are passionate artisans, dedicated to sourcing the finest ingredients and perfecting every recipe.<br><br>
+                            Today, Al-Reem Mandi is not just a restaurant—it's a community of food lovers, a destination for families and friends, and a symbol of quality and hospitality across Kerala and beyond.<br><br>
+                            From humble beginnings to a growing family of outlets, our story is shaped by the trust of our guests and the dedication of our team. We continue to evolve while staying true to our roots—serving meals that are memorable, comforting, and genuinely Arabian.<br><br>
+                            Whether it's your first visit or your hundredth, we’re honored to welcome you to the Al-Reem experience—where warmth, flavor, and tradition meet.</p>
+                                    <button id="about-toggle" class="about-toggle hidden learn-more-btn mt-4" aria-controls="about-text" aria-expanded="false" type="button">Show more</button>
+                        </div>
+                        <div class="story-image-container scroll-animate">
+                         <div class="story-slideshow">
+                             <img src="assets/images/About Us/1.webp" onerror="this.onerror=null;this.src='assets/images/About Us/1.jpg';" alt="About Us Photo 1" class="visible" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/2.webp" onerror="this.onerror=null;this.src='assets/images/About Us/2.jpg';" alt="About Us Photo 2" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/3.webp" onerror="this.onerror=null;this.src='assets/images/About Us/3.jpg';" alt="About Us Photo 3" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/4.webp" onerror="this.onerror=null;this.src='assets/images/About Us/4.jpg';" alt="About Us Photo 4" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/5.webp" onerror="this.onerror=null;this.src='assets/images/About Us/5.jpg';" alt="About Us Photo 5" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/6.webp" onerror="this.onerror=null;this.src='assets/images/About Us/6.jpg';" alt="About Us Photo 6" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/7.webp" onerror="this.onerror=null;this.src='assets/images/About Us/7.jpg';" alt="About Us Photo 7" loading="lazy" style="image-rendering: crisp-edges;">
+                             <img src="assets/images/About Us/8.webp" onerror="this.onerror=null;this.src='assets/images/About Us/8.jpg';" alt="About Us Photo 8" loading="lazy" style="image-rendering: crisp-edges;">
+                         </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us Section (background + parallax only) -->
+            <section id="why-us" class="py-20 parallax-bg min-h-[85vh]">
+                <div class="parallax-overlay"></div>
+                <div class="parallax-content">
+                    <div class="container mx-auto px-6">
+                        <blockquote class="parallax-quote">
+                            <span class="quote-mark" aria-hidden="true">“</span>
+                            <p>Welcome to our table. At Al-Reem, every meal is a celebration of food, family, and friendship.</p>
+                            <span class="quote-mark" aria-hidden="true">”</span>
+                        </blockquote>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Menu Section -->
+            <section id="menu" class="py-20 bg-primary-black">
+                <div class="menu-logo-outline" aria-hidden="true"></div>
+                <!-- Vertical Contact Rail on the right side -->
+                <aside class="menu-contact-rail" aria-label="Get in touch">
+                    <div class="rail-inner">
+                        <span class="rail-text">Get in touch</span>
+                        <nav class="rail-icons" aria-label="Social links">
+                            <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" aria-label="Instagram" class="rail-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>
+                            </a>
+                            <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" aria-label="Facebook" class="rail-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9V12.1h2.54V9.86c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.22.2 2.22.2v2.44h-1.25c-1.23 0-1.61.77-1.61 1.56v1.91h2.74l-.44 2.88h-2.3V22c4.78-.75 8.44-4.92 8.44-9.93z"/></svg>
+                            </a>
+                            <a href="#outlets" aria-label="Our Outlets" class="rail-icon" title="Our Outlets">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+                            </a>
+                        </nav>
+                    </div>
+                </aside>
+                <!-- Left Vertical Quote Rail -->
+                <aside class="menu-quote-rail" aria-hidden="true">
+                    <div class="quote-inner">
+                        <span class="quote-text">Crafted with passion, served with pride</span>
+                    </div>
+                </aside>
+                <!-- Inline SVG filters for image background knockout -->
+                <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+                    <defs>
+                        <!-- Remove near-black backgrounds by using luminance as alpha with a threshold curve -->
+                        <filter id="knockout-dark" color-interpolation-filters="sRGB">
+                            <!-- Create an alpha map from luminance only (no RGB content) -->
+                            <feColorMatrix in="SourceGraphic" type="matrix" values="
+                                0 0 0 0 0
+                                0 0 0 0 0
+                                0 0 0 0 0
+                                0.2126 0.7152 0.0722 0 0" result="lumaAlpha" />
+                            <!-- Threshold: keep mid-to-bright pixels, drop very dark ones (tweakable) -->
+                            <feComponentTransfer in="lumaAlpha" result="alphaThresh">
+                                <!-- Map low luminance to 0 alpha, higher to 1; adjust steps to taste -->
+                                <feFuncA type="table" tableValues="0 0 0 0 0 0 0 0.2 0.6 1 1 1" />
+                            </feComponentTransfer>
+                            <!-- Use the thresholded alpha to mask the original colors -->
+                            <feComposite in="SourceGraphic" in2="alphaThresh" operator="in" />
+                        </filter>
+                    </defs>
+                </svg>
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-12">
+                        <h2 class="section-title scroll-animate main-title text-white">Our Signature Dishes</h2>
+                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                    </div>
+                    <div class="menu-inner-container">
+                        <!-- Top horizontal dish list -->
+                        <div class="dish-top-list-wrapper" aria-label="Signature dishes">
+                            <button class="dish-scroll-btn prev" type="button" aria-label="Scroll dishes left">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                            </button>
+                            <div class="dish-top-list">
+                                <button class="dish-chip active" data-index="0">Chicken Mandi</button>
+                                <button class="dish-chip" data-index="1">Chicken Masala Mandi</button>
+                                <button class="dish-chip" data-index="2">Alfaham Mandi</button>
+                                <button class="dish-chip" data-index="3">Peri Peri Alfaham Mandi</button>
+                                <button class="dish-chip" data-index="4">Honey Alfaham Mandi</button>
+                                <button class="dish-chip" data-index="5">Mutton Mandi</button>
+                                <button class="dish-chip" data-index="6">Beef Mandi</button>
+                                <button class="dish-chip" data-index="7">Beef Ribs Mandi</button>
+                            </div>
+                            <button class="dish-scroll-btn next" type="button" aria-label="Scroll dishes right">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                            </button>
+                        </div>
+                        <div class="menu-carousel-and-info-wrapper">
+                            <!-- Single Large Dish Carousel on Existing Red Arc -->
+                            <div class="menu-arc-guide"></div>
+                            <div class="menu-arc-guide inner"></div>
+                            <div class="arc-dish-carousel-wrapper">
+                                <div id="single-arc-carousel" class="single-arc-carousel">
+                                    <!-- Dish 1: Chicken Mandi -->
+                                    <div class="single-dish-slide active" data-index="0">
+                                        <img src="assets/images/Chicken Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Chicken Mandi.jpg?v=20251221d1';" alt="Chicken Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 2: Chicken Masala Mandi -->
+                                    <div class="single-dish-slide" data-index="1">
+                                        <img src="assets/images/Chicken Masala Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Chicken Masala Mandi.jpg?v=20251221d1';" alt="Chicken Masala Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 3: Alfaham Mandi -->
+                                    <div class="single-dish-slide" data-index="2">
+                                        <img src="assets/images/Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Alfaham Mandi.jpg?v=20251221d1';" alt="Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 4: Peri Peri Alfaham Mandi -->
+                                    <div class="single-dish-slide" data-index="3">
+                                        <img src="assets/images/Peri Peri Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Peri Peri Alfaham Mandi.jpg?v=20251221d1';" alt="Peri Peri Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 5: Honey Alfaham Mandi -->
+                                    <div class="single-dish-slide" data-index="4">
+                                        <img src="assets/images/Honey Alfaham Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Honey Alfaham Mandi.jpg?v=20251221d1';" alt="Honey Alfaham Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 6: Mutton Mandi -->
+                                    <div class="single-dish-slide" data-index="5">
+                                        <img src="assets/images/Mutton Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Mutton Mandi.jpg?v=20251221d1';" alt="Mutton Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 7: Beef Mandi -->
+                                    <div class="single-dish-slide" data-index="6">
+                                        <img src="assets/images/Beef Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Beef Mandi.jpg?v=20251221d1';" alt="Beef Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                    <!-- Dish 8: Beef Ribs Mandi -->
+                                    <div class="single-dish-slide" data-index="7">
+                                        <img src="assets/images/Beef Ribs Mandi.webp?v=20251221d1" onerror="this.onerror=null;this.src='assets/images/Beef Ribs Mandi.jpg?v=20251221d1';" alt="Beef Ribs Mandi" class="single-dish-img" loading="lazy">
+                                    </div>
+                                </div>
+                                
+                                <!-- Carousel Navigation -->
+                                <button id="single-arc-prev" class="single-arc-nav-btn prev-btn" aria-label="Previous Dish">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                                </button>
+                                <button id="single-arc-next" class="single-arc-nav-btn next-btn" aria-label="Next Dish">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+                            
+                            <div class="dish-info">
+                                <h3 id="current-dish-title" class="current-dish-title">Chicken Mandi</h3>
+                                <p id="current-dish-desc" class="current-dish-desc">Authentic Yemeni-style rice with tender, marinated chicken, slow-cooked for deep, aromatic flavor.</p>
+                                <button id="current-dish-cta" type="button" class="dish-cta-btn" aria-label="Learn more about Chicken Mandi">Learn More</button>
+                                <!-- Navigation dots for dish carousel -->
+                                <div id="dish-carousel-dots" class="dish-carousel-dots"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-content-area"></div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Menu Modal -->
+            <div id="menu-modal" class="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+                <div id="modal-content" class="bg-primary-grey rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto relative transform scale-95 transition-transform duration-300">
+                    <button id="modal-close-btn" class="absolute top-4 right-4 text-white hover:text-accent-red z-10">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <div class="grid md:grid-cols-2">
+                        <div class="modal-image-container">
+                            <img id="modal-img" src="" alt="Menu Item" class="w-full h-full object-cover" loading="eager" decoding="sync">
+                        </div>
+                        <div class="p-8 flex flex-col justify-center">
+                            <h2 id="modal-title" class="text-3xl font-bold mb-4 main-title"></h2>
+                            <p id="modal-description" class="text-gray-300 mb-4"></p>
+                            <ul id="modal-details" class="text-gray-200 space-y-2 list-disc pl-5 mb-2"></ul>
+                            <div class="flex items-center justify-between hidden">
+                                <span id="modal-price" class="text-3xl font-bold text-accent-red"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Menu Overlay: All Dishes -->
+            <div id="full-menu-overlay" class="fixed inset-0 bg-black bg-opacity-85 z-[120] hidden opacity-0 transition-opacity duration-300">
+                <div class="max-w-6xl mx-auto p-4 md:p-8 h-full overflow-y-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl md:text-3xl font-bold text-white">Our Signature Dishes</h2>
+                        <button id="full-menu-back" class="px-4 py-2 rounded-full bg-accent-red text-white hover:bg-[#b30000] transition">Back</button>
+                    </div>
+                    <div id="full-menu-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+            </div>
+
+            <!-- Outlet Modal (refined glassmorphism, premium card, glowing accent border) -->
+            <div id="outlet-modal" class="fixed inset-0 bg-black/90 z-[130] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+                <div id="outlet-modal-content" class="relative flex flex-col items-center max-w-xl w-full max-h-[96vh] overflow-y-auto rounded-3xl shadow-2xl border-2 border-accent-red/70 backdrop-blur-2xl bg-black/90 ring-1 ring-accent-red/30 animate-fadein-modal" style="box-shadow: 0 8px 48px 0 #c7000033, 0 1.5px 0 #c70000 inset;">
+                    <button id="outlet-modal-close" class="absolute top-5 right-5 text-white hover:text-accent-red z-10 transition-transform hover:scale-110" aria-label="Close outlet details">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <div class="w-full flex flex-col items-center p-0 pt-0">
+                        <div class="relative w-full flex flex-col items-center rounded-t-3xl overflow-hidden">
+                            <button id="outlet-modal-prev" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-accent-red text-white rounded-full w-11 h-11 flex items-center justify-center z-10 shadow transition disabled:opacity-30 border border-accent-red/40" aria-label="Previous photo">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </button>
+                            <div class="relative w-full flex items-center justify-center min-h-[260px] max-h-[400px]">
+                                <img id="outlet-modal-image" src="" alt="Outlet photo" class="object-cover w-full max-h-[400px] min-h-[220px] bg-black/40 border-b-2 border-accent-red/80 shadow-xl transition-all duration-500 ease-in-out rounded-t-3xl animate-fadein-img" loading="lazy" style="box-shadow: 0 4px 32px 0 #c7000033;">
+                            </div>
+                            <button id="outlet-modal-next" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-accent-red text-white rounded-full w-11 h-11 flex items-center justify-center z-10 shadow transition disabled:opacity-30 border border-accent-red/40" aria-label="Next photo">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </button>
+                        </div>
+                            <div class="w-full flex flex-col items-center px-8 pt-6 pb-8">
+                                <h3 id="outlet-modal-title" class="text-3xl font-bold main-title text-center mb-2 text-white tracking-wide drop-shadow-lg font-cinzel animate-fadein-title" style="letter-spacing:0.5px;">Outlet Details</h3>
+                                <div id="outlet-modal-image-count" class="text-xs text-gray-300 mb-4 font-medium tracking-wide"></div>
+                                <div class="w-full bg-black/60 border border-accent-red/40 rounded-2xl p-6 shadow-sm flex flex-col gap-4" style="backdrop-filter: blur(8px);">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+                                        <div>
+                                            <h4 class="text-lg font-semibold text-white mb-1">Contact</h4>
+                                            <p id="outlet-modal-contact" class="text-gray-200 mb-1">To be updated</p>
+                                        </div>
+                                        <a id="outlet-modal-maps" href="#" target="_blank" rel="noopener" class="inline-block px-4 py-2 rounded-md bg-accent-red text-white hover:bg-[#b30000] transition text-sm font-semibold shadow" aria-label="Open location in maps">Open Maps</a>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-white mb-1">Location</h4>
+                                        <p id="outlet-modal-location" class="text-gray-200 mb-1">To be updated</p>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Outlets Section -->
+            <section id="outlets" class="py-20 relative" style="background-color: #660000;">
+                <div class="container mx-auto px-6 pt-12">
+                    <div class="mb-12">
+                        <h2 class="section-title scroll-animate main-title text-white text-center">Our Outlets</h2>
+                        <div class="w-32 h-[1.5px] mx-auto section-underline underline-animated" style="background-color: #d1d1d1; opacity: 1;"></div>
+                        <div class="mt-8 mb-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-6">
+                            <p class="text-gray-300 text-base md:text-lg leading-relaxed max-w-2xl text-center md:text-left" style="letter-spacing:0.2px; color: #d1d1d1;">
+                                We’ve grown to <span id="outlet-count">0</span> outlets across Kerala, Sri Lanka, and Saudi Arabia — bringing authentic Arabian cuisine closer to you.
+                            </p>
+                            <div class="relative w-full md:w-auto max-w-md md:max-w-xs md:ml-auto">
+                                <input id="outlet-search" type="text" placeholder="Search outlets..." aria-label="Search outlets" class="w-full rounded-full py-3 pl-12 pr-4 bg-[#181818] text-white placeholder-gray-400 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent-red transition text-base shadow-sm" autocomplete="off" />
+                                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                            </div>
+                        </div>
+                        <div id="outlet-search-status" class="sr-only" aria-live="polite"></div>
+                    </div>
+
+                    <!-- Outlet Cards: order as requested -->
+                    <div id="outlet-cards-grid" class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 lg:gap-12">
+                        <!-- 1. Nedumbasseri (folder: Nadumbasseri) -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" data-outlet="Nedumbasseri">
+                            <img src="assets/images/Nadumbasseri/Main.webp" onerror="this.onerror=null;this.src='assets/images/Nadumbasseri/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Nedumbasseri main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Nedumbasseri
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 2. Aroor -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.05s;" data-outlet="Aroor">
+                            <img src="assets/images/Aroor/Main.webp" onerror="this.onerror=null;this.src='assets/images/Aroor/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Aroor main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Aroor
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 3. Alappuzha -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.1s;" data-outlet="Alappuzha">
+                            <img src="assets/images/Alappuzha/Main.webp" onerror="this.onerror=null;this.src='assets/images/Alappuzha/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Alappuzha main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Alappuzha
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 4. Muvattupuzha -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.15s;" data-outlet="Muvattupuzha">
+                            <img src="assets/images/Muvattupuzha/Main.webp" onerror="this.onerror=null;this.src='assets/images/Muvattupuzha/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Muvattupuzha main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Muvattupuzha
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 5. Kodungallur -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.2s;" data-outlet="Kodungallur">
+                            <img src="assets/images/Kodungallur/Main.webp" onerror="this.onerror=null;this.src='assets/images/Kodungallur/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Kodungallur main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Kodungallur
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 6. Thammanam -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.25s;" data-outlet="Thammanam">
+                            <img src="assets/images/Thammanam/Main.webp" onerror="this.onerror=null;this.src='assets/images/Thammanam/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Thammanam main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Thammanam
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 7. Edappally -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.3s;" data-outlet="Edappally">
+                            <img src="assets/images/Edappally/Main.webp" onerror="this.onerror=null;this.src='assets/images/Edappally/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Edappally main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Edappally
+                                </h3>
+                            </div>
+                        </button>
+
+                        <!-- 8. Kathrikadavu -->
+                        <button class="card outlet-card p-0 text-center scroll-animate focus:outline-none focus:ring-2 focus:ring-red-700 group" style="transition-delay: 0.35s;" data-outlet="Kathrikadavu">
+                            <img src="assets/images/Kathrikadavu/Main.webp" onerror="this.onerror=null;this.src='assets/images/Kathrikadavu/Main.jpg';" class="w-full aspect-[16/9] md:aspect-[4/3] lg:aspect-[16/9] h-auto object-cover" alt="AL-REEM MANDI - Kathrikadavu main" loading="lazy" decoding="async" width="1600" height="900" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw">
+                            <div class="p-5">
+                                <h3 class="text-xl font-bold text-white flex items-center justify-center gap-2">
+                                    <svg class="w-5 h-5 text-accent-red -mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.418 0-8-5.373-8-9a8 8 0 1116 0c0 3.627-3.582 9-8 9z"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+                                    Kathrikadavu
+                                </h3>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="text-center mt-8 flex flex-col items-center gap-4">
+                        <button id="outlet-show-more" type="button" class="dish-cta-btn">Show More</button>
+                        <button id="outlet-show-less" type="button" class="dish-cta-btn hidden">Show Less</button>
+                        <p id="outlet-more-hint" class="text-gray-400 text-sm mt-3 hidden">More outlets coming soon.</p>
+                    </div>
+
+                    <!-- Outlet Details Panel removed (replaced by modal) -->
+                </div>
+            </section>
+
+            <!-- Why Choose Section (new, with background image and restored content) -->
+            <section id="why-choose" class="py-20 why-choose-new-bg">
+                <div class="why-choose-inner">
+                    <div class="container mx-auto px-6 pt-12 relative z-10">
+                        <div class="text-center mb-16">
+                            <h2 class="section-title scroll-animate text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">Why Choose Us</h2>
+                            <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                        </div>
+                        <div class="grid md:grid-cols-3 gap-10 text-center text-white">
+                            <div class="scroll-animate">
+                                <div class="why-choose-3d-btn mb-4">
+                                    <svg class="w-10 h-10 text-accent-red why-choose-icon" data-delay="0" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.28 2.28a1 1 0 001.414 0L18 3m-2 14l-2.28-2.28a1 1 0 00-1.414 0L10 17m.002 4h4.002M17 11a5 5 0 11-10 0 5 5 0 0110 0z"></path></svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 text-white">Authentic Recipes</h3>
+                                <p class="text-gray-200">We use generations-old recipes and traditional cooking methods to bring you the true, unadulterated taste of Arabian Mandi.</p>
+                            </div>
+                            <div class="scroll-animate">
+                                <div class="why-choose-3d-btn mb-4">
+                                    <svg class="w-10 h-10 text-accent-red why-choose-icon" data-delay="1" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 text-white">Quality Ingredients</h3>
+                                <p class="text-gray-200">From premium basmati rice to the freshest spices and tender meat, we never compromise on the quality of our ingredients.</p>
+                            </div>
+                            <div class="scroll-animate">
+                                <div class="why-choose-3d-btn mb-4">
+                                    <svg class="w-10 h-10 text-accent-red why-choose-icon" data-delay="2" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </div>
+                                <h3 class="text-2xl font-bold mb-2 text-white">18 Locations</h3>
+                                <p class="text-gray-200">Your favorite Mandi is never too far away. Find an Al-Reem outlet in major towns across Kerala, all serving our signature taste.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+                                    <!-- Our Team Section (Premium, Glassmorphism, Creative) -->
+                                                <section id="team" class="team-section with-side-bands with-top-band" aria-labelledby="team-heading">
+                    <!-- Left Vertical Contact Rail for Team Section -->
+                    <aside class="team-contact-rail" aria-label="Get in touch">
+                        <div class="rail-inner">
+                            <span class="rail-text">Get in touch</span>
+                            <nav class="rail-icons" aria-label="Social links">
+                                <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" aria-label="Instagram" class="rail-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>
+                                </a>
+                                <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" aria-label="Facebook" class="rail-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9V12.1h2.54V9.86c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.22.2 2.22.2v2.44h-1.25c-1.23 0-1.61.77-1.61 1.56v1.91h2.74l-.44 2.88h-2.3V22c4.78-.75 8.44-4.92 8.44-9.93z"/></svg>
+                                </a>
+                                <a href="#outlets" aria-label="Our Outlets" class="rail-icon" title="Our Outlets">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+                                </a>
+                            </nav>
+                        </div>
+                    </aside>
+                                                                                    <div class="team-logo-outline" aria-hidden="true">
+                                                                                        <picture>
+                                                                                            <!-- Try WebP/JPG variations if available; fallback to provided JPG -->
+                                                                                            <source srcset="assets/images/newlogooutline.webp" type="image/webp">
+                                                                                            <source srcset="assets/images/newlogooutline.jpg" type="image/jpeg">
+                                                                                            <img src="assets/images/newlogooutline.jpg" alt="Decorative logo outline" loading="lazy" decoding="async" />
+                                                                                        </picture>
+                                                                                    </div>
+                                                                                    <div class="team-header scroll-animate">
+                                                                                        <h2 id="team-heading">Meet Our Team</h2>
+                                                                                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                                                                                    </div>
+                                                                                                                    <div class="team-group-photo scroll-animate">
+                                                                                                                                                                        <span class="group-photo-full-border">
+                                                                                                                                                                            <img src="assets/images/Our Team/Group photo.webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Group photo.jpg';" alt="Our team group photo" class="group-photo-bordered" loading="lazy" />
+                                                                                                                                                                        </span>
+                                                                                                                        <p class="team-section-subtitle">Passionate people behind our success</p>
+                                                                                                                    </div>
+                                        <div class="team-grid">
+                                                                                                            <div class="team-item scroll-animate" tabindex="0" data-member="4">
+                                                                                                                <div class="team-card-imageonly" aria-hidden="false">
+                                                                                                                    <img src="assets/images/Our Team/Member 5 (4).webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Member 5 (4).jpg';" alt="Shanavas T.C" loading="lazy" />
+                                                                                                                </div>
+                                                                                                                <h4 class="team-member-name">Shanavas T.C</h4>
+                                                                                                            </div>
+                                                                                                            <div class="team-item scroll-animate" tabindex="0" data-member="5">
+                                                                                                                <div class="team-card-imageonly" aria-hidden="false">
+                                                                                                                    <img src="assets/images/Our Team/Member 5 (5).webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Member 5 (5).jpg';" alt="Sudheer K.C" loading="lazy" />
+                                                                                                                </div>
+                                                                                                                <h4 class="team-member-name">Sudheer K.C</h4>
+                                                                                                            </div>
+                                                                                                            <div class="team-item scroll-animate" tabindex="0" data-member="1">
+                                                                                                                <div class="team-card-imageonly" aria-hidden="false">
+                                                                                                                    <img src="assets/images/Our Team/Member 5 (1).webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Member 5 (1).jpg';" alt="Hamza P" loading="lazy" />
+                                                                                                                </div>
+                                                                                                                <h4 class="team-member-name">Hamza P</h4>
+                                                                                                            </div>
+                                                                                                            <div class="team-item scroll-animate" tabindex="0" data-member="2">
+                                                                                                                <div class="team-card-imageonly" aria-hidden="false">
+                                                                                                                    <img src="assets/images/Our Team/Member 5 (2).webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Member 5 (2).jpg';" alt="Sakeer P.K" loading="lazy" />
+                                                                                                                </div>
+                                                                                                                <h4 class="team-member-name">Sakeer P.K</h4>
+                                                                                                            </div>
+                                                                                                            <div class="team-item scroll-animate" tabindex="0" data-member="3">
+                                                                                                                <div class="team-card-imageonly" aria-hidden="false">
+                                                                                                                    <img src="assets/images/Our Team/Member 5 (3).webp" onerror="this.onerror=null;this.src='assets/images/Our Team/Member 5 (3).jpg';" alt="Abdul Salam P" loading="lazy" />
+                                                                                                                </div>
+                                                                                                                <h4 class="team-member-name">Abdul Salam P</h4>
+                                                                                                            </div>
+                                        </div>
+                                    </section>
+
+            <!-- Testimonials Section -->
+            <section id="testimonials" class="py-20 bg-primary-black-light relative testimonials-section-bg with-side-bands with-top-band">
+                <div class="container mx-auto px-6 pt-12">
+                    <div class="text-center mb-16">
+                        <h2 class="section-title scroll-animate main-title">What Our Customers Say</h2>
+                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="card p-8 scroll-animate relative">
+                            <svg class="w-20 h-20 text-gray-800 absolute -top-4 -left-4 opacity-20 transform rotate-180" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.333 22.667h4L16 16V9.333H6.667v9.334L9.333 22.667zM22.667 22.667h4L29.333 16V9.333H20v9.334L22.667 22.667z"></path></svg>
+                            <div class="flex items-center mb-4">
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+                            <p class="mb-4 relative z-10">"The most authentic Mandi I've had outside of the Middle East. Al-Reem is a true gem in Kerala. The mutton just melts in your mouth. Highly recommended!"</p>
+                            <h4 class="font-bold text-lg text-right">- Shaji k</h4>
+                        </div>
+                        <div class="card p-8 scroll-animate relative" style="transition-delay: 0.2s;">
+                            <svg class="w-20 h-20 text-gray-800 absolute -top-4 -left-4 opacity-20 transform rotate-180" fill="currentColor" viewBox="0 0 32 32" aria-hidden="true"><path d="M9.333 22.667h4L16 16V9.333H6.667v9.334L9.333 22.667zM22.667 22.667h4L29.333 16V9.333H20v9.334L22.667 22.667z"></path></svg>
+                            <div class="flex items-center mb-4">
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                <svg class="w-5 h-5 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                            </div>
+                            <p class="mb-4 relative z-10">"A fantastic place for a family dinner. The ambiance is great and the food is consistently delicious. We've been regulars for years and the quality has never dropped."</p>
+                            <h4 class="font-bold text-lg text-right">- Aariz Rahman</h4>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-primary-black relative">
+                 <div class="container mx-auto px-6 pt-12">
+            <div class="text-center mb-12">
+                        <h2 class="section-title scroll-animate main-title">Get In Touch</h2>
+                        <div class="w-32 h-[1px] mx-auto section-underline underline-animated" style="background-color: var(--accent-red);"></div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-12 items-stretch">
+                        <!-- Left: Image with blurred placeholder -->
+                        <div class="scroll-animate h-full overflow-hidden rounded-xl relative contact-img-wrapper">
+                            <img src="assets/images/new_bg.webp" onerror="this.onerror=null;this.src='assets/images/new_bg.jpg';" alt="Al-Reem Mandi ambiance" class="contact-img-main w-full h-48 sm:h-56 md:h-[580px] lg:h-[620px] object-cover object-center md:object-[50%_45%] rounded-xl opacity-0 transition-opacity duration-700" loading="lazy" decoding="async" />
+                            <div class="contact-img-blur absolute inset-0 w-full h-full rounded-xl" style="background-image: image-set(url('assets/images/new_bg.webp') type('image/webp'), url('assets/images/new_bg.jpg') type('image/jpeg')); background-image: -webkit-image-set(url('assets/images/new_bg.webp') type('image/webp'), url('assets/images/new_bg.jpg') type('image/jpeg')); background-size:cover; background-position:center 45%; filter: blur(18px) brightness(0.7); z-index:1;"></div>
+                        </div>
+                        <!-- Right: Contact Form (in container) -->
+                        <div class="scroll-animate bg-[#0f0f0f]/90 border border-gray-800/60 rounded-xl p-5 md:p-6 md:h-[580px] lg:h-[620px] shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                            <h3 class="text-2xl font-bold text-accent-red mb-3">Send us a message</h3>
+                            <form id="contact-form" class="space-y-3" novalidate>
+                                <div class="grid md:grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-sm text-gray-300 mb-1" for="name">Name</label>
+                                        <input id="name" name="name" type="text" required class="w-full px-4 py-2 rounded-md bg-black/40 text-white placeholder-gray-400 border border-gray-800 focus:outline-none focus:border-red-700 focus:ring-1 focus:ring-red-700 transition" placeholder="Your name" />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm text-gray-300 mb-1" for="email">Email</label>
+                                        <input id="email" name="email" type="email" required class="w-full px-4 py-2 rounded-md bg-black/40 text-white placeholder-gray-400 border border-gray-800 focus:outline-none focus:border-red-700 focus:ring-1 focus:ring-red-700 transition" placeholder="you@example.com" />
+                                    </div>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-2">
+                                    <div>
+                                        <label class="block text-sm text-gray-300 mb-1" for="phone">Phone (optional)</label>
+                                        <input id="phone" name="phone" type="tel" class="w-full px-4 py-2 rounded-md bg-black/40 text-white placeholder-gray-400 border border-gray-800 focus:outline-none focus:border-red-700 focus:ring-1 focus:ring-red-700 transition" placeholder="+91 ..." />
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm text-gray-300 mb-1" for="department">Send to</label>
+                                        <select id="department" name="department" class="w-full px-4 py-2 rounded-md bg-black/40 text-white border border-gray-800 focus:outline-none focus:border-red-700 focus:ring-1 focus:ring-red-700 transition">
+                                            <option>General Enquiry</option>
+                                            <option>Reservations</option>
+                                            <option>Catering</option>
+                                            <option>Franchise</option>
+                                            <option>Careers</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm text-gray-300 mb-1" for="message">Message</label>
+                                    <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 rounded-md bg-black/40 text-white placeholder-gray-400 border border-gray-800 focus:outline-none focus:border-red-700 focus:ring-1 focus:ring-red-700 transition" placeholder="How can we help you?"></textarea>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p id="contact-status" class="text-sm text-gray-400"></p>
+                                    <button id="contact-submit" type="submit" class="dish-cta-btn">Send Message</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-black text-white py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-4 gap-8 text-center md:text-left">
+                    <!-- About -->
+                    <div class="md:col-span-2">
+                        <div class="flex items-center justify-center md:justify-start mb-4">
+                             <img src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-16 w-16 md:h-20 md:w-20 mr-4" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async" loading="lazy">
+                             <div>
+                                <h3 class="text-2xl font-bold main-title">AL-REEM MANDI</h3>
+                                <p class="text-gray-400">"The Real Arabian Taste"</p>
+                             </div>
+                        </div>
+                        <p class="text-gray-400 max-w-md mx-auto md:mx-0">Pioneering authentic Arabian Mandi in Kerala since 2010. We are committed to serving traditional flavors with the highest quality ingredients across our 18 outlets.</p>
+                    </div>
+                    <!-- Quick Links -->
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 tracking-wider">Quick Links</h4>
+                        <ul class="space-y-2 text-gray-400">
+                            <li><a href="#about" class="hover:text-accent-red transition-colors">About Us</a></li>
+                            <li><a href="#menu" class="hover:text-accent-red transition-colors">Menu</a></li>
+                            <li><a href="#outlets" class="hover:text-accent-red transition-colors">Our Outlets</a></li>
+                            <li><a href="#team" class="hover:text-accent-red transition-colors">Our Team</a></li>
+                        </ul>
+                    </div>
+                    <!-- Contact Info -->
+                    <div>
+                    <h4 class="text-xl font-semibold mb-4 tracking-wider">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                                                         <li><p>alreemrestaurant2010@gmail.com</p></li>
+                                                                                     <li>
+                                                                                         <p class="text-xs text-gray-400 italic mt-1">Contact Numbers for each Outlet are available in the <a href="#outlets" class="underline hover:text-accent-red font-semibold transition-colors">Our Outlets</a> section.</p>
+                                                                                     </li>
+                        <li>
+                           <div class="flex justify-center md:justify-start space-x-4 mt-4">
+                                    <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" aria-label="Instagram" class="footer-social-icon">
+                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.792 2.013 10.146 2 12.315 2zm-1.161 4.943a.81.81 0 100 1.62.81.81 0 000-1.62zM12 6.873c-2.849 0-5.148 2.299-5.148 5.148s2.299 5.148 5.148 5.148 5.148-2.299 5.148-5.148-2.299-5.148-5.148-5.148zm0 8.468c-1.837 0-3.32-1.483-3.32-3.32s1.483-3.32 3.32-3.32 3.32 1.483 3.32 3.32-1.483 3.32-3.32 3.32z" clip-rule="evenodd" /></svg>
+                             </a>
+                                    <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" aria-label="Facebook" class="footer-social-icon">
+                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                             </a>
+                                    <a href="#outlets" aria-label="Our Outlets" class="footer-social-icon" title="Our Outlets">
+                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+                             </a>
+                           </div>
+                        </li>
+                      </ul>
+                    </div>
+                </div>
+                <div class="mt-12 pt-8 border-t border-gray-800 text-center md:text-left text-gray-500">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-2">
+                        <p class="text-sm">
+                            <span class="opacity-80">Developed by</span>
+                            <a href="https://jaas-stack-studio.netlify.app/" class="font-semibold text-white hover:text-accent-red transition-colors">Jaas Stack Studio</a>
+                        </p>
+                        <p class="text-sm md:text-right">&copy; 2025 AL-REEM MANDI. All Rights Reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- All Events Page -->
+    <div id="events-page" class="bg-primary-black text-secondary-offwhite">
+        <div class="container mx-auto px-6 py-20">
+            <div class="text-center mb-16">
+                <h2 class="section-title main-title">All Upcoming Events</h2>
+                <div class="w-32 h-[1px] mx-auto section-underline" style="background-color: var(--accent-red);"></div>
+            </div>
+            <div id="events-list-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Event cards will be dynamically inserted here -->
+            </div>
+            <div class="text-center mt-16">
+                <button id="back-to-events-btn" class="btn-primary" onclick="window.history.back();">Back</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Member Modal (Lightbox) -->
+    <div id="team-modal" class="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300" aria-hidden="true">
+        <div class="relative max-w-md w-full max-h-[90vh] flex flex-col items-center">
+            <button id="team-modal-close" class="absolute top-3 right-3 text-white hover:text-accent-red z-10 transition-transform hover:scale-110" aria-label="Close team photo">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <img id="team-modal-image" src="" alt="" class="object-contain w-full max-h-[80vh] rounded-2xl shadow-2xl bg-black" style="image-rendering: auto;" />
+        </div>
+    </div>
+    
+    <!-- Back to Top Button (hidden during intro sequence) -->
+    <button id="back-to-top" aria-label="Back to top"
+        class="fixed bottom-4 right-6 z-[110] w-12 h-12 rounded-full flex items-center justify-center text-white shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"
+        style="background-color: var(--accent-red); display: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
+
+    <!-- Main JavaScript - deferred for better performance -->
+    <script src="assets/js/script.js?v=20251221r9" defer></script>
+</body>
+</html>
+

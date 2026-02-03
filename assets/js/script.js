@@ -526,7 +526,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const introInner = document.getElementById('logo-intro-inner');
                 const introImg = document.getElementById('logo-intro-img');
                 const targetLogo = document.getElementById('home-logo');
-                const playedKey = 'alreem_intro_played_v1';
+                const playedKey = 'alreem_intro_played_v2_logo_update';
                 // Play once per session: use sessionStorage so refreshes in the same tab skip the intro
                 let alreadyPlayed = false;
                 try { alreadyPlayed = !!(sessionStorage && sessionStorage.getItem && sessionStorage.getItem(playedKey)); } catch (e) { alreadyPlayed = false; }
@@ -911,7 +911,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const logoImg = document.getElementById('logo-intro-img');
         const logoPng = new Image();
-        logoPng.src = 'assets/images/logo.png';
+        logoPng.src = 'assets/images/logo-intro.png';
         
         // Wait for intro logo (SVG) to load
         const waitForSvgLogo = new Promise(resolve => {

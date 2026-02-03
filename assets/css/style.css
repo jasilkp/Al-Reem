@@ -573,12 +573,13 @@ img {
     transform-origin: center center;
     will-change: transform, opacity;
 }
-
 /* Desktop-only increase for extra presence on large screens */
 @media (min-width: 1200px) {
-    .intro-logo { width: 420px; height: 420px; }
+    .intro-logo {
+        width: 420px;
+        height: 420px;
+    }
 }
-
 /* New, simpler scale-in animation */
 @keyframes introScaleIn {
     0% { transform: scale(0.9); opacity: 0; }
@@ -595,6 +596,11 @@ img {
     opacity: 0;
     transform: translateY(10px) scale(0.99);
     will-change: transform, opacity;
+}
+
+/* Keep the home logo crisp during the reveal: avoid fractional scaling on the image */
+img#home-logo.home-anim-item {
+    transform: translateY(10px) scale(1);
 }
 
 /* Background video for home section - hidden until intro + text animations finish */
@@ -772,8 +778,15 @@ img {
     100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+/* Logo variant: same motion, no scaling (stays crisp) */
+@keyframes homeLogoIn {
+    0% { opacity: 0; transform: translateY(12px); }
+    70% { opacity: 1; transform: translateY(-4px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
 /* Slightly longer durations but tightened staggers for overlap */
-body.home-anim-play .home-anim-item.home-anim-logo { animation: homeTextIn 1100ms cubic-bezier(.22,.88,.26,1) forwards 0ms; }
+body.home-anim-play .home-anim-item.home-anim-logo { animation: homeLogoIn 1100ms cubic-bezier(.22,.88,.26,1) forwards 0ms; }
 body.home-anim-play .home-anim-item.home-anim-title { animation: homeTextIn 1200ms cubic-bezier(.22,.9,.26,1) forwards 140ms; }
 body.home-anim-play .home-anim-item.home-anim-sub { animation: homeTextIn 1100ms cubic-bezier(.22,.92,.28,1) forwards 280ms; }
 body.home-anim-play .home-anim-item.home-anim-cta { animation: homeTextIn 1100ms cubic-bezier(.22,.92,.28,1) forwards 420ms; }
@@ -876,7 +889,7 @@ body.home-anim-play .home-anim-item.home-anim-cta { animation: popUp 980ms cubic
     transition: background-color var(--intro-fade-duration) ease-out, opacity var(--intro-fade-duration) ease-out;
 }
 
-/* Red circling glowing border around the centered logo. Trigger by adding
+/* Golden circling glowing border around the centered logo. Trigger by adding
    `circle-glow` to `#logo-intro-overlay`. The pseudo-element is sized
    relative to the intro container and rotates once. */
 #logo-intro-inner { position: relative; display: inline-block; }
@@ -899,8 +912,8 @@ body.home-anim-play .home-anim-item.home-anim-cta { animation: popUp 980ms cubic
     opacity: 1;
     animation: introCircleSpin var(--intro-circle-duration) cubic-bezier(.2,.8,.2,1) 1 forwards;
     /* Create a glowing segment using a conic gradient and then mask it into a thin ring */
-    background: conic-gradient(#c70000 0deg, rgba(199,0,0,0.85) 30deg, rgba(199,0,0,0.18) 80deg, rgba(199,0,0,0.06) 140deg, transparent 360deg);
-    box-shadow: 0 0 18px rgba(199,0,0,0.9), 0 0 44px rgba(199,0,0,0.18);
+    background: conic-gradient(#bbab88 0deg, rgba(187,171,136,0.92) 22deg, rgba(178,158,125,0.55) 70deg, rgba(162,133,104,0.16) 125deg, transparent 360deg);
+    box-shadow: 0 0 22px rgba(178,158,125,0.85), 0 0 60px rgba(178,158,125,0.22);
     -webkit-mask-image: radial-gradient(circle, transparent calc(50% - 8px), black calc(50% - 8px), black calc(50% - 4px), transparent calc(50% - 4px));
     mask-image: radial-gradient(circle, transparent calc(50% - 8px), black calc(50% - 8px), black calc(50% - 4px), transparent calc(50% - 4px));
 }
@@ -2806,4 +2819,13 @@ html {
 /* Ensure overlay scrolling is hardware-accelerated on touch devices */
 #full-menu-overlay > div {
     -webkit-overflow-scrolling: touch;
+}
+
+/* About logo: keep sharp at fixed size */
+img#about-logo {
+    image-rendering: auto;
+    filter: none !important;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }

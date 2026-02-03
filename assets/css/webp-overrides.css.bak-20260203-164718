@@ -1,0 +1,31 @@
+/* WebP preference overrides (JPG fallback). Keeps visuals identical, reduces bandwidth. */
+
+.events-section-bg {
+    background-image: image-set(url('../images/IMG_3730-min.webp') type('image/webp'), url('../images/IMG_3730-min.JPG') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/IMG_3730-min.webp') type('image/webp'), url('../images/IMG_3730-min.JPG') type('image/jpeg')) !important;
+}
+
+.testimonials-section-bg {
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), image-set(url('../images/IMG_3795.webp') type('image/webp'), url('../images/IMG_3795.JPG') type('image/jpeg')) !important;
+    background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), -webkit-image-set(url('../images/IMG_3795.webp') type('image/webp'), url('../images/IMG_3795.JPG') type('image/jpeg')) !important;
+}
+
+.menu-logo-outline {
+    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
+}
+
+.parallax-bg {
+    background-image: image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
+}
+
+.why-choose-new-bg {
+    background-image: image-set(url('../images/bg02.webp') type('image/webp'), url('../images/bg02.JPG') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/bg02.webp') type('image/webp'), url('../images/bg02.JPG') type('image/jpeg')) !important;
+}
+
+.team-logo-outline {
+    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
+}
