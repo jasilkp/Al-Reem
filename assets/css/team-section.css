@@ -114,15 +114,15 @@
     height: min(90vw, 1200px);
     pointer-events: none;
     z-index: 1;
-    filter: saturate(1.05) contrast(1.08) brightness(1);
+    filter: grayscale(1) contrast(1.28) brightness(1.22);
     /* Blend black away so only logo strokes remain */
-    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
-    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg'));
+    background-image: image-set(url('../images/teamlogooutline.webp') type('image/webp'), url('../images/teamlogooutline.jpg') type('image/jpeg'));
+    background-image: -webkit-image-set(url('../images/teamlogooutline.webp') type('image/webp'), url('../images/teamlogooutline.jpg') type('image/jpeg'));
     background-repeat: no-repeat;
     background-position: right top;
         background-size: 900%;
     mix-blend-mode: screen;
-    opacity: 0.32;
+    opacity: 0.34;
     border: 0;
 }
 /* Ensure header sits above the decorative logo */

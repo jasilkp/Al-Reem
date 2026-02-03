@@ -26,6 +26,6 @@
 }
 
 .team-logo-outline {
-    background-image: image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
-    background-image: -webkit-image-set(url('../images/newlogooutline.webp') type('image/webp'), url('../images/newlogooutline.jpg') type('image/jpeg')) !important;
+    background-image: image-set(url('../images/teamlogooutline.webp') type('image/webp'), url('../images/teamlogooutline.jpg') type('image/jpeg')) !important;
+    background-image: -webkit-image-set(url('../images/teamlogooutline.webp') type('image/webp'), url('../images/teamlogooutline.jpg') type('image/jpeg')) !important;
 }
