@@ -55,19 +55,19 @@
     <!-- Non-critical CSS - defer loading -->
     <link rel="stylesheet" href="assets/css/signature-slider.min.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="assets/css/team-section.css?v=20260203r1" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251220r1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20260203r4" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="assets/css/header-social.css?v=20251105" media="print" onload="this.media='all'">
     <noscript>
         <link rel="stylesheet" href="assets/css/signature-slider.min.css">
         <link rel="stylesheet" href="assets/css/team-section.css?v=20260203r1">
-        <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20251220r1">
+        <link rel="stylesheet" href="assets/css/mobile-overrides.css?v=20260203r4">
         <link rel="stylesheet" href="assets/css/header-social.css?v=20251105">
     </noscript>
 
     <!-- Preload critical intro assets first (highest priority) -->
     <link rel="preload" as="image" href="assets/images/newlogo-intro.svg" type="image/svg+xml" fetchpriority="high">
-    <link rel="preload" as="image" href="assets/images/logo-intro.png" type="image/png" fetchpriority="high">
-    <link rel="preload" as="image" href="assets/images/logo.png" type="image/png" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/logo-intro.webp" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="assets/images/logo.webp" type="image/webp" fetchpriority="high">
     <!-- Avoid preloading heavy background/video assets to keep CSS/JS priority on first load -->
     
     <!-- Prevent FOUC (Flash of Unstyled Content) -->
@@ -145,7 +145,10 @@
 
     <!-- Loading Screen -->
     <div class="loading-screen">
-        <img src="assets/images/logo.png" alt="Loading..." class="loading-logo">
+        <picture>
+  <source srcset="assets/images/logo.webp" type="image/webp">
+  <img src="assets/images/logo.png" alt="Loading..." class="loading-logo">
+</picture>
     </div>
 
     <!-- ARIA live region for intro announcements -->
@@ -201,13 +204,16 @@
                  <a href="#contact" class="block py-2 px-4 text-sm nav-link">Contact</a>
             </div>
         </header>
-        <!-- Top header social icons (Instagram, Facebook) placed above the red underline -->
-        <div class="header-social" aria-label="Social links">
+        <!-- Top header quick icons (Instagram, Facebook, Outlets location) placed above the red underline -->
+        <div class="header-social" aria-label="Quick links">
             <a href="https://www.instagram.com/alreem_mandi?igsh=MTA0NjVxajJvaGdueA%3D%3D&utm_source=qr" class="header-social-icon" aria-label="Instagram" title="Instagram">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm5.5-.75a1.25 1.25 0 11-2.5 0 1.25 1.25 0 012.5 0z"/></svg>
             </a>
             <a href="https://www.facebook.com/share/1KfWSyfLPJ/?mibextid=wwXIfr" class="header-social-icon" aria-label="Facebook" title="Facebook">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5.02 3.66 9.19 8.44 9.94v-7.03H7.9V12.1h2.54V9.86c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.22.2 2.22.2v2.44h-1.25c-1.23 0-1.61.77-1.61 1.56v1.91h2.74l-.44 2.88h-2.3V22c4.78-.75 8.44-4.92 8.44-9.93z"/></svg>
+            </a>
+            <a href="#outlets" class="header-social-icon" aria-label="Our Outlets" title="Our Outlets">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="16" height="16"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
             </a>
         </div>
         <!-- Underline now outside sticky header so it scrolls away -->
@@ -222,9 +228,9 @@
                      object-fit: contain (so the main video remains unzoomed and uncropped). -->
                 <div class="home-bg-video-fill" aria-hidden="true" role="presentation" style="background-image: image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg')); background-image: -webkit-image-set(url('assets/images/video-poster.webp') type('image/webp'), url('assets/images/video-poster.jpg') type('image/jpeg'))"></div>
 
-                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="none" poster="assets/images/video-poster.webp" disablePictureInPicture disableRemotePlayback>
-                    <source data-src="assets/images/1085(1)new-720p.webm" type="video/webm">
-                    <source data-src="assets/images/1085(1)new-720p.mp4" type="video/mp4">
+                <video id="home-bg-video" class="home-bg-video" playsinline autoplay muted loop preload="auto" poster="assets/images/video-poster.webp" disablePictureInPicture disableRemotePlayback>
+                    <source src="assets/images/1085(1)new-720p.webm" type="video/webm">
+                    <source src="assets/images/1085(1)new-720p.mp4" type="video/mp4">
                 </video>
                 <!-- Persistent dim layer to improve contrast between video and foreground content -->
                 <div class="home-video-dim" aria-hidden="true"></div>
@@ -263,7 +269,10 @@
             <div class="frame-bottom-label" aria-hidden="true">Since 2010 — Authentic Arabian Mandi</div>
             
             <div class="home-anim fade-in flex items-center justify-center mb-6">
-                                <img id="home-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-52 md:w-52 mr-6 home-anim-item home-anim-logo" loading="eager" fetchpriority="high" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+                                <picture>
+  <source srcset="assets/images/logo.webp 1x, assets/images/logo-2x.webp 2x" type="image/webp">
+  <img id="home-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-52 md:w-52 mr-6 home-anim-item home-anim-logo" loading="eager" fetchpriority="high" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+</picture>
                                 <div>
                                         <h1 class="text-4xl md:text-6xl text-secondary-offwhite main-title home-anim-item home-anim-title">Al-Reem Mandi</h1>
                                         <p class="mt-2 text-lg md:text-xl text-gray-300 home-anim-item home-anim-sub">The Real Arabian Taste</p>
@@ -333,7 +342,10 @@
                     <div class="grid md:grid-cols-2 gap-12 items-center">
                         <div class="story-text-container scroll-animate">
                             <div class="flex items-center mb-6">
-                                <img id="about-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-40 md:w-40 mr-6 flex-shrink-0" loading="lazy" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+                                <picture>
+  <source srcset="assets/images/logo.webp 1x, assets/images/logo-2x.webp 2x" type="image/webp">
+  <img id="about-logo" src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-40 w-40 md:h-40 md:w-40 mr-6 flex-shrink-0" loading="lazy" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async">
+</picture>
                                 <h3 class="text-3xl font-bold main-title">A Legacy of Taste Since 2010</h3>
                             </div>
                                     <p id="about-text" class="text-gray-300 leading-relaxed">From a single spark of culinary passion in Athani, Ernakulam, a legacy was born. In 2010, AL-REEM MANDI introduced Kerala to the true essence of Arabian Mandi, becoming one of the very first to share this rich heritage. Our journey, which started from that single location, has since expanded to a constellation of over 20 restaurants across the state.<br><br>
@@ -725,7 +737,7 @@
                                 <div class="why-choose-3d-btn mb-4">
                                     <svg class="w-10 h-10 text-accent-red why-choose-icon" data-delay="2" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                                 </div>
-                                <h3 class="text-2xl font-bold mb-2 text-white">18 Locations</h3>
+                                <h3 class="text-2xl font-bold mb-2 text-white">28 Locations</h3>
                                 <p class="text-gray-200">Your favorite Mandi is never too far away. Find an Al-Reem outlet in major towns across Kerala, all serving our signature taste.</p>
                             </div>
                         </div>
@@ -903,7 +915,10 @@
                     <!-- About -->
                     <div class="md:col-span-2">
                         <div class="flex items-center justify-center md:justify-start mb-4">
-                             <img src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-20 w-20 md:h-24 md:w-24 mr-4" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async" loading="lazy">
+                             <picture>
+  <source srcset="assets/images/logo.webp 1x, assets/images/logo-2x.webp 2x" type="image/webp">
+  <img src="assets/images/logo.png" alt="Al-Reem Mandi Logo" class="h-20 w-20 md:h-24 md:w-24 mr-4" srcset="assets/images/logo.png 1x, assets/images/logo-2x.png 2x" decoding="async" loading="lazy">
+</picture>
                              <div>
                                 <h3 class="text-2xl font-bold main-title">AL-REEM MANDI</h3>
                                 <p class="text-gray-400">"The Real Arabian Taste"</p>
@@ -994,7 +1009,7 @@
     </button>
 
     <!-- Main JavaScript - deferred for better performance -->
-    <script src="assets/js/script.js?v=20251221r9" defer></script>
+    <script src="assets/js/script.js?v=20260203r2" defer></script>
 </body>
 </html>
 

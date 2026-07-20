@@ -156,7 +156,8 @@ function startHomeBackgroundVideo() {
     const video = document.getElementById('home-bg-video');
     if (!video) return;
 
-    const sources = video.querySelectorAll('source[data-src]');
+    // Ensure all source tags have src populated (supports both src and data-src)
+    const sources = video.querySelectorAll('source');
     if (sources && sources.length) {
         sources.forEach((source) => {
             const hasSrc = !!source.getAttribute('src');
@@ -167,17 +168,45 @@ function startHomeBackgroundVideo() {
         });
     }
 
-    try {
-        if (video.preload === 'none') {
-            video.preload = 'auto';
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    try { video.preload = 'auto'; } catch (e) {}
+
+    const safePlay = () => {
+        if (!video) return;
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
+        const p = video.play();
+        if (p && typeof p.catch === 'function') {
+            p.catch(() => {
+                // If browser autoplay restriction or Low Power Mode blocked play(), play on first user touch/scroll
+                const onUserInteract = () => {
+                    video.muted = true;
+                    video.play().catch(() => {});
+                    ['touchstart', 'pointerdown', 'scroll', 'click'].forEach(evt => {
+                        window.removeEventListener(evt, onUserInteract);
+                    });
+                };
+                ['touchstart', 'pointerdown', 'scroll', 'click'].forEach(evt => {
+                    window.addEventListener(evt, onUserInteract, { once: true, passive: true });
+                });
+            });
         }
-    } catch (e) {}
+    };
 
     try { video.load(); } catch (e) {}
-    try {
-        const p = video.play();
-        if (p && typeof p.catch === 'function') p.catch(() => {});
-    } catch (e) {}
+    safePlay();
+
+    // Re-trigger play when returning to tab or un-minimizing browser window
+    if (!video.dataset.playbackListenersAttached) {
+        video.dataset.playbackListenersAttached = 'true';
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) safePlay();
+        });
+        window.addEventListener('pageshow', () => safePlay());
+    }
 }
 
 // Handle loading state
@@ -911,7 +940,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const logoImg = document.getElementById('logo-intro-img');
         const logoPng = new Image();
-        logoPng.src = 'assets/images/logo-intro.png';
+        logoPng.src = 'assets/images/logo-intro.webp';
         
         // Wait for intro logo (SVG) to load
         const waitForSvgLogo = new Promise(resolve => {
@@ -943,13 +972,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         
-        // Wait for PNG logo to load
+        // Wait for PNG logo to load (prefer WebP, fall back to PNG)
         const waitForPngLogo = new Promise(resolve => {
-            if (logoPng.complete) {
+            const fallbackToPng = () => {
+                try {
+                    if (String(logoPng.src).endsWith('assets/images/logo-intro.webp')) {
+                        logoPng.src = 'assets/images/logo-intro.png';
+                        logoPng.addEventListener('load', resolve, { once: true });
+                        logoPng.addEventListener('error', resolve, { once: true });
+                        return;
+                    }
+                } catch (e) {}
+                resolve();
+            };
+
+            if (logoPng.complete && (logoPng.naturalWidth || 0) > 0) {
                 resolve();
             } else {
                 logoPng.addEventListener('load', resolve, { once: true });
-                logoPng.addEventListener('error', resolve, { once: true });
+                logoPng.addEventListener('error', fallbackToPng, { once: true });
             }
         });
         
@@ -1138,11 +1179,11 @@ function initOutlets() {
             'photo_2025-10-10_22-51-29.jpg',
             'photo_2025-10-10_22-51-33.jpg'
         ], contact: '09947955955', location: 'Thrissur, Kerala, India', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Thrissur' },
-        { name: 'Wayanad', folder: 'Wayanad', images: [
+        { name: 'Kalpetta', folder: 'Wayanad', images: [
             'photo_2025-10-10_22-52-43.jpg',
             'photo_2025-10-10_22-52-46.jpg',
             'photo_2025-10-10_22-52-50.jpg'
-        ], contact: '09544810810', location: 'Wayanad, Kerala, India', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Wayanad' },
+        ], contact: '09544810810', location: 'Kalpetta, Wayanad, Kerala, India', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Kalpetta' },
         { name: 'Coimbatore', folder: 'Coimbatore', images: [
             'photo_2025-10-10_22-51-01.jpg'
         ], contact: '+91 8453410410', location: 'Coimbatore, Tamil Nadu, India', maps: 'https://www.google.com/maps/search/?api=1&query=Al-Reem%20Mandi%20Coimbatore' },
@@ -1328,7 +1369,7 @@ function initOutlets() {
             'Kottakkal',
             'Chemmad',
             'Thrissur',
-            'Wayanad',
+            'Kalpetta',
             'Thamarassery',
             'Coimbatore',
             'Palakkad',

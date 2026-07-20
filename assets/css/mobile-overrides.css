@@ -376,6 +376,11 @@
 		width: 260px !important;
 		height: 340px !important;
 	}
+	/* Mobile: always show Events carousel arrows (touch devices don’t hover) */
+	.events-carousel-wrapper .carousel-arrow {
+		opacity: 1 !important;
+	}
+
 	/* Side slides: slightly larger and more visible to match increased poster size */
 	.event-slide.prev { /* previous slide should peek on the left */
 		transform: translateX(-44%) scale(0.78) !important;
@@ -393,9 +398,18 @@
 	/* Reduce the Events section padding so it sits tighter vertically on phones */
 	#events, .events-section-bg {
 		padding-top: 2.5rem !important; /* reduce top spacing */
-		padding-bottom: 2.5rem !important; /* reduce bottom spacing */
+		padding-bottom: 1.8rem !important; /* reduce bottom spacing */
 		min-height: auto !important; /* allow section to size to content on small screens */
 	}
+
+	/* Mobile-only: zoom the Events background image and align it a small bit more upward */
+	#events, .events-section-bg {
+		background-size: 175% !important; /* Zoomed-in for mobile presence */
+		background-position: center 22% !important; /* Shifted slightly more upward */
+		--events-bg-x: 50% !important;
+		--events-bg-y: 22% !important;
+	}
+
 	/* Tighten heading spacing inside the events section */
 	#events .text-center { margin-bottom: 1rem !important; }
 	.event-slide.active { box-shadow: 0 12px 30px rgba(0,0,0,0.5) !important; }
@@ -2389,30 +2403,474 @@ p, .text-gray-300, .text-gray-200 {
 	/* Show the toggle button on mobile; center it */
 	.about-toggle { display: inline-block !important; margin: 0.5rem 0 0 !important; }
 
-	/* Events section: Hide descriptions, show only posters, titles, and buttons */
-	#event-details-container .event-details-card p {
+	/* Mobile Events section: Remove all text below poster picture, keep ONLY the Learn More button */
+	#event-details-container h2,
+	#event-details-container h3,
+	#event-details-container h4,
+	#event-details-container p,
+	#event-details-container .event-date,
+	#event-details-container .event-meta,
+	#event-details-container .event-description,
+	#event-details-card h2,
+	#event-details-card h3,
+	#event-details-card h4,
+	#event-details-card p,
+	.event-details-card h2,
+	.event-details-card h3,
+	.event-details-card h4,
+	.event-details-card p {
 		display: none !important;
 	}
 
-	/* Center-align event title and button */
-	#event-details-container .event-details-card {
+	/* Center-align event details card & button container on mobile */
+	#event-details-card,
+	#event-details-container,
+	.event-details-card {
 		text-align: center !important;
-		padding: 1rem !important;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		padding: 0.5rem 0 0 0 !important;
+		margin-top: 0 !important;
 	}
 
-	#event-details-container .event-details-card h3 {
-		font-size: clamp(1.3rem, 5vw, 1.6rem) !important;
-		margin-bottom: 1rem !important;
+	/* Perfect premium "Learn More" button styling on mobile */
+	#event-details-container a,
+	#event-details-container .learn-more-btn,
+	#event-details-container .btn-primary,
+	#event-details-card a,
+	#event-details-card .learn-more-btn,
+	#event-details-card .btn-primary {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		margin: 0.5rem auto 0 auto !important;
+		padding: 0.45rem 1.35rem !important;
+		font-size: 0.78rem !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.06em !important;
+		text-transform: uppercase !important;
+		color: #ffffff !important;
+		background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%) !important;
+		border-radius: 9999px !important; /* Full pill curve */
+		box-shadow: 0 6px 22px rgba(220, 38, 38, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+		border: 1px solid rgba(255, 255, 255, 0.25) !important;
+		transition: all 250ms ease !important;
+		touch-action: manipulation;
+		-webkit-tap-highlight-color: transparent;
+	}
+	#event-details-container a::after,
+	#event-details-card a::after {
+		content: ' \2192';
+		font-weight: 800;
+		margin-left: 0.45rem;
+		display: inline-block;
+		transition: transform 200ms ease;
+	}
+	#event-details-container a:active,
+	#event-details-card a:active {
+		transform: scale(0.95) !important;
+		box-shadow: 0 2px 10px rgba(220, 38, 38, 0.7) !important;
 	}
 
-	#event-details-container .event-details-card .learn-more-btn {
-		margin: 0 auto !important;
-		display: inline-block !important;
+	/* Gently darkened bottom overlay transition for Events section on mobile */
+	.events-section-bg::after {
+		background: linear-gradient(
+			to bottom,
+			rgba(0, 0, 0, 0.4) 0%,
+			rgba(0, 0, 0, 0.35) 50%,
+			rgba(0, 0, 0, 0.42) 100%
+		) !important;
 	}
 
-	/* Reduce events section height from bottom */
 	#events, .events-section-bg {
-		padding-bottom: 2rem !important;
+		padding-bottom: 2.2rem !important;
+		margin-bottom: 0 !important;
+		position: relative !important;
+		border-bottom: none !important;
+	}
+
+	/* Perfected centered glowing red accent line fading out gracefully at the edges */
+	#events::before {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 75%;
+		height: 1px;
+		background: linear-gradient(90deg, transparent 0%, rgba(220, 38, 38, 0.25) 20%, #DC2626 50%, rgba(220, 38, 38, 0.25) 80%, transparent 100%);
+		box-shadow: 0 0 10px rgba(220, 38, 38, 0.6);
+		z-index: 5;
+		pointer-events: none;
+	}
+
+
+
+	/* About Us Section Mobile Adjustments */
+	#about {
+		margin-top: 0 !important;
+		background-color: #101010 !important;
+		padding-top: 3rem !important;
+	}
+
+	/* Interchange picture and text on mobile: Picture FIRST, Text SECOND below it */
+	#about .grid {
+		display: flex !important;
+		flex-direction: column !important;
+	}
+
+	#about .story-image-container {
+		order: 1 !important;
+		margin-bottom: 1.5rem !important;
+		width: 100% !important;
+	}
+
+	/* Beautiful subtle brand red border & red ambient glow for the story picture slideshow on mobile */
+	#about .story-slideshow {
+		border-radius: 1.25rem !important;
+		border: 1.5px solid rgba(220, 38, 38, 0.55) !important;
+		box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65), 0 0 22px rgba(220, 38, 38, 0.3) !important;
+		overflow: hidden !important;
+	}
+
+	/* Full card box design for Story Text section on mobile */
+	#about .story-text-container {
+		order: 2 !important;
+		width: 100% !important;
+		background: rgba(20, 20, 20, 0.75) !important;
+		backdrop-filter: blur(10px) !important;
+		-webkit-backdrop-filter: blur(10px) !important;
+		border: 1px solid rgba(255, 255, 255, 0.12) !important;
+		border-radius: 1.25rem !important;
+		padding: 1.5rem 1.25rem !important;
+		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+		margin-top: 0.5rem !important;
+	}
+
+	/* Perfectly balanced About Us section headings on mobile */
+	#about .section-title {
+		font-size: clamp(1.95rem, 6.2vw, 2.45rem) !important;
+		line-height: 1.15 !important;
+		margin-bottom: 0.5rem !important;
+	}
+	#about h3.main-title {
+		font-size: clamp(1.35rem, 4.5vw, 1.85rem) !important;
+		line-height: 1.25 !important;
+	}
+
+	/* Lighter, perfectly balanced dark overlay for Why-Us quote background on mobile */
+	#why-us .parallax-overlay {
+		background: rgba(0, 0, 0, 0.42) !important;
+		opacity: 1 !important;
+	}
+
+	/* Clean unboxed quote styling: no dark box near text, just clean big visible quote text */
+	#why-us .parallax-quote {
+		background: transparent !important;
+		border: none !important;
+		box-shadow: none !important;
+		backdrop-filter: none !important;
+		-webkit-backdrop-filter: none !important;
+		padding: 1rem 0.5rem !important;
+		text-align: center !important;
+		max-width: 96% !important;
+		margin: 0 auto !important;
+	}
+
+	#why-us .parallax-quote p {
+		font-size: clamp(1.35rem, 5.2vw, 1.85rem) !important;
+		line-height: 1.55 !important;
+		color: #ffffff !important;
+		font-weight: 600 !important;
+		font-style: italic !important;
+		text-shadow: 0 3px 12px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+		margin: 0.25rem 0 !important;
+	}
+
+	#why-us .quote-mark {
+		font-size: clamp(2.6rem, 8.5vw, 3.8rem) !important;
+		color: #DC2626 !important;
+		opacity: 0.95 !important;
+		line-height: 1 !important;
+		display: inline-block !important;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+	}
+
+	/* ---------------------------------------------------------------------------
+	   OUR SIGNATURE DISHES (#menu) - MASTER MOBILE COLOR & LAYOUT DESIGN
+	   --------------------------------------------------------------------------- */
+	#menu {
+		background-color: #080808 !important; /* High-end pitch black outer section background */
+		min-height: auto !important;
+		height: auto !important;
+		padding-top: 2.25rem !important; /* Position section content and heading slightly lower */
+		padding-bottom: 1.75rem !important;
+	}
+
+	/* Completely eliminate background logo outline mask on mobile */
+	#menu .menu-logo-outline {
+		display: none !important;
+		opacity: 0 !important;
+	}
+
+	#menu .container {
+		padding-top: 0 !important;
+	}
+
+	/* Master Card Container: Option 2 Solid Dark Charcoal Card (#18181a) with All-Around Thin Red Border */
+	#menu .menu-inner-container {
+		height: auto !important;
+		min-height: auto !important;
+		max-height: none !important;
+		padding-top: 1.5rem !important;
+		padding-bottom: 1.5rem !important;
+		margin-bottom: 0 !important;
+		background: #18181a !important; /* Option 2 solid matte dark charcoal card surface */
+		border: 1.5px solid rgba(220, 38, 38, 0.4) !important; /* All-around thin red border line for all 4 sides */
+		border-radius: 1rem !important;
+		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
+	}
+
+	/* Fix original template bug: Expand chips container to full width scrolling instead of 34px box */
+	#menu .dish-top-list {
+		display: flex !important;
+		width: 100% !important;
+		height: auto !important;
+		max-width: 100% !important;
+		margin: 0 auto !important;
+		padding: 0.5rem 0.25rem !important;
+		overflow-x: auto !important;
+		white-space: nowrap !important;
+		-webkit-overflow-scrolling: touch !important;
+		gap: 0.5rem !important;
+		border: none !important;
+		box-shadow: none !important;
+	}
+
+	/* Hide navigation buttons for horizontal scroll list, as touch scrolling is native and cleaner */
+	#menu .dish-scroll-btn {
+		display: none !important;
+	}
+
+	/* Dish Chips: Dark charcoal pill for inactive, solid brand red for active */
+	#menu .dish-chip {
+		background: #242428 !important;
+		color: #d4d4d8 !important;
+		border: 1px solid rgba(255, 255, 255, 0.08) !important;
+		padding: 0.35rem 0.85rem !important;
+		font-size: 0.82rem !important;
+		font-weight: 500 !important;
+		border-radius: 9999px !important;
+		transition: all 0.2s ease !important;
+		white-space: nowrap !important;
+	}
+	#menu .dish-chip.active {
+		background: #c70000 !important;
+		color: #ffffff !important;
+		font-weight: 600 !important;
+		border-color: #c70000 !important;
+		box-shadow: 0 4px 14px rgba(199, 0, 0, 0.35) !important;
+	}
+
+	/* Signature Dishes flex column layout on mobile: Perfectly center-aligned image, text, and button */
+	#menu .menu-carousel-and-info-wrapper {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
+		position: relative !important;
+		width: 100% !important;
+		margin-top: 0.5rem !important;
+	}
+
+	/* Dish image slideshow wrapper dead-centered horizontally and slightly smaller on mobile */
+	#menu .arc-dish-carousel-wrapper {
+		position: relative !important;
+		top: auto !important;
+		left: auto !important;
+		right: auto !important;
+		bottom: auto !important;
+		transform: none !important;
+		width: clamp(260px, 78vw, 320px) !important;
+		height: clamp(260px, 78vw, 320px) !important;
+		margin: 0.25rem auto 0.35rem auto !important;
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+	}
+
+	#menu .single-arc-carousel {
+		position: relative !important;
+		width: 100% !important;
+		height: 100% !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		margin: 0 auto !important;
+	}
+
+	/* Restored smooth scale & fade transition animations for single-dish-slide */
+	#menu .single-dish-slide {
+		position: absolute !important;
+		top: 50% !important;
+		left: 50% !important;
+		transform: translate3d(-50%, -50%, 0) scale(0.3) !important;
+		width: 100% !important;
+		height: 100% !important;
+		border-radius: 50% !important;
+		border: none !important;
+		box-shadow: none !important;
+		opacity: 0 !important;
+		transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+	}
+
+	#menu .single-dish-slide.active {
+		transform: translate3d(-50%, -50%, 0) scale(1) !important;
+		opacity: 1 !important;
+		z-index: 10 !important;
+	}
+
+	/* Dish image with warm crimson backlight ambient glow */
+	#menu .single-dish-img {
+		width: 100% !important;
+		height: 100% !important;
+		margin: 0 auto !important;
+		display: block !important;
+		border-radius: 50% !important;
+		border: none !important;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 25px rgba(199, 0, 0, 0.25) !important;
+		object-fit: cover !important;
+		transition: transform 0.3s ease, opacity 0.4s ease !important;
+	}
+	#menu .single-dish-slide.active .single-dish-img {
+		border: none !important;
+	}
+
+	/* Carousel navigation arrows: clean dark glass circles with white icons */
+	#menu .single-arc-nav-btn {
+		width: 40px !important;
+		height: 40px !important;
+		border-radius: 50% !important;
+		background: rgba(0, 0, 0, 0.6) !important;
+		border: 1px solid rgba(255, 255, 255, 0.1) !important;
+		color: #ffffff !important;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		transition: all 0.2s ease !important;
+	}
+	#menu .single-arc-nav-btn.prev-btn {
+		left: -6px !important;
+		right: auto !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+	}
+	#menu .single-arc-nav-btn.next-btn {
+		right: -6px !important;
+		left: auto !important;
+		top: 50% !important;
+		transform: translateY(-50%) !important;
+	}
+	#menu .single-arc-nav-btn:active {
+		background: #ffffff !important;
+		color: #000000 !important;
+	}
+
+	/* Dish description text & button positioned perfectly centered completely BELOW / UNDER the dish image on mobile */
+	#menu .dish-info {
+		position: relative !important;
+		z-index: 20 !important;
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		top: auto !important;
+		left: auto !important;
+		transform: none !important;
+		text-align: center !important;
+		padding-left: 0.5rem !important;
+		padding-right: 0.5rem !important;
+		margin: 0.4rem auto 0 auto !important;
+		width: 100% !important;
+	}
+
+	#menu h2.section-title,
+	#menu .section-title {
+		font-size: clamp(1.95rem, 6.4vw, 2.45rem) !important;
+		line-height: 1.15 !important;
+		letter-spacing: 0.5px !important;
+		margin-top: 0.75rem !important; /* Move title "Our Signature Dishes" a bit lower */
+		margin-bottom: 0.6rem !important;
+		color: #ffffff !important;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+	}
+
+	#menu .current-dish-title {
+		position: relative !important;
+		z-index: 51 !important;
+		text-align: center !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		font-family: Cinzel, serif !important;
+		color: #ffffff !important; /* Premium crisp white title for top clarity and luxury feel */
+		font-size: clamp(1.45rem, 5.8vw, 2rem) !important;
+		font-weight: 700 !important;
+		line-height: 1.25 !important;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
+
+	#menu .current-dish-desc {
+		position: relative !important;
+		z-index: 51 !important;
+		text-align: center !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		max-width: 92% !important;
+		color: #e4e4e7 !important; /* Crisp silver zinc description text for maximum clarity */
+		font-size: clamp(0.95rem, 3.8vw, 1.1rem) !important;
+		line-height: 1.6 !important;
+		font-weight: 400 !important;
+		text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+	}
+
+	#menu .dish-cta-btn {
+		position: relative !important;
+		z-index: 51 !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		margin-top: 0.85rem !important;
+		padding: 0.45rem 1.35rem !important;
+		font-size: 0.78rem !important;
+		font-weight: 600 !important;
+		letter-spacing: 0.06em !important;
+		background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%) !important; /* Glowing crimson gradient button */
+		color: #ffffff !important;
+		border-radius: 9999px !important;
+		border: 1px solid rgba(255, 255, 255, 0.2) !important;
+		box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45) !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transition: all 0.2s ease !important;
+	}
+	#menu .dish-cta-btn:active {
+		background: #b30000 !important;
+		transform: scale(0.96) !important;
+	}
+
+	#menu .menu-content-area {
+		padding: 0 !important;
+		margin: 0 !important;
 	}
 }
 
@@ -2682,4 +3140,333 @@ p, .text-gray-300, .text-gray-200 {
 	background-image: image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
 	background-image: -webkit-image-set(url('../images/Why Choose Us -min.webp') type('image/webp'), url('../images/Why Choose Us -min.jpg') type('image/jpeg')) !important;
 }
+
+/* MOBILE FIX: About (Our Story) logo should stay perfectly circular on phones */
+@media (max-width: 720px) {
+  /* Prevent the logo from being stretched by any generic img rules */
+  #about picture {
+    display: block !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Force a 1:1 box, then circle */
+  #about #about-logo {
+    width: 84px !important;      /* slightly smaller on mobile */
+    height: 84px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 9999px !important;
+    object-fit: contain !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    transform: none !important;
+  }
+}
+/* END MOBILE FIX: About logo */
+
+/* ========================================================================
+   MOBILE HERO: Restored Original Video Background
+   ======================================================================== */
+@media (max-width: 820px) {
+
+	/* ---------------------------------------------------------------------------
+	   MOBILE HERO: PEAK PERFECTION VIDEO & VIEWPORT PRESENTATION
+	   --------------------------------------------------------------------------- */
+	#home.hero-section {
+		height: 76vh !important; /* Compact, sweet-spot height so landing section doesn't feel too long */
+		min-height: 520px !important;
+		max-height: 660px !important;
+		padding-top: 2.5rem !important;
+		padding-bottom: 2rem !important;
+		justify-content: center !important;
+		align-items: center !important;
+		overflow: hidden !important;
+		position: relative !important;
+	}
+
+	/* Master video wrapper & player cover styling with hardware acceleration & color enhancement */
+	#home.hero-section .home-video-wrap {
+		position: absolute !important;
+		inset: 0 !important;
+		width: 100% !important;
+		height: 100% !important;
+		z-index: 0 !important;
+		overflow: hidden !important;
+	}
+
+	#home.hero-section .home-bg-video,
+	#home.hero-section .home-bg-video-fill,
+	#home.hero-section .home-bg-video-alt,
+	#home.hero-section .with-container-frame .home-video-wrap .home-bg-video {
+		position: absolute !important;
+		inset: 0 !important;
+		object-fit: cover !important;
+		object-position: center center !important;
+		width: 100% !important;
+		height: 100% !important;
+		transform: translateZ(0) !important;
+		-webkit-backface-visibility: hidden !important;
+		filter: brightness(1.04) contrast(1.05) saturate(1.06) !important;
+	}
+
+	/* High-end cinematic dark vignette overlay over video for flawless text legibility */
+	#home.hero-section .home-video-dim,
+	#home.hero-section .home-video-overlay {
+		position: absolute !important;
+		inset: 0 !important;
+		z-index: 1 !important;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.65) 100%) !important;
+		pointer-events: none !important;
+	}
+
+	/* Ensure center logo, title, and CTA sit with maximum clarity above the video */
+	#home.hero-section > .home-anim,
+	#home.hero-section > .fade-in {
+		position: relative !important;
+		z-index: 5 !important;
+	}
+
+	/* Center logo & title container vertically and horizontally on mobile */
+	#home.hero-section > .home-anim.fade-in {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		justify-content: center !important;
+		text-align: center !important;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		margin-bottom: 1.25rem !important;
+		width: 100% !important;
+	}
+
+	/* Perfectly center logo image (remove desktop right margin) */
+	#home.hero-section #home-logo {
+		width: clamp(175px, 46vw, 210px) !important;
+		height: clamp(175px, 46vw, 210px) !important;
+		max-width: 52vw !important;
+		margin-right: 0 !important;
+		margin-left: auto !important;
+		margin-bottom: 0.75rem !important;
+		filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.85)) !important;
+	}
+
+	/* Center aligned main title and subtitle text */
+	#home.hero-section .main-title {
+		font-size: clamp(2.3rem, 7.5vw, 3rem) !important;
+		line-height: 1.15 !important;
+		text-align: center !important;
+		text-shadow: 0 4px 12px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.9) !important;
+	}
+	#home.hero-section .home-anim-sub {
+		font-size: clamp(1.1rem, 3.8vw, 1.35rem) !important;
+		text-align: center !important;
+		text-shadow: 0 3px 10px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+		color: #ffffff !important;
+	}
+
+	/* Apply the exact same compact pill button model to the home page CTA button ("Book a Table") */
+	#home.hero-section .home-anim-cta-wrap {
+		margin-top: 0 !important;
+		z-index: 3 !important;
+	}
+	#home.hero-section .home-anim-cta-wrap a,
+	#home.hero-section .home-anim-cta,
+	#home.hero-section .btn-primary {
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		margin: 0.5rem auto 0 auto !important;
+		padding: 0.45rem 1.35rem !important;
+		font-size: 0.78rem !important;
+		font-weight: 700 !important;
+		letter-spacing: 0.06em !important;
+		text-transform: uppercase !important;
+		color: #ffffff !important;
+		background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%) !important;
+		border-radius: 9999px !important; /* Full pill curve */
+		box-shadow: 0 6px 22px rgba(220, 38, 38, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+		border: 1px solid rgba(255, 255, 255, 0.25) !important;
+		transition: all 250ms ease !important;
+		touch-action: manipulation;
+		-webkit-tap-highlight-color: transparent;
+	}
+	#home.hero-section .home-anim-cta-wrap a:active,
+	#home.hero-section .home-anim-cta:active {
+		transform: scale(0.95) !important;
+		box-shadow: 0 2px 10px rgba(220, 38, 38, 0.7) !important;
+	}
+
+	/* ---------------------------------------------------------------------------
+	   GET IN TOUCH SECTION (#contact) - PURE GREY & BLACK LUXURY MOBILE STYLING
+	   --------------------------------------------------------------------------- */
+	#contact {
+		background: #0b0b0b !important; /* Rich deep charcoal black background */
+		padding-top: 2rem !important;
+		padding-bottom: 2.5rem !important;
+	}
+
+	#contact .contact-img-wrapper {
+		min-height: auto !important;
+		height: clamp(260px, 48vw, 320px) !important;
+		border-radius: 1rem !important;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+		border: 1px solid rgba(255, 255, 255, 0.08) !important;
+	}
+
+	#contact .contact-img-main {
+		height: 100% !important;
+		border-radius: 1rem !important;
+	}
+
+	/* Contact form card container: Clean matte charcoal card with crisp glass border (zero red accents) */
+	#contact form,
+	#contact .bg-\[\#0f0f0f\]\/90 {
+		background: #181818 !important;
+		backdrop-filter: blur(10px) !important;
+		-webkit-backdrop-filter: blur(10px) !important;
+		border: 1px solid rgba(255, 255, 255, 0.1) !important;
+		border-top: 1px solid rgba(255, 255, 255, 0.1) !important; /* Clean glass top border (no red) */
+		border-radius: 1rem !important;
+		box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5) !important;
+	}
+
+	/* Form heading color: Crisp white instead of red */
+	#contact h3,
+	#contact .text-accent-red {
+		color: #ffffff !important;
+		font-weight: 700 !important;
+	}
+
+	/* Form Input fields styling: Deep black on charcoal card */
+	#contact input,
+	#contact select,
+	#contact textarea {
+		background: #0d0d0d !important;
+		border: 1px solid rgba(255, 255, 255, 0.12) !important;
+		color: #ffffff !important;
+		border-radius: 0.5rem !important;
+	}
+	#contact input:focus,
+	#contact select:focus,
+	#contact textarea:focus {
+		border-color: rgba(255, 255, 255, 0.3) !important;
+		box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+	}
+
+	#contact label {
+		color: #9ca3af !important;
+		font-weight: 500 !important;
+	}
+
+	/* Send Message CTA Button: Sleek charcoal pill with white text (no red) */
+	#contact #contact-submit,
+	#contact .dish-cta-btn {
+		background: #242424 !important;
+		color: #ffffff !important;
+		border: 1px solid rgba(255, 255, 255, 0.15) !important;
+		box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+		font-weight: 600 !important;
+	}
+	#contact #contact-submit:active,
+	#contact .dish-cta-btn:active {
+		background: #333333 !important;
+		border-color: rgba(255, 255, 255, 0.25) !important;
+	}
+
+	/* ---------------------------------------------------------------------------
+	   FOOTER - COMPACT, DISTINCT & HIGH-CONTRAST MOBILE STYLING
+	   --------------------------------------------------------------------------- */
+	footer,
+	footer.bg-black {
+		background: #18181a !important; /* Rich dark slate charcoal background - instant visual contrast from #contact */
+		border-top: 1.5px solid rgba(255, 255, 255, 0.15) !important; /* Crisp glass divider line */
+		padding-top: 1.25rem !important;
+		padding-bottom: 1.25rem !important;
+	}
+
+	footer .container {
+		padding-left: 1rem !important;
+		padding-right: 1rem !important;
+	}
+
+	/* Ultra-compact grid layout on mobile */
+	footer .grid {
+		display: flex !important;
+		flex-direction: column !important;
+		gap: 0.85rem !important;
+		margin-top: 0 !important;
+		text-align: center !important;
+	}
+
+	footer .grid > div {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+	}
+
+	/* Compact Brand Logo & Title Header */
+	footer img {
+		height: 2.75rem !important;
+		width: 2.75rem !important;
+		margin-right: 0.5rem !important;
+	}
+
+	footer h3 {
+		font-size: 1.15rem !important;
+		margin-bottom: 0.1rem !important;
+		color: #ffffff !important;
+	}
+
+	footer p {
+		font-size: 0.8rem !important;
+		line-height: 1.35 !important;
+		color: #a1a1aa !important;
+		margin-bottom: 0.35rem !important;
+		max-width: 100% !important;
+	}
+
+	footer h4 {
+		font-size: 0.88rem !important;
+		margin-bottom: 0.35rem !important;
+		color: #ffffff !important;
+		text-transform: uppercase !important;
+		letter-spacing: 0.8px !important;
+	}
+
+	/* Inline horizontal list for Quick Links to save massive vertical space */
+	footer ul {
+		display: flex !important;
+		flex-wrap: wrap !important;
+		justify-content: center !important;
+		gap: 0.5rem 1rem !important;
+		margin-bottom: 0.25rem !important;
+		padding: 0 !important;
+		list-style: none !important;
+	}
+
+	footer ul li {
+		margin-bottom: 0 !important;
+	}
+
+	footer ul li a,
+	footer ul li p {
+		font-size: 0.8rem !important;
+		color: #d4d4d8 !important;
+		line-height: 1.3 !important;
+	}
+
+	/* Copyright & credit bottom bar: ultra compact */
+	footer .mt-12.pt-8,
+	footer .border-t {
+		margin-top: 0.85rem !important;
+		padding-top: 0.75rem !important;
+		border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+	}
+
+	footer .mt-12.pt-8 p {
+		font-size: 0.72rem !important;
+		color: #9ca3af !important;
+		margin-bottom: 0.15rem !important;
+	}
+}
+/* END MOBILE HERO: Mutton Mandi dish background */
 
