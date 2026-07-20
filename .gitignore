@@ -6,7 +6,7 @@ build/
 .DS_Store
 
 # Backup files
-*.bak
+*.bak*
 
 # Test files
 test-*.html
